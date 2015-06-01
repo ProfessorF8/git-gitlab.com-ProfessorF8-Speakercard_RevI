@@ -1,0 +1,129 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE timer_TEXT,SPACE=ROM
+                           A     6    	FILE	".\timer.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT ROM_DATA
+                           A     9    
+                           A    10    
+                           A    11    ;**************************** _isr_timer0 *****
+                           A    12    ;Name                         Addr/Register   S
+                           A    13    
+                           A    14    
+                           A    15    ; Aggregate Stack Size: 0 (words)
+                           A    16    
+                           A    17    
+                           A    18    	.FRAME _n_isr_timer0,?_n_isr_timer0,RDATA
+                           A    19    	.FRAME _f_isr_timer0,?_f_isr_timer0,EDATA
+                           A    20    	SEGMENT timer_TEXT
+                           A    21    ;    1	/**************************************
+                           A    22    ;    2	 *  Copyright (C) 1999-2008 by Zilog, I
+                           A    23    ;    3	 *  All Rights Reserved
+                           A    24    ;    4	 **************************************
+                           A    25    ;    5	
+                           A    26    ;    6	#include <eZ8.h>
+                           A    27    ;    7	#include "main.h"
+                           A    28    ;    8	#include "timer.h"
+                           A    29    ;    9	
+                           A    30    ;   10	///////////////////////////////////////
+                           A    31    ;   11	//Interrupt routine
+                           A    32    ;   12	
+                           A    33    ;   13	#pragma interrupt
+                           A    34    ;   14	void isr_timer0(void) 
+                           A    35    ;   15	{
+0000                       A    36    _isr_timer0:
+                           A    37    .define "_isr_timer0"
+                           A    38    .value _isr_timer0
+                           A    39    .class 2
+                           A    40    .type 65
+                           A    41    .endef
+                           A    42    .begfunc "isr_timer0",15,"_isr_timer0"
+0000 C8FFD0                A    43    	PUSHX	4093
+0003 D6 0000               A    44    	CALL	__b_iframeset00
+                           A    45    ;   16	//    setStatus(RUN);
+                           A    46    ;   17	}
+                           A    47    .line 17
+0006 D6 0000               A    48    	CALL	__b_iframereset
+0009 BF                    A    49    	IRET	
+                           A    50    .endfunc "isr_timer0",17,"_isr_timer0"
+                           A    51    	SEGMENT ROM_DATA
+                           A    52    
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   2
+
+
+PC     Object              I  Line    Source timer.src
+                           A    53    
+                           A    54    ;**************************** _init_timer0 ****
+                           A    55    ;Name                         Addr/Register   S
+                           A    56    ;_SET_VECTOR                         IMPORT  --
+                           A    57    
+                           A    58    
+                           A    59    ; Aggregate Stack Size: 0 (words)
+                           A    60    
+                           A    61    
+                           A    62    	.FRAME _n_init_timer0,?_n_init_timer0,RDATA
+                           A    63    	.FRAME _f_init_timer0,?_f_init_timer0,EDATA
+                           A    64    	SEGMENT timer_TEXT
+                           A    65    ;   18	
+                           A    66    ;   19	///////////////////////////////////////
+                           A    67    ;   20	//Intialize Timer-0 
+                           A    68    ;   21	void init_timer0(void)
+                           A    69    ;   22	{
+000A                       A    70    _init_timer0:
+                           A    71    .define "_init_timer0"
+                           A    72    .value _init_timer0
+                           A    73    .class 2
+                           A    74    .type 65
+                           A    75    .endef
+                           A    76    .begfunc "init_timer0",22,"_init_timer0"
+000A D6 0000               A    77    	CALL	__b_frameset00
+                           A    78    ;   23		SET_VECTOR(TIMER0, isr_timer0); 
+                           A    79    ;   24	 	T0H		= 0xFF;	// Timer High	
+                           A    80    .line 24
+000D E9FF0F00              A    81    	LDX	3840,#255
+                           A    82    ;   25		T0L 	= 0xFF;	// Timer Low
+                           A    83    .line 25
+0011 E9FF0F01              A    84    	LDX	3841,#255
+                           A    85    ;   26		T0RH 	= 0xFF;	// Reload Compare H
+                           A    86    .line 26
+0015 E9FF0F02              A    87    	LDX	3842,#255
+                           A    88    ;   27		T0RL 	= 0xFF;	// Reload Compare L
+                           A    89    .line 27
+0019 E9FF0F03              A    90    	LDX	3843,#255
+                           A    91    ;   28		T0CTL 	= 0xF9;	// Continous/Presca
+                           A    92    .line 28
+001D E9F90F07              A    93    	LDX	3847,#249
+                           A    94    ;   29		IRQ0ENH |= 0x20;	// Set Interrup
+                           A    95    .line 29
+0021 49200FC1              A    96    	ORX	4033,#32
+                           A    97    ;   30		IRQ0ENL &= 0xDF;	// Set Interrup
+                           A    98    .line 30
+0025 59DF0FC2              A    99    	ANDX	4034,#223
+                           A   100    ;   31	}
+                           A   101    .line 31
+0029 D6 0000               A   102    	CALL	__b_framereset
+002C AF                    A   103    	RET	
+                           A   104    .endfunc "init_timer0",31,"_init_timer0"
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   3
+
+
+PC     Object              I  Line    Source timer.src
+000C 0000                  A   105    	VECTOR	TIMER0=_isr_timer0
+                           A   106    	XREF __b_framereset:ROM
+                           A   107    	XREF __b_iframereset:ROM
+                           A   108    	XREF __b_frameset00:ROM
+                           A   109    	XREF __b_iframeset00:ROM
+                           A   110    	XDEF _init_timer0
+                           A   111    	XDEF _isr_timer0
+                           A   112    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 113

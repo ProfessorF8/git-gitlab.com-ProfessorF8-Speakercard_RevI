@@ -1,0 +1,112 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE _button_TEXT,SPACE=ROM
+                           A     6    	FILE	".\test_button.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT ROM_DATA
+                           A     9    
+                           A    10    
+                           A    11    ;**************************** _isr_C0 *********
+                           A    12    ;Name                         Addr/Register   S
+                           A    13    
+                           A    14    
+                           A    15    ; Aggregate Stack Size: 0 (words)
+                           A    16    
+                           A    17    
+                           A    18    	.FRAME _n_isr_C0,?_n_isr_C0,RDATA
+                           A    19    	.FRAME _f_isr_C0,?_f_isr_C0,EDATA
+                           A    20    	SEGMENT _button_TEXT
+                           A    21    ;    1	/**************************************
+                           A    22    ;    2	 *  Copyright (C) 1999-2008 by Zilog, I
+                           A    23    ;    3	 *  All Rights Reserved
+                           A    24    ;    4	 **************************************
+                           A    25    ;    5	
+                           A    26    ;    6	#include <eZ8.h>
+                           A    27    ;    7	#include "main.h"
+                           A    28    ;    8	#include "test_button.h"
+                           A    29    ;    9	
+                           A    30    ;   10	
+                           A    31    ;   11	///////////////////////////////////////
+                           A    32    ;   12	//Interrupt routine
+                           A    33    ;   13	
+                           A    34    ;   14	#pragma interrupt
+                           A    35    ;   15	void isr_C0(void) 
+                           A    36    ;   16	{
+0000                       A    37    _isr_C0:
+                           A    38    .define "_isr_C0"
+                           A    39    .value _isr_C0
+                           A    40    .class 2
+                           A    41    .type 65
+                           A    42    .endef
+                           A    43    .begfunc "isr_C0",16,"_isr_C0"
+0000 C8FFD0                A    44    	PUSHX	4093
+0003 D6 0000               A    45    	CALL	__b_iframeset00
+                           A    46    ;   17	//   	toggle_port();
+                           A    47    ;   18	}
+                           A    48    .line 18
+0006 D6 0000               A    49    	CALL	__b_iframereset
+0009 BF                    A    50    	IRET	
+                           A    51    .endfunc "isr_C0",18,"_isr_C0"
+                           A    52    	SEGMENT ROM_DATA
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   2
+
+
+PC     Object              I  Line    Source test_button.src
+                           A    53    
+                           A    54    
+                           A    55    ;**************************** _init_test_button
+                           A    56    ;Name                         Addr/Register   S
+                           A    57    ;_SET_VECTOR                         IMPORT  --
+                           A    58    
+                           A    59    
+                           A    60    ; Aggregate Stack Size: 0 (words)
+                           A    61    
+                           A    62    
+                           A    63    	.FRAME _n_init_test_button,?_n_init_test_bu
+                           A    64    	.FRAME _f_init_test_button,?_f_init_test_bu
+                           A    65    	SEGMENT _button_TEXT
+                           A    66    ;   19	
+                           A    67    ;   20	
+                           A    68    ;   21	///////////////////////////////////////
+                           A    69    ;   22	//Intialize Test Button 
+                           A    70    ;   23	void init_test_button(void)
+                           A    71    ;   24	{
+000A                       A    72    _init_test_button:
+                           A    73    .define "_init_test_button"
+                           A    74    .value _init_test_button
+                           A    75    .class 2
+                           A    76    .type 65
+                           A    77    .endef
+                           A    78    .begfunc "init_test_button",24,"_init_test_butt
+000A D6 0000               A    79    	CALL	__b_frameset00
+                           A    80    ;   25		SET_VECTOR(C0, isr_C0); 
+                           A    81    ;   26		IRQ2ENH |= 0x01;	// Set Interrup
+                           A    82    .line 26
+000D 49010FC7              A    83    	ORX	4039,#1
+                           A    84    ;   27		IRQ2ENL |= 0x01;	// Set Interrup
+                           A    85    .line 27
+0011 49010FC8              A    86    	ORX	4040,#1
+                           A    87    ;   28	}
+                           A    88    .line 28
+0015 D6 0000               A    89    	CALL	__b_framereset
+0018 AF                    A    90    	RET	
+                           A    91    .endfunc "init_test_button",28,"_init_test_butt
+0036 0000                  A    92    	VECTOR	C0=_isr_C0
+                           A    93    	XREF __b_framereset:ROM
+                           A    94    	XREF __b_iframereset:ROM
+                           A    95    	XREF __b_frameset00:ROM
+                           A    96    	XREF __b_iframeset00:ROM
+                           A    97    	XDEF _init_test_button
+                           A    98    	XDEF _isr_C0
+                           A    99    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 100

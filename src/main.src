@@ -1,0 +1,699 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE main_TEXT,SPACE=ROM
+	FILE	".\main.c"
+.debug "C"
+	SEGMENT FAR_BSS
+_cardAddress:
+	DS	1
+.define "cardAddress"
+.alias "_cardAddress"
+.class 83
+.value _cardAddress
+.type 2
+.endef
+	SEGMENT main_TEXT
+.begrec "fmt_type",10
+.define "flags"
+.value 0
+.class 8
+.type 2
+.endef
+.define "size"
+.value 1
+.class 8
+.type 2
+.endef
+.define "space"
+.value 2
+.class 8
+.type 2
+.endef
+.define "type"
+.value 3
+.class 8
+.type 2
+.endef
+.define "field_width"
+.value 4
+.class 8
+.type 2
+.endef
+.define "precision"
+.value 5
+.class 8
+.type 2
+.endef
+.define "print_leading_char"
+.value 6
+.class 8
+.type 2
+.endef
+.define "dest"
+.value 7
+.class 8
+.type 162
+.endef
+.define "print_len"
+.value 9
+.class 8
+.type 12
+.endef
+.endrec "fmt_type"
+.begrec "flt_fmt_data",5
+.define "pad_whole"
+.value 0
+.class 8
+.type 12
+.endef
+.define "pad_pre_fract"
+.value 1
+.class 8
+.type 12
+.endef
+.define "pad_post_fract"
+.value 2
+.class 8
+.type 12
+.endef
+.define "pad_at"
+.value 3
+.class 8
+.type 162
+.endef
+.endrec "flt_fmt_data"
+.begrec "fmt_control_data",2
+.define "status"
+.value 0
+.class 8
+.type 2
+.endef
+.define "chr"
+.value 1
+.class 8
+.type 2
+.endef
+.endrec "fmt_control_data"
+.begrec "_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 162
+.endef
+.define "end"
+.value 2
+.class 8
+.type 162
+.endef
+.endrec "_set_type"
+.begrec "near_set_type",2
+.define "begin"
+.value 0
+.class 8
+.type 130
+.endef
+.define "end"
+.value 1
+.class 8
+.type 130
+.endef
+.endrec "near_set_type"
+.begrec "far_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 162
+.endef
+.define "end"
+.value 2
+.class 8
+.type 162
+.endef
+.endrec "far_set_type"
+.begrec "rom_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 194
+.endef
+.define "end"
+.value 2
+.class 8
+.type 194
+.endef
+.endrec "rom_set_type"
+.begrec "flt_info",12
+.define "flags"
+.value 0
+.class 8
+.type 12
+.endef
+.define "exp"
+.value 1
+.class 8
+.type 2
+.endef
+.define "digits"
+.value 2
+.class 8
+.dim 10
+.type 108
+.endef
+.endrec "flt_info"
+.begrec "NONAME0",6
+.define "baudRate"
+.value 0
+.class 8
+.type 5
+.endef
+.define "stopBits"
+.value 4
+.class 8
+.type 12
+.endef
+.define "parity"
+.value 5
+.class 8
+.type 12
+.endef
+.endrec "NONAME0"
+.begrec "NONAME1",5
+.define "pBuffer"
+.value 0
+.class 8
+.type 172
+.endef
+.define "next_in"
+.value 2
+.class 8
+.type 12
+.endef
+.define "next_out"
+.value 3
+.class 8
+.type 12
+.endef
+.define "size"
+.value 4
+.class 8
+.type 12
+.endef
+.endrec "NONAME1"
+.begrec "cmd",11
+.define "address"
+.value 0
+.class 8
+.type 12
+.endef
+.define "command"
+.value 1
+.class 8
+.type 2
+.endef
+.define "cs"
+.value 2
+.class 8
+.type 12
+.endef
+.define "data"
+.value 3
+.class 8
+.dim 8
+.type 108
+.endef
+.endrec "cmd"
+.begrec "NONAME2",4
+.define "quot"
+.value 0
+.class 8
+.type 3
+.endef
+.define "rem"
+.value 2
+.class 8
+.type 3
+.endef
+.endrec "NONAME2"
+.begrec "NONAME3",8
+.define "quot"
+.value 0
+.class 8
+.type 5
+.endef
+.define "rem"
+.value 4
+.class 8
+.type 5
+.endef
+.endrec "NONAME3"
+	SEGMENT FAR_BSS
+_checksumEnabled:
+	DS	1
+.define "checksumEnabled"
+.alias "_checksumEnabled"
+.class 83
+.value _checksumEnabled
+.type 2
+.endef
+	SEGMENT FAR_DATA
+_icChannel:
+	DW	0
+.define "icChannel"
+.alias "_icChannel"
+.class 69
+.value _icChannel
+.type 3
+.endef
+_zone:
+	DW	0
+.define "zone"
+.alias "_zone"
+.class 69
+.value _zone
+.type 3
+.endef
+_supervisorChannels:
+	DW	0
+.define "supervisorChannels"
+.alias "_supervisorChannels"
+.class 69
+.value _supervisorChannels
+.type 3
+.endef
+_apccRelays:
+	DB	0
+.define "apccRelays"
+.alias "_apccRelays"
+.class 69
+.value _apccRelays
+.type 2
+.endef
+_tibboOnline:
+	DW	0
+.define "tibboOnline"
+.alias "_tibboOnline"
+.class 69
+.value _tibboOnline
+.type 3
+.endef
+	SEGMENT ROM_DATA
+
+
+;**************************** _main ***************************
+;Name                         Addr/Register   Size   Type
+;_processCommands                    IMPORT  -----   function
+;_tibboOnline                        STATIC      2   variable
+;_initTibbo                          IMPORT  -----   function
+;_zone                               STATIC      2   variable
+;_setZone                            IMPORT  -----   function
+;_icChannel                          STATIC      2   variable
+;_setICChannel                       IMPORT  -----   function
+;_clearPgmRlyCtl                     IMPORT  -----   function
+;_setPgmRlyCtl                       IMPORT  -----   function
+;_clearClkCor2Ctl                    IMPORT  -----   function
+;_setClkCor2Ctl                      IMPORT  -----   function
+;_clearClkCor1Ctl                    IMPORT  -----   function
+;_delay                              IMPORT  -----   function
+;_setClkCor1Ctl                      IMPORT  -----   function
+;_updateSupervisor                   IMPORT  -----   function
+;_cardAddress                        STATIC      1   variable
+;_readAddress                        IMPORT  -----   function
+;_Init                               IMPORT  -----   function
+;callButtons                         RR14-4      2   variable
+;index                               RR14-2      2   variable
+
+
+; Aggregate Stack Size: -4 (words)
+
+
+	.FRAME _n_main,?_n_main,RDATA
+	.FCALL _n_Init
+	.FCALL _n_readAddress
+	.FCALL _n_updateSupervisor
+	.FCALL _n_setClkCor1Ctl
+	.FCALL _n_delay
+	.FCALL _n_clearClkCor1Ctl
+	.FCALL _n_setClkCor2Ctl
+	.FCALL _n_clearClkCor2Ctl
+	.FCALL _n_setPgmRlyCtl
+	.FCALL _n_clearPgmRlyCtl
+	.FCALL _n_setICChannel
+	.FCALL _n_setZone
+	.FCALL _n_initTibbo
+	.FCALL _n_processCommands
+	.FRAME _f_main,?_f_main,EDATA
+	.FCALL _f_Init
+	.FCALL _f_readAddress
+	.FCALL _f_updateSupervisor
+	.FCALL _f_setClkCor1Ctl
+	.FCALL _f_delay
+	.FCALL _f_clearClkCor1Ctl
+	.FCALL _f_setClkCor2Ctl
+	.FCALL _f_clearClkCor2Ctl
+	.FCALL _f_setPgmRlyCtl
+	.FCALL _f_clearPgmRlyCtl
+	.FCALL _f_setICChannel
+	.FCALL _f_setZone
+	.FCALL _f_initTibbo
+	.FCALL _f_processCommands
+;    1	/********************************************************************
+;    2	 * Teradon Speaker Card Rev I firmware  
+;    3	 *  
+;    4	 ********************************************************************/
+;    5	#include <eZ8.h>
+;    6	#include <stdio.h>
+;    7	#include <sio.h> // non-standard I/O
+;    8	#include "main.h"
+;    9	#include "cmd.h"
+;   10	#include "timer.h"
+;   11	#include "test_button.h"
+;   12	#include "uart.h"
+;   13	#include "string.h"
+;   14	#include "stdlib.h"
+;   15	#include "init.h"
+;   16	#include "util.h"
+;   17	#include "tibbo.h"
+;   18	
+;   19	////////////////////////////////////////////////////////
+;   20	// Global variables
+;   21	char cardAddress;
+;   22	char checksumEnabled;
+;   23	int  icChannel          = 0;
+;   24	int  zone               = 0;
+;   25	int  supervisorChannels = 0;
+;   26	char apccRelays         = 0; // Bit 0 is all page
+;   27	                             // Bit 1 is clk cor 1
+;   28	                             // Bit 2 is clk cor 2
+;   29	int  tibboOnline        = 0;
+	SEGMENT main_TEXT
+;   30	
+;   31	////////////////////////////////////////////////////////
+;   32	// Main program begins here 
+;   33	void main ()
+;   34	{
+_main:
+.define "_main"
+.value _main
+.class 2
+.type 65
+.endef
+.begfunc "main",34,"_main"
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "callButtons"
+.class 1
+.value -4
+.type 3
+.endef
+	LD	R5,#4
+	CALL	__b_frameset0
+;   35	  int index;
+;   36	  int callButtons = 0;
+.line 36
+	CLR	R0
+	CLR	R1
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+;   37	
+;   38	  // perform initialization
+;   39	  Init ( );
+.line 39
+	CALL	_Init
+;   40		
+;   41	  // Read the card address from the dip switch
+;   42	  cardAddress = readAddress();
+.line 42
+	CALL	_readAddress
+	LDX	_cardAddress,R0
+;   43	
+;   44	  // Set the supervisor relays
+;   45	  updateSupervisor(0x0000);    
+.line 45
+	PUSH	#0
+	PUSH	#0
+	CALL	_updateSupervisor
+	POP	R0
+	POP	R0
+;   46	
+;   47	  // Use the card address switch setting of zero
+;   48	  // to indicate that a selftest should be performed
+;   49	  if (0 == cardAddress)
+.line 49
+	CPX	_cardAddress,#-0
+	JR	NE,_1_L_13
+;   50	  {
+;   51	    // Do selftest
+;   52	    setClkCor1Ctl();
+.line 52
+	CALL	_setClkCor1Ctl
+;   53	    delay();
+.line 53
+	CALL	_delay
+;   54	    clearClkCor1Ctl();
+.line 54
+	CALL	_clearClkCor1Ctl
+;   55	    setClkCor2Ctl();
+.line 55
+	CALL	_setClkCor2Ctl
+;   56	    delay();
+.line 56
+	CALL	_delay
+;   57	    clearClkCor2Ctl();
+.line 57
+	CALL	_clearClkCor2Ctl
+;   58	    setPgmRlyCtl();
+.line 58
+	CALL	_setPgmRlyCtl
+;   59	    delay();
+.line 59
+	CALL	_delay
+;   60	    clearPgmRlyCtl();
+.line 60
+	CALL	_clearPgmRlyCtl
+	JR	_1_L_1
+;   61	
+;   62	    // Cycle channels
+;   63	    for (index = 0; index < 16; index++)
+_1_L_2:
+.line 63
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#16
+	CPC	R0,#-0
+	JR	LT,_1_L_4
+	JR	_1_L_5
+_1_L_1:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_1_L_2
+_1_L_4:
+;   64	    {
+;   65	      setICChannel(0x0001 << index + 1);
+.line 65
+	LDX	R0,-1(RR14)
+	INC	R0
+	CLR	R1
+	LD	R2,#1
+	OR	R0,R0
+	JR	Z,L__9
+L__10:
+	ADD	R2,R2
+	ADC	R1,R1
+	DJNZ	R0,L__10
+L__9:
+	PUSH	R2
+	PUSH	R1
+	CALL	_setICChannel
+	POP	R0
+	POP	R0
+;   66	      delay();
+.line 66
+	CALL	_delay
+.line 63
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;   67	    }
+.line 67
+	JR	_1_L_2
+_1_L_5:
+;   68	
+;   69	    // Set the channels back to 0
+;   70	    setICChannel(icChannel);
+.line 70
+	PUSHX	_icChannel+1
+	PUSHX	_icChannel
+	CALL	_setICChannel
+	POP	R0
+	POP	R0
+	JR	_1_L_7
+;   71	  
+;   72	    // Cycle zone
+;   73	    for (index = 0; index < 16; index++)
+_1_L_8:
+.line 73
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#16
+	CPC	R0,#-0
+	JR	LT,_1_L_10
+	JR	_1_L_11
+_1_L_7:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_1_L_8
+_1_L_10:
+;   74	    {
+;   75	      setZone(0x0001 << index + 1);
+.line 75
+	LDX	R0,-1(RR14)
+	INC	R0
+	CLR	R1
+	LD	R2,#1
+	OR	R0,R0
+	JR	Z,L__11
+L__12:
+	ADD	R2,R2
+	ADC	R1,R1
+	DJNZ	R0,L__12
+L__11:
+	PUSH	R2
+	PUSH	R1
+	CALL	_setZone
+	POP	R0
+	POP	R0
+;   76	      delay();
+.line 76
+	CALL	_delay
+.line 73
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;   77	    }
+.line 77
+	JR	_1_L_8
+_1_L_11:
+;   78	
+;   79	    // Set zone back to 0
+;   80	    setZone(zone);
+.line 80
+	PUSHX	_zone+1
+	PUSHX	_zone
+	CALL	_setZone
+	POP	R0
+	POP	R0
+;   81	  }
+;   82	  else
+.line 82
+	JR	_1_L_17
+_1_L_13:
+;   83	  {
+;   84	    // Set the channels to 0
+;   85	    setICChannel(icChannel);
+.line 85
+	PUSHX	_icChannel+1
+	PUSHX	_icChannel
+	CALL	_setICChannel
+	POP	R0
+	POP	R0
+;   86	
+;   87	    // Set zone to 0
+;   88	    setZone(zone);
+.line 88
+	PUSHX	_zone+1
+	PUSHX	_zone
+	CALL	_setZone
+	POP	R0
+	POP	R0
+;   89	  }
+_1_L_17:
+.line 89
+;   90	  
+;   91	  
+;   92	  // Some card addresses are not allowed with the Tibbo Ethernet
+;   93	  // to RS232 module. If the address switch is set to one of them
+;   94	  // do not attemp to initialize the module.
+;   95	  if ((0 != cardAddress) && (1 != cardAddress) && (255 != cardAddress))
+.line 95
+	CPX	_cardAddress,#-0
+	JR	Z,_1_L_18
+	CPX	_cardAddress,#1
+	JR	Z,_1_L_18
+	CPX	_cardAddress,#255
+	JR	Z,_1_L_18
+;   96	  {
+;   97	  // Initialize the Tibbo Ethernet to RS232 module
+;   98	  tibboOnline = (initTibbo() == OK);
+.line 98
+	CALL	_initTibbo
+	CP	R1,#1
+	CPC	R0,#-0
+	JR	NE,L__7
+	CLR	R0
+	LD	R1,#1
+	JR	L__8
+L__7:
+	CLR	R0
+	CLR	R1
+L__8:
+	LDX	_tibboOnline,R0
+	LDX	_tibboOnline+1,R1
+;   99	  }
+_1_L_18:
+.line 99
+;  100	
+;  101	  // Go to the command processing loop
+;  102	  processCommands(cardAddress);  
+.line 102
+	LDX	R1,_cardAddress
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	PUSH	R1
+	PUSH	R0
+	CALL	_processCommands
+	POP	R0
+	POP	R0
+;  103	} //End of main program
+.line 103
+	CALL	__b_framereset
+	RET	
+.endfunc "main",103,"_main"
+	XREF _initTibbo:ROM
+	XREF _readAddress:ROM
+	XREF _updateSupervisor:ROM
+	XREF _delay:ROM
+	XREF _setZone:ROM
+	XREF _setICChannel:ROM
+	XREF _clearPgmRlyCtl:ROM
+	XREF _setPgmRlyCtl:ROM
+	XREF _clearClkCor2Ctl:ROM
+	XREF _clearClkCor1Ctl:ROM
+	XREF _setClkCor2Ctl:ROM
+	XREF _setClkCor1Ctl:ROM
+	XREF _Init:ROM
+	XREF _processCommands:ROM
+	XREF __b_framereset:ROM
+	XREF __b_frameset0:ROM
+	XDEF _main
+	XDEF _tibboOnline
+	XDEF _apccRelays
+	XDEF _supervisorChannels
+	XDEF _zone
+	XDEF _icChannel
+	XDEF _checksumEnabled
+	XDEF _cardAddress
+	END

@@ -1,0 +1,877 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE uart_TEXT,SPACE=ROM
+                           A     6    	FILE	".\uart.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT ROM_DATA
+                           A     9    
+                           A    10    
+                           A    11    ;**************************** _isr_uart0_rx ***
+                           A    12    ;Name                         Addr/Register   S
+                           A    13    
+                           A    14    
+                           A    15    ; Aggregate Stack Size: 0 (words)
+                           A    16    
+                           A    17    
+                           A    18    	.FRAME _n_isr_uart0_rx,?_n_isr_uart0_rx,RDA
+                           A    19    	.FRAME _f_isr_uart0_rx,?_f_isr_uart0_rx,EDA
+                           A    20    	SEGMENT uart_TEXT
+                           A    21    .begrec "fmt_type",10
+                           A    22    .define "flags"
+                           A    23    .value 0
+                           A    24    .class 8
+                           A    25    .type 2
+                           A    26    .endef
+                           A    27    .define "size"
+                           A    28    .value 1
+                           A    29    .class 8
+                           A    30    .type 2
+                           A    31    .endef
+                           A    32    .define "space"
+                           A    33    .value 2
+                           A    34    .class 8
+                           A    35    .type 2
+                           A    36    .endef
+                           A    37    .define "type"
+                           A    38    .value 3
+                           A    39    .class 8
+                           A    40    .type 2
+                           A    41    .endef
+                           A    42    .define "field_width"
+                           A    43    .value 4
+                           A    44    .class 8
+                           A    45    .type 2
+                           A    46    .endef
+                           A    47    .define "precision"
+                           A    48    .value 5
+                           A    49    .class 8
+                           A    50    .type 2
+                           A    51    .endef
+                           A    52    .define "print_leading_char"
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   2
+
+
+PC     Object              I  Line    Source uart.src
+                           A    53    .value 6
+                           A    54    .class 8
+                           A    55    .type 2
+                           A    56    .endef
+                           A    57    .define "dest"
+                           A    58    .value 7
+                           A    59    .class 8
+                           A    60    .type 162
+                           A    61    .endef
+                           A    62    .define "print_len"
+                           A    63    .value 9
+                           A    64    .class 8
+                           A    65    .type 12
+                           A    66    .endef
+                           A    67    .endrec "fmt_type"
+                           A    68    .begrec "flt_fmt_data",5
+                           A    69    .define "pad_whole"
+                           A    70    .value 0
+                           A    71    .class 8
+                           A    72    .type 12
+                           A    73    .endef
+                           A    74    .define "pad_pre_fract"
+                           A    75    .value 1
+                           A    76    .class 8
+                           A    77    .type 12
+                           A    78    .endef
+                           A    79    .define "pad_post_fract"
+                           A    80    .value 2
+                           A    81    .class 8
+                           A    82    .type 12
+                           A    83    .endef
+                           A    84    .define "pad_at"
+                           A    85    .value 3
+                           A    86    .class 8
+                           A    87    .type 162
+                           A    88    .endef
+                           A    89    .endrec "flt_fmt_data"
+                           A    90    .begrec "fmt_control_data",2
+                           A    91    .define "status"
+                           A    92    .value 0
+                           A    93    .class 8
+                           A    94    .type 2
+                           A    95    .endef
+                           A    96    .define "chr"
+                           A    97    .value 1
+                           A    98    .class 8
+                           A    99    .type 2
+                           A   100    .endef
+                           A   101    .endrec "fmt_control_data"
+                           A   102    .begrec "_set_type",4
+                           A   103    .define "begin"
+                           A   104    .value 0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   3
+
+
+PC     Object              I  Line    Source uart.src
+                           A   105    .class 8
+                           A   106    .type 162
+                           A   107    .endef
+                           A   108    .define "end"
+                           A   109    .value 2
+                           A   110    .class 8
+                           A   111    .type 162
+                           A   112    .endef
+                           A   113    .endrec "_set_type"
+                           A   114    .begrec "near_set_type",2
+                           A   115    .define "begin"
+                           A   116    .value 0
+                           A   117    .class 8
+                           A   118    .type 130
+                           A   119    .endef
+                           A   120    .define "end"
+                           A   121    .value 1
+                           A   122    .class 8
+                           A   123    .type 130
+                           A   124    .endef
+                           A   125    .endrec "near_set_type"
+                           A   126    .begrec "far_set_type",4
+                           A   127    .define "begin"
+                           A   128    .value 0
+                           A   129    .class 8
+                           A   130    .type 162
+                           A   131    .endef
+                           A   132    .define "end"
+                           A   133    .value 2
+                           A   134    .class 8
+                           A   135    .type 162
+                           A   136    .endef
+                           A   137    .endrec "far_set_type"
+                           A   138    .begrec "rom_set_type",4
+                           A   139    .define "begin"
+                           A   140    .value 0
+                           A   141    .class 8
+                           A   142    .type 194
+                           A   143    .endef
+                           A   144    .define "end"
+                           A   145    .value 2
+                           A   146    .class 8
+                           A   147    .type 194
+                           A   148    .endef
+                           A   149    .endrec "rom_set_type"
+                           A   150    .begrec "flt_info",12
+                           A   151    .define "flags"
+                           A   152    .value 0
+                           A   153    .class 8
+                           A   154    .type 12
+                           A   155    .endef
+                           A   156    .define "exp"
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   4
+
+
+PC     Object              I  Line    Source uart.src
+                           A   157    .value 1
+                           A   158    .class 8
+                           A   159    .type 2
+                           A   160    .endef
+                           A   161    .define "digits"
+                           A   162    .value 2
+                           A   163    .class 8
+                           A   164    .dim 10
+                           A   165    .type 108
+                           A   166    .endef
+                           A   167    .endrec "flt_info"
+                           A   168    .begrec "NONAME0",6
+                           A   169    .define "baudRate"
+                           A   170    .value 0
+                           A   171    .class 8
+                           A   172    .type 5
+                           A   173    .endef
+                           A   174    .define "stopBits"
+                           A   175    .value 4
+                           A   176    .class 8
+                           A   177    .type 12
+                           A   178    .endef
+                           A   179    .define "parity"
+                           A   180    .value 5
+                           A   181    .class 8
+                           A   182    .type 12
+                           A   183    .endef
+                           A   184    .endrec "NONAME0"
+                           A   185    .begrec "NONAME1",5
+                           A   186    .define "pBuffer"
+                           A   187    .value 0
+                           A   188    .class 8
+                           A   189    .type 172
+                           A   190    .endef
+                           A   191    .define "next_in"
+                           A   192    .value 2
+                           A   193    .class 8
+                           A   194    .type 12
+                           A   195    .endef
+                           A   196    .define "next_out"
+                           A   197    .value 3
+                           A   198    .class 8
+                           A   199    .type 12
+                           A   200    .endef
+                           A   201    .define "size"
+                           A   202    .value 4
+                           A   203    .class 8
+                           A   204    .type 12
+                           A   205    .endef
+                           A   206    .endrec "NONAME1"
+                           A   207    ;    1	/**************************************
+                           A   208    ;    2	 *  Copyright (C) 1999-2008 by Zilog, I
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   5
+
+
+PC     Object              I  Line    Source uart.src
+                           A   209    ;    3	 *  All Rights Reserved
+                           A   210    ;    4	 **************************************
+                           A   211    ;    5	
+                           A   212    ;    6	#include <eZ8.h>
+                           A   213    ;    7	#include <stdio.h>
+                           A   214    ;    8	#include <sio.h> // non-standard I/O
+                           A   215    ;    9	#include "main.h"
+                           A   216    ;   10	#include "uart.h"
+                           A   217    ;   11	#include "util.h"
+                           A   218    ;   12	
+                           A   219    ;   13	
+                           A   220    ;   14	///////////////////////////////////////
+                           A   221    ;   15	//Interrupt routine UART 0
+                           A   222    ;   16	
+                           A   223    ;   17	#pragma interrupt
+                           A   224    ;   18	void isr_uart0_rx(void) 
+                           A   225    ;   19	{
+0000                       A   226    _isr_uart0_rx:
+                           A   227    .define "_isr_uart0_rx"
+                           A   228    .value _isr_uart0_rx
+                           A   229    .class 2
+                           A   230    .type 65
+                           A   231    .endef
+                           A   232    .begfunc "isr_uart0_rx",19,"_isr_uart0_rx"
+0000 C8FFD0                A   233    	PUSHX	4093
+0003 D6 0000               A   234    	CALL	__b_iframeset00
+                           A   235    ;   20	    //toggle_uart();
+                           A   236    ;   21	}
+                           A   237    .line 21
+0006 D6 0000               A   238    	CALL	__b_iframereset
+0009 BF                    A   239    	IRET	
+                           A   240    .endfunc "isr_uart0_rx",21,"_isr_uart0_rx"
+                           A   241    	SEGMENT ROM_DATA
+                           A   242    
+                           A   243    
+                           A   244    ;**************************** _isr_uart1_rx ***
+                           A   245    ;Name                         Addr/Register   S
+                           A   246    ;_putchar                            IMPORT  --
+                           A   247    
+                           A   248    
+                           A   249    ; Aggregate Stack Size: 0 (words)
+                           A   250    
+                           A   251    
+                           A   252    	.FRAME _n_isr_uart1_rx,?_n_isr_uart1_rx,RDA
+                           A   253    	.FCALL _n_putchar
+                           A   254    	.FRAME _f_isr_uart1_rx,?_f_isr_uart1_rx,EDA
+                           A   255    	.FCALL _f_putchar
+                           A   256    	SEGMENT uart_TEXT
+                           A   257    ;   22	
+                           A   258    ;   23	///////////////////////////////////////
+                           A   259    ;   24	//Interrupt routine UART 1
+                           A   260    ;   25	
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   6
+
+
+PC     Object              I  Line    Source uart.src
+                           A   261    ;   26	#pragma interrupt
+                           A   262    ;   27	void isr_uart1_rx(void) 
+                           A   263    ;   28	{
+000A                       A   264    _isr_uart1_rx:
+                           A   265    .define "_isr_uart1_rx"
+                           A   266    .value _isr_uart1_rx
+                           A   267    .class 2
+                           A   268    .type 65
+                           A   269    .endef
+                           A   270    .begfunc "isr_uart1_rx",28,"_isr_uart1_rx"
+000A C8FFD0                A   271    	PUSHX	4093
+000D D6 0000               A   272    	CALL	__b_iframeset00
+                           A   273    ;   29	  putchar('S');
+                           A   274    .line 29
+0010 1F7053                A   275    	PUSH	#83
+0013 1F7000                A   276    	PUSH	#0
+0016 D6 0000               A   277    	CALL	_putchar
+0019 50E0                  A   278    	POP	R0
+001B 50E0                  A   279    	POP	R0
+                           A   280    ;   30	}
+                           A   281    .line 30
+001D D6 0000               A   282    	CALL	__b_iframereset
+0020 BF                    A   283    	IRET	
+                           A   284    .endfunc "isr_uart1_rx",30,"_isr_uart1_rx"
+                           A   285    	SEGMENT ROM_DATA
+                           A   286    
+                           A   287    
+                           A   288    ;**************************** _init_uart0 *****
+                           A   289    ;Name                         Addr/Register   S
+                           A   290    ;_SET_VECTOR                         IMPORT  --
+                           A   291    ;_select_port                        IMPORT  --
+                           A   292    ;_get_freq                           IMPORT  --
+                           A   293    ;_init_uart                          IMPORT  --
+                           A   294    
+                           A   295    
+                           A   296    ; Aggregate Stack Size: 0 (words)
+                           A   297    
+                           A   298    
+                           A   299    	.FRAME _n_init_uart0,?_n_init_uart0,RDATA
+                           A   300    	.FCALL _n_init_uart
+                           A   301    	.FCALL _n_get_freq
+                           A   302    	.FCALL _n_select_port
+                           A   303    	.FRAME _f_init_uart0,?_f_init_uart0,EDATA
+                           A   304    	.FCALL _f_init_uart
+                           A   305    	.FCALL _f_get_freq
+                           A   306    	.FCALL _f_select_port
+                           A   307    	SEGMENT uart_TEXT
+                           A   308    ;   31	
+                           A   309    ;   32	///////////////////////////////////////
+                           A   310    ;   33	//Intialize UART 0 
+                           A   311    ;   34	void init_uart0(void)
+                           A   312    ;   35	{
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   7
+
+
+PC     Object              I  Line    Source uart.src
+0021                       A   313    _init_uart0:
+                           A   314    .define "_init_uart0"
+                           A   315    .value _init_uart0
+                           A   316    .class 2
+                           A   317    .type 65
+                           A   318    .endef
+                           A   319    .begfunc "init_uart0",35,"_init_uart0"
+0021 D6 0000               A   320    	CALL	__b_frameset00
+                           A   321    ;   36	  init_uart(_UART0,_DEFFREQ,38400);    
+                           A   322    .line 36
+0024 D6 0000               A   323    	CALL	_get_freq
+0027 1F7000                A   324    	PUSH	#0
+002A 1F7096                A   325    	PUSH	#150
+002D 1F7000                A   326    	PUSH	#0
+0030 1F7000                A   327    	PUSH	#0
+0033 70E3                  A   328    	PUSH	R3
+0035 70E2                  A   329    	PUSH	R2
+0037 70E1                  A   330    	PUSH	R1
+0039 70E0                  A   331    	PUSH	R0
+003B 1F7000                A   332    	PUSH	#0
+003E 1F7000                A   333    	PUSH	#0
+0041 D6 0000               A   334    	CALL	_init_uart
+0044 2F                    A   335    	ATM	
+0045 090A0FFF              A   336    	ADDX	4095,#10
+0049 19000FFE              A   337    	ADCX	4094,#-0
+                           A   338    ;   37	  select_port(_UART0);                 
+                           A   339    .line 37
+004D 1F7000                A   340    	PUSH	#0
+0050 1F7000                A   341    	PUSH	#0
+0053 D6 0000               A   342    	CALL	_select_port
+0056 50E0                  A   343    	POP	R0
+0058 50E0                  A   344    	POP	R0
+                           A   345    ;   38	  SET_VECTOR(UART0_RX, isr_uart0_rx);  
+                           A   346    ;   39	  IRQ0ENH |= 0x10;                     
+                           A   347    .line 39
+005A 49100FC1              A   348    	ORX	4033,#16
+                           A   349    ;   40	  IRQ0ENL |= 0x10;                     
+                           A   350    .line 40
+005E 49100FC2              A   351    	ORX	4034,#16
+                           A   352    ;   41	}
+                           A   353    .line 41
+0062 D6 0000               A   354    	CALL	__b_framereset
+0065 AF                    A   355    	RET	
+                           A   356    .endfunc "init_uart0",41,"_init_uart0"
+                           A   357    	SEGMENT ROM_DATA
+                           A   358    
+                           A   359    
+                           A   360    ;**************************** _init_uart1 *****
+                           A   361    ;Name                         Addr/Register   S
+                           A   362    ;_SET_VECTOR                         IMPORT  --
+                           A   363    ;_select_port                        IMPORT  --
+                           A   364    ;_get_freq                           IMPORT  --
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   8
+
+
+PC     Object              I  Line    Source uart.src
+                           A   365    ;_init_uart                          IMPORT  --
+                           A   366    
+                           A   367    
+                           A   368    ; Aggregate Stack Size: 0 (words)
+                           A   369    
+                           A   370    
+                           A   371    	.FRAME _n_init_uart1,?_n_init_uart1,RDATA
+                           A   372    	.FCALL _n_init_uart
+                           A   373    	.FCALL _n_get_freq
+                           A   374    	.FCALL _n_select_port
+                           A   375    	.FRAME _f_init_uart1,?_f_init_uart1,EDATA
+                           A   376    	.FCALL _f_init_uart
+                           A   377    	.FCALL _f_get_freq
+                           A   378    	.FCALL _f_select_port
+                           A   379    	SEGMENT uart_TEXT
+                           A   380    ;   42	
+                           A   381    ;   43	///////////////////////////////////////
+                           A   382    ;   44	//Intialize UART 1 
+                           A   383    ;   45	void init_uart1(void)
+                           A   384    ;   46	{
+0066                       A   385    _init_uart1:
+                           A   386    .define "_init_uart1"
+                           A   387    .value _init_uart1
+                           A   388    .class 2
+                           A   389    .type 65
+                           A   390    .endef
+                           A   391    .begfunc "init_uart1",46,"_init_uart1"
+0066 D6 0000               A   392    	CALL	__b_frameset00
+                           A   393    ;   47	  init_uart(_UART1,_DEFFREQ,38400);    
+                           A   394    .line 47
+0069 D6 0000               A   395    	CALL	_get_freq
+006C 1F7000                A   396    	PUSH	#0
+006F 1F7096                A   397    	PUSH	#150
+0072 1F7000                A   398    	PUSH	#0
+0075 1F7000                A   399    	PUSH	#0
+0078 70E3                  A   400    	PUSH	R3
+007A 70E2                  A   401    	PUSH	R2
+007C 70E1                  A   402    	PUSH	R1
+007E 70E0                  A   403    	PUSH	R0
+0080 1F7001                A   404    	PUSH	#1
+0083 1F7000                A   405    	PUSH	#0
+0086 D6 0000               A   406    	CALL	_init_uart
+0089 2F                    A   407    	ATM	
+008A 090A0FFF              A   408    	ADDX	4095,#10
+008E 19000FFE              A   409    	ADCX	4094,#-0
+                           A   410    ;   48	  select_port(_UART1);				   
+                           A   411    .line 48
+0092 1F7001                A   412    	PUSH	#1
+0095 1F7000                A   413    	PUSH	#0
+0098 D6 0000               A   414    	CALL	_select_port
+009B 50E0                  A   415    	POP	R0
+009D 50E0                  A   416    	POP	R0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   9
+
+
+PC     Object              I  Line    Source uart.src
+                           A   417    ;   49	  SET_VECTOR(UART1_RX, isr_uart1_rx);  
+                           A   418    ;   50	  IRQ1ENH |= 0x10;                     
+                           A   419    .line 50
+009F 49100FC4              A   420    	ORX	4036,#16
+                           A   421    ;   51	  IRQ1ENL |= 0x10;                     
+                           A   422    .line 51
+00A3 49100FC5              A   423    	ORX	4037,#16
+                           A   424    ;   52	}
+                           A   425    .line 52
+00A7 D6 0000               A   426    	CALL	__b_framereset
+00AA AF                    A   427    	RET	
+                           A   428    .endfunc "init_uart1",52,"_init_uart1"
+                           A   429    	SEGMENT ROM_DATA
+                           A   430    
+                           A   431    
+                           A   432    ;**************************** _getc ***********
+                           A   433    ;Name                         Addr/Register   S
+                           A   434    ;_getchar                            IMPORT  --
+                           A   435    ;temp                                RR14-2    
+                           A   436    
+                           A   437    
+                           A   438    ; Aggregate Stack Size: -2 (words)
+                           A   439    
+                           A   440    
+                           A   441    	.FRAME _n_getc,?_n_getc,RDATA
+                           A   442    	.FCALL _n_getchar
+                           A   443    	.FRAME _f_getc,?_f_getc,EDATA
+                           A   444    	.FCALL _f_getchar
+                           A   445    	SEGMENT uart_TEXT
+                           A   446    ;   53	
+                           A   447    ;   54	///////////////////////////////////////
+                           A   448    ;   55	// getc
+                           A   449    ;   56	// This function reads chars from the u
+                           A   450    ;   57	// Param none
+                           A   451    ;   58	// Return char
+                           A   452    ;   59	int getc(void)
+                           A   453    ;   60	{
+00AB                       A   454    _getc:
+                           A   455    .define "_getc"
+                           A   456    .value _getc
+                           A   457    .class 2
+                           A   458    .type 67
+                           A   459    .endef
+                           A   460    .begfunc "getc",60,"_getc"
+                           A   461    .define "temp"
+                           A   462    .class 1
+                           A   463    .value -2
+                           A   464    .type 3
+                           A   465    .endef
+00AB 5C02                  A   466    	LD	R5,#2
+00AD D6 0000               A   467    	CALL	__b_frameset0
+                           A   468    ;   61	  int temp = EOF;
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  10
+
+
+PC     Object              I  Line    Source uart.src
+                           A   469    .line 61
+00B0 0CFF                  A   470    	LD	R0,#255
+00B2 1CFF                  A   471    	LD	R1,#255
+00B4 89E0FE                A   472    	LDX	-2(RR14),R0
+00B7 89E1FF                A   473    	LDX	-1(RR14),R1
+                           A   474    ;   62	  
+                           A   475    ;   63	  while (EOF == temp)
+00BA                       A   476    _5_L_4:
+                           A   477    .line 63
+00BA 880EFE                A   478    	LDX	R0,-2(RR14)
+00BD 881EFF                A   479    	LDX	R1,-1(RR14)
+00C0 A6E1FF                A   480    	CP	R1,#255
+00C3 1FA6E0FF              A   481    	CPC	R0,#255
+00C7 EB 0B                 A   482    	JR	NE,_5_L_6
+                           A   483    ;   64	  {
+                           A   484    ;   65	    temp = getchar();
+                           A   485    .line 65
+00C9 D6 0000               A   486    	CALL	_getchar
+00CC 89E0FE                A   487    	LDX	-2(RR14),R0
+00CF 89E1FF                A   488    	LDX	-1(RR14),R1
+                           A   489    ;   66	  }
+                           A   490    .line 66
+00D2 8B E6                 A   491    	JR	_5_L_4
+00D4                       A   492    _5_L_6:
+                           A   493    ;   67	  return temp;
+                           A   494    .line 67
+00D4 880EFE                A   495    	LDX	R0,-2(RR14)
+00D7 881EFF                A   496    	LDX	R1,-1(RR14)
+                           A   497    ;   68	}
+                           A   498    .line 68
+00DA D6 0000               A   499    	CALL	__b_framereset
+00DD AF                    A   500    	RET	
+                           A   501    .endfunc "getc",68,"_getc"
+                           A   502    	SEGMENT ROM_DATA
+                           A   503    
+                           A   504    
+                           A   505    ;**************************** _readUart *******
+                           A   506    ;Name                         Addr/Register   S
+                           A   507    ;_uSecDelay                          IMPORT  --
+                           A   508    ;result                              RR14-8    
+                           A   509    ;timeout_count                       RR14-6    
+                           A   510    ;loop_count                          RR14-4    
+                           A   511    ;index                               RR14-2    
+                           A   512    ;timeout                            RR14+10    
+                           A   513    ;count                               RR14+8    
+                           A   514    ;uart                                RR14+6    
+                           A   515    ;buffer                              RR14+4    
+                           A   516    
+                           A   517    
+                           A   518    ; Aggregate Stack Size: -8 (words)
+                           A   519    
+                           A   520    
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  11
+
+
+PC     Object              I  Line    Source uart.src
+                           A   521    	.FRAME _n_readUart,?_n_readUart,RDATA
+                           A   522    	.FCALL _n_uSecDelay
+                           A   523    	.FRAME _f_readUart,?_f_readUart,EDATA
+                           A   524    	.FCALL _f_uSecDelay
+                           A   525    	SEGMENT uart_TEXT
+                           A   526    ;   69	
+                           A   527    ;   70	///////////////////////////////////////
+                           A   528    ;   71	// readUart
+                           A   529    ;   72	// This function reads chars from the u
+                           A   530    ;   73	// Param buffer - buffer to store the r
+                           A   531    ;   74	// Param uart - UART to receive data fr
+                           A   532    ;   75	// Param count - number of characters t
+                           A   533    ;   76	// Param timeout - time out in millisec
+                           A   534    ;   77	// Return bytes read
+                           A   535    ;   78	int readUart(char* buffer, int uart, in
+                           A   536    ;   79	{
+00DE                       A   537    _readUart:
+                           A   538    .define "_readUart"
+                           A   539    .value _readUart
+                           A   540    .class 2
+                           A   541    .type 67
+                           A   542    .endef
+                           A   543    .begfunc "readUart",79,"_readUart"
+                           A   544    .define "buffer"
+                           A   545    .class 9
+                           A   546    .value 4
+                           A   547    .type 162
+                           A   548    .endef
+                           A   549    .define "uart"
+                           A   550    .class 9
+                           A   551    .value 6
+                           A   552    .type 3
+                           A   553    .endef
+                           A   554    .define "count"
+                           A   555    .class 9
+                           A   556    .value 8
+                           A   557    .type 3
+                           A   558    .endef
+                           A   559    .define "timeout"
+                           A   560    .class 9
+                           A   561    .value 10
+                           A   562    .type 3
+                           A   563    .endef
+                           A   564    .define "index"
+                           A   565    .class 1
+                           A   566    .value -2
+                           A   567    .type 3
+                           A   568    .endef
+                           A   569    .define "loop_count"
+                           A   570    .class 1
+                           A   571    .value -4
+                           A   572    .type 3
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  12
+
+
+PC     Object              I  Line    Source uart.src
+                           A   573    .endef
+                           A   574    .define "timeout_count"
+                           A   575    .class 1
+                           A   576    .value -6
+                           A   577    .type 3
+                           A   578    .endef
+                           A   579    .define "result"
+                           A   580    .class 1
+                           A   581    .value -8
+                           A   582    .type 3
+                           A   583    .endef
+00DE 5C08                  A   584    	LD	R5,#8
+00E0 D6 0000               A   585    	CALL	__b_frameset0
+                           A   586    ;   80	  int index = 0;
+                           A   587    .line 80
+00E3 B0E0                  A   588    	CLR	R0
+00E5 B0E1                  A   589    	CLR	R1
+00E7 89E0FE                A   590    	LDX	-2(RR14),R0
+00EA 89E1FF                A   591    	LDX	-1(RR14),R1
+                           A   592    ;   81	  int loop_count = 0;
+                           A   593    .line 81
+00ED B0E0                  A   594    	CLR	R0
+00EF B0E1                  A   595    	CLR	R1
+00F1 89E0FC                A   596    	LDX	-4(RR14),R0
+00F4 89E1FD                A   597    	LDX	-3(RR14),R1
+                           A   598    ;   82	  int timeout_count = 0;
+                           A   599    .line 82
+00F7 B0E0                  A   600    	CLR	R0
+00F9 B0E1                  A   601    	CLR	R1
+00FB 89E0FA                A   602    	LDX	-6(RR14),R0
+00FE 89E1FB                A   603    	LDX	-5(RR14),R1
+                           A   604    ;   83	  int result = 0;
+                           A   605    .line 83
+0101 B0E0                  A   606    	CLR	R0
+0103 B0E1                  A   607    	CLR	R1
+0105 89E0F8                A   608    	LDX	-8(RR14),R0
+0108 89E1F9                A   609    	LDX	-7(RR14),R1
+                           A   610    ;   84	  
+                           A   611    ;   85	  for(;;)
+010B                       A   612    _6_L_23:
+                           A   613    .line 85
+                           A   614    ;   86	  {
+                           A   615    ;   87	    if ((uart == UART0) && (U0STAT0 & 0
+                           A   616    .line 87
+010B 880E06                A   617    	LDX	R0,6(RR14)
+010E 881E07                A   618    	LDX	R1,7(RR14)
+0111 4201                  A   619    	OR	R0,R1
+0113 EB 4C                 A   620    	JR	NE,_6_L_17
+0115 79800F41              A   621    	TMX	3905,#128
+0119 6B 46                 A   622    	JR	Z,_6_L_17
+                           A   623    ;   88		  {
+                           A   624    ;   89	      // Data is ready
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  13
+
+
+PC     Object              I  Line    Source uart.src
+                           A   625    ;   90	      buffer[index++] = U0RXD;
+                           A   626    .line 90
+011B 880EFE                A   627    	LDX	R0,-2(RR14)
+011E 881EFF                A   628    	LDX	R1,-1(RR14)
+0121 882E04                A   629    	LDX	R2,4(RR14)
+0124 883E05                A   630    	LDX	R3,5(RR14)
+0127 0231                  A   631    	ADD	R3,R1
+0129 1220                  A   632    	ADC	R2,R0
+012B 840F40                A   633    	LDX	R0,3904
+012E 96E0E2                A   634    	LDX	@RR2,R0
+0131 880EFE                A   635    	LDX	R0,-2(RR14)
+0134 881EFF                A   636    	LDX	R1,-1(RR14)
+0137 A0E0                  A   637    	INCW	RR0
+0139 89E0FE                A   638    	LDX	-2(RR14),R0
+013C 89E1FF                A   639    	LDX	-1(RR14),R1
+                           A   640    ;   91	      if (index >= count)
+                           A   641    .line 91
+013F 880EFE                A   642    	LDX	R0,-2(RR14)
+0142 881EFF                A   643    	LDX	R1,-1(RR14)
+0145 882E08                A   644    	LDX	R2,8(RR14)
+0148 883E09                A   645    	LDX	R3,9(RR14)
+014B A213                  A   646    	CP	R1,R3
+014D 1FA202                A   647    	CPC	R0,R2
+0150 1B 0F                 A   648    	JR	LT,_6_L_17
+                           A   649    ;   92	      {
+                           A   650    ;   93	      	// All data received
+                           A   651    ;   94	        result = index;
+                           A   652    .line 94
+0152 880EFE                A   653    	LDX	R0,-2(RR14)
+0155 881EFF                A   654    	LDX	R1,-1(RR14)
+0158 89E0F8                A   655    	LDX	-8(RR14),R0
+015B 89E1F9                A   656    	LDX	-7(RR14),R1
+                           A   657    ;   95	        break;
+                           A   658    .line 95
+015E 8D 02 1E              A   659    	JR	_6_L_25
+                           A   660    ;   96	      }
+                           A   661    ;   97		  }
+0161                       A   662    _6_L_17:
+                           A   663    .line 97
+                           A   664    ;   98	    if ((uart == UART1) && (U1STAT0 & 0
+                           A   665    .line 98
+0161 880E06                A   666    	LDX	R0,6(RR14)
+0164 881E07                A   667    	LDX	R1,7(RR14)
+0167 A6E101                A   668    	CP	R1,#1
+016A 1FA6E000              A   669    	CPC	R0,#-0
+016E EB 4B                 A   670    	JR	NE,_6_L_16
+0170 79800F49              A   671    	TMX	3913,#128
+0174 6B 45                 A   672    	JR	Z,_6_L_16
+                           A   673    ;   99		  {
+                           A   674    ;  100	      // Data is ready
+                           A   675    ;  101	      buffer[index++] = U1RXD;
+                           A   676    .line 101
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  14
+
+
+PC     Object              I  Line    Source uart.src
+0176 880EFE                A   677    	LDX	R0,-2(RR14)
+0179 881EFF                A   678    	LDX	R1,-1(RR14)
+017C 882E04                A   679    	LDX	R2,4(RR14)
+017F 883E05                A   680    	LDX	R3,5(RR14)
+0182 0231                  A   681    	ADD	R3,R1
+0184 1220                  A   682    	ADC	R2,R0
+0186 840F48                A   683    	LDX	R0,3912
+0189 96E0E2                A   684    	LDX	@RR2,R0
+018C 880EFE                A   685    	LDX	R0,-2(RR14)
+018F 881EFF                A   686    	LDX	R1,-1(RR14)
+0192 A0E0                  A   687    	INCW	RR0
+0194 89E0FE                A   688    	LDX	-2(RR14),R0
+0197 89E1FF                A   689    	LDX	-1(RR14),R1
+                           A   690    ;  102	      if (index >= count)
+                           A   691    .line 102
+019A 880EFE                A   692    	LDX	R0,-2(RR14)
+019D 881EFF                A   693    	LDX	R1,-1(RR14)
+01A0 882E08                A   694    	LDX	R2,8(RR14)
+01A3 883E09                A   695    	LDX	R3,9(RR14)
+01A6 A213                  A   696    	CP	R1,R3
+01A8 1FA202                A   697    	CPC	R0,R2
+01AB 1B 1B                 A   698    	JR	LT,_6_L_19
+                           A   699    ;  103	      {
+                           A   700    ;  104	      	// All data received
+                           A   701    ;  105	        result = index;
+                           A   702    .line 105
+01AD 880EFE                A   703    	LDX	R0,-2(RR14)
+01B0 881EFF                A   704    	LDX	R1,-1(RR14)
+01B3 89E0F8                A   705    	LDX	-8(RR14),R0
+01B6 89E1F9                A   706    	LDX	-7(RR14),R1
+                           A   707    ;  106	        break;
+                           A   708    .line 106
+01B9 8B 63                 A   709    	JR	_6_L_25
+                           A   710    ;  107	      }
+                           A   711    ;  108		  }
+                           A   712    ;  109	    else
+01BB                       A   713    _6_L_16:
+                           A   714    .line 109
+                           A   715    ;  110	    {
+                           A   716    ;  111	    	uSecDelay(50);
+                           A   717    .line 111
+01BB 1F7032                A   718    	PUSH	#50
+01BE 1F7000                A   719    	PUSH	#0
+01C1 D6 0000               A   720    	CALL	_uSecDelay
+01C4 50E0                  A   721    	POP	R0
+01C6 50E0                  A   722    	POP	R0
+                           A   723    ;  112	    }
+01C8                       A   724    _6_L_19:
+                           A   725    .line 112
+                           A   726    ;  113	
+                           A   727    ;  114	    loop_count++;
+                           A   728    .line 114
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  15
+
+
+PC     Object              I  Line    Source uart.src
+01C8 880EFC                A   729    	LDX	R0,-4(RR14)
+01CB 881EFD                A   730    	LDX	R1,-3(RR14)
+01CE A0E0                  A   731    	INCW	RR0
+01D0 89E0FC                A   732    	LDX	-4(RR14),R0
+01D3 89E1FD                A   733    	LDX	-3(RR14),R1
+                           A   734    ;  115	    if (loop_count >= 20)
+                           A   735    .line 115
+01D6 880EFC                A   736    	LDX	R0,-4(RR14)
+01D9 881EFD                A   737    	LDX	R1,-3(RR14)
+01DC A6E114                A   738    	CP	R1,#20
+01DF 1FA6E000              A   739    	CPC	R0,#-0
+01E3 1D 01 0B              A   740    	JR	LT,_6_L_23
+                           A   741    ;  116	    {
+                           A   742    ;  117	    	loop_count = 0;
+                           A   743    .line 117
+01E6 B0E0                  A   744    	CLR	R0
+01E8 B0E1                  A   745    	CLR	R1
+01EA 89E0FC                A   746    	LDX	-4(RR14),R0
+01ED 89E1FD                A   747    	LDX	-3(RR14),R1
+                           A   748    ;  118	      timeout_count++;
+                           A   749    .line 118
+01F0 880EFA                A   750    	LDX	R0,-6(RR14)
+01F3 881EFB                A   751    	LDX	R1,-5(RR14)
+01F6 A0E0                  A   752    	INCW	RR0
+01F8 89E0FA                A   753    	LDX	-6(RR14),R0
+01FB 89E1FB                A   754    	LDX	-5(RR14),R1
+                           A   755    ;  119	      if (timeout_count >= timeout)
+                           A   756    .line 119
+01FE 880EFA                A   757    	LDX	R0,-6(RR14)
+0201 881EFB                A   758    	LDX	R1,-5(RR14)
+0204 882E0A                A   759    	LDX	R2,10(RR14)
+0207 883E0B                A   760    	LDX	R3,11(RR14)
+020A A213                  A   761    	CP	R1,R3
+020C 1FA202                A   762    	CPC	R0,R2
+020F 1D 01 0B              A   763    	JR	LT,_6_L_23
+                           A   764    ;  120	      {
+                           A   765    ;  121	      	//Timedout waiting for message
+                           A   766    ;  122	        //result = ERROR;
+                           A   767    ;  123	        result = index;
+                           A   768    .line 123
+0212 880EFE                A   769    	LDX	R0,-2(RR14)
+0215 881EFF                A   770    	LDX	R1,-1(RR14)
+0218 89E0F8                A   771    	LDX	-8(RR14),R0
+021B 89E1F9                A   772    	LDX	-7(RR14),R1
+                           A   773    ;  124					break;
+                           A   774    .line 124
+                           A   775    ;  125	      }
+                           A   776    ;  126	    }      
+                           A   777    ;  127	  }
+                           A   778    .line 127
+021E                       A   779    _6_L_25:
+                           A   780    ;  128	  return result;
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:  16
+
+
+PC     Object              I  Line    Source uart.src
+                           A   781    .line 128
+021E 880EF8                A   782    	LDX	R0,-8(RR14)
+0221 881EF9                A   783    	LDX	R1,-7(RR14)
+                           A   784    ;  129	}
+                           A   785    .line 129
+0224 D6 0000               A   786    	CALL	__b_framereset
+0227 AF                    A   787    	RET	
+                           A   788    .endfunc "readUart",129,"_readUart"
+002A 000A                  A   789    	VECTOR	UART1_RX=_isr_uart1_rx
+000E 0000                  A   790    	VECTOR	UART0_RX=_isr_uart0_rx
+                           A   791    	XREF _uSecDelay:ROM
+                           A   792    	XREF _select_port:ROM
+                           A   793    	XREF _init_uart:ROM
+                           A   794    	XREF _putchar:ROM
+                           A   795    	XREF _getchar:ROM
+                           A   796    	XREF _get_freq:ROM
+                           A   797    	XREF __b_framereset:ROM
+                           A   798    	XREF __b_iframereset:ROM
+                           A   799    	XREF __b_frameset0:ROM
+                           A   800    	XREF __b_frameset00:ROM
+                           A   801    	XREF __b_iframeset00:ROM
+                           A   802    	XDEF _readUart
+                           A   803    	XDEF _getc
+                           A   804    	XDEF _init_uart1
+                           A   805    	XDEF _init_uart0
+                           A   806    	XDEF _isr_uart1_rx
+                           A   807    	XDEF _isr_uart0_rx
+                           A   808    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 809

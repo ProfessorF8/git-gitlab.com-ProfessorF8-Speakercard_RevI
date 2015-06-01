@@ -1,0 +1,4018 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE cmd_TEXT,SPACE=ROM
+	FILE	".\cmd.c"
+.debug "C"
+	SEGMENT ROM_DATA
+;	Jump Table for Switch Statement at line 61
+L__6:
+	DW	11
+	DW	65
+	DW	_1_L_3
+	DW	66
+	DW	_1_L_4
+	DW	67
+	DW	_1_L_5
+	DW	69
+	DW	_1_L_6
+	DW	70
+	DW	_1_L_7
+	DW	71
+	DW	_1_L_8
+	DW	80
+	DW	_1_L_9
+	DW	82
+	DW	_1_L_10
+	DW	83
+	DW	_1_L_11
+	DW	84
+	DW	_1_L_12
+	DW	87
+	DW	_1_L_13
+	DW	_1_L_14
+
+
+;**************************** _processCommands ***************************
+;Name                         Addr/Register   Size   Type
+;_sendBadCmdMsg                      IMPORT  -----   function
+;_processW                           IMPORT  -----   function
+;_processT                           IMPORT  -----   function
+;_processS                           IMPORT  -----   function
+;_processR                           IMPORT  -----   function
+;_processP                           IMPORT  -----   function
+;_processG                           IMPORT  -----   function
+;_processF                           IMPORT  -----   function
+;_processE                           IMPORT  -----   function
+;_processC                           IMPORT  -----   function
+;_processB                           IMPORT  -----   function
+;_processA                           IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_decodeCommandStr                   IMPORT  -----   function
+;_getCommand                         IMPORT  -----   function
+;cs                                 RR14-30      2   variable
+;commandStr                         RR14-28     17   variable
+;command                            RR14-11     11   variable
+;cardAddress                         RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -30 (words)
+
+
+	.FRAME _n_processCommands,?_n_processCommands,RDATA
+	.FCALL _n_getCommand
+	.FCALL _n_decodeCommandStr
+	.FCALL _n_calculateChecksum
+	.FCALL _n_processA
+	.FCALL _n_processB
+	.FCALL _n_processC
+	.FCALL _n_processE
+	.FCALL _n_processF
+	.FCALL _n_processG
+	.FCALL _n_processP
+	.FCALL _n_processR
+	.FCALL _n_processS
+	.FCALL _n_processT
+	.FCALL _n_processW
+	.FCALL _n_sendBadCmdMsg
+	.FRAME _f_processCommands,?_f_processCommands,EDATA
+	.FCALL _f_getCommand
+	.FCALL _f_decodeCommandStr
+	.FCALL _f_calculateChecksum
+	.FCALL _f_processA
+	.FCALL _f_processB
+	.FCALL _f_processC
+	.FCALL _f_processE
+	.FCALL _f_processF
+	.FCALL _f_processG
+	.FCALL _f_processP
+	.FCALL _f_processR
+	.FCALL _f_processS
+	.FCALL _f_processT
+	.FCALL _f_processW
+	.FCALL _f_sendBadCmdMsg
+	SEGMENT cmd_TEXT
+.begrec "fmt_type",10
+.define "flags"
+.value 0
+.class 8
+.type 2
+.endef
+.define "size"
+.value 1
+.class 8
+.type 2
+.endef
+.define "space"
+.value 2
+.class 8
+.type 2
+.endef
+.define "type"
+.value 3
+.class 8
+.type 2
+.endef
+.define "field_width"
+.value 4
+.class 8
+.type 2
+.endef
+.define "precision"
+.value 5
+.class 8
+.type 2
+.endef
+.define "print_leading_char"
+.value 6
+.class 8
+.type 2
+.endef
+.define "dest"
+.value 7
+.class 8
+.type 162
+.endef
+.define "print_len"
+.value 9
+.class 8
+.type 12
+.endef
+.endrec "fmt_type"
+.begrec "flt_fmt_data",5
+.define "pad_whole"
+.value 0
+.class 8
+.type 12
+.endef
+.define "pad_pre_fract"
+.value 1
+.class 8
+.type 12
+.endef
+.define "pad_post_fract"
+.value 2
+.class 8
+.type 12
+.endef
+.define "pad_at"
+.value 3
+.class 8
+.type 162
+.endef
+.endrec "flt_fmt_data"
+.begrec "fmt_control_data",2
+.define "status"
+.value 0
+.class 8
+.type 2
+.endef
+.define "chr"
+.value 1
+.class 8
+.type 2
+.endef
+.endrec "fmt_control_data"
+.begrec "_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 162
+.endef
+.define "end"
+.value 2
+.class 8
+.type 162
+.endef
+.endrec "_set_type"
+.begrec "near_set_type",2
+.define "begin"
+.value 0
+.class 8
+.type 130
+.endef
+.define "end"
+.value 1
+.class 8
+.type 130
+.endef
+.endrec "near_set_type"
+.begrec "far_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 162
+.endef
+.define "end"
+.value 2
+.class 8
+.type 162
+.endef
+.endrec "far_set_type"
+.begrec "rom_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 194
+.endef
+.define "end"
+.value 2
+.class 8
+.type 194
+.endef
+.endrec "rom_set_type"
+.begrec "flt_info",12
+.define "flags"
+.value 0
+.class 8
+.type 12
+.endef
+.define "exp"
+.value 1
+.class 8
+.type 2
+.endef
+.define "digits"
+.value 2
+.class 8
+.dim 10
+.type 108
+.endef
+.endrec "flt_info"
+.begrec "NONAME0",6
+.define "baudRate"
+.value 0
+.class 8
+.type 5
+.endef
+.define "stopBits"
+.value 4
+.class 8
+.type 12
+.endef
+.define "parity"
+.value 5
+.class 8
+.type 12
+.endef
+.endrec "NONAME0"
+.begrec "NONAME1",5
+.define "pBuffer"
+.value 0
+.class 8
+.type 172
+.endef
+.define "next_in"
+.value 2
+.class 8
+.type 12
+.endef
+.define "next_out"
+.value 3
+.class 8
+.type 12
+.endef
+.define "size"
+.value 4
+.class 8
+.type 12
+.endef
+.endrec "NONAME1"
+.begrec "NONAME2",4
+.define "quot"
+.value 0
+.class 8
+.type 3
+.endef
+.define "rem"
+.value 2
+.class 8
+.type 3
+.endef
+.endrec "NONAME2"
+.begrec "NONAME3",8
+.define "quot"
+.value 0
+.class 8
+.type 5
+.endef
+.define "rem"
+.value 4
+.class 8
+.type 5
+.endef
+.endrec "NONAME3"
+.begrec "cmd",11
+.define "address"
+.value 0
+.class 8
+.type 12
+.endef
+.define "command"
+.value 1
+.class 8
+.type 2
+.endef
+.define "cs"
+.value 2
+.class 8
+.type 12
+.endef
+.define "data"
+.value 3
+.class 8
+.dim 8
+.type 108
+.endef
+.endrec "cmd"
+;    1	#include <eZ8.h>
+;    2	#include <stdio.h>
+;    3	#include <sio.h> // non-standard I/O
+;    4	#include "string.h"
+;    5	#include "stdlib.h"
+;    6	#include "main.h"
+;    7	#include "cmd.h"
+;    8	#include "util.h"
+;    9	#include "uart.h"
+;   10	
+;   11	////////////////////////////////////////////////////////
+;   12	// Command processor
+;   13	// This function reads commands from the UART or TCP
+;   14	// and processes them.
+;   15	// Param cardAddress
+;   16	// Return none
+;   17	void processCommands(int cardAddress)
+;   18	{
+_processCommands:
+.define "_processCommands"
+.value _processCommands
+.class 2
+.type 65
+.endef
+.begfunc "processCommands",18,"_processCommands"
+.define "cardAddress"
+.class 9
+.value 4
+.type 3
+.endef
+.define "command"
+.class 1
+.value -11
+.tag "cmd"
+.type 8
+.endef
+.define "commandStr"
+.class 1
+.value -28
+.dim 17
+.type 98
+.endef
+.define "cs"
+.class 1
+.value -30
+.type 3
+.endef
+	LD	R5,#30
+	CALL	__b_frameset0
+;   19	  char commandStr[17]; // Longest command is 16 characters plus one for null termination
+;   20	  CMD_T command;
+;   21	  int cs = 0;
+.line 21
+	CLR	R0
+	CLR	R1
+	LDX	-30(RR14),R0
+	LDX	-29(RR14),R1
+;   22	  
+;   23	  for (;;)
+_1_L_21:
+.line 23
+;   24	  {
+;   25	    if (ERROR == getCommand(&commandStr))
+.line 25
+	LD	R1,#255
+	LD	R0,#228
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_getCommand
+	POP	R2
+	POP	R2
+	CP	R1,#255
+	CPC	R0,#255
+	JR	Z,_1_L_21
+;   26	    {
+;   27	#ifdef DEBUG
+;   28	      printf("Command error: Command exceeded %d characters\n", MAX_COMMAND_LENGTH);
+;   29	#endif
+;   30	    }
+;   31	    else
+.line 31
+;   32	    {
+;   33	#ifdef DEBUG
+;   34	      printf("Command string -> %s\n", commandStr);
+;   35	#endif      
+;   36	      decodeCommandStr(&commandStr, &command);
+.line 36
+	LD	R1,#255
+	LD	R0,#245
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	LD	R1,#255
+	LD	R0,#228
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_decodeCommandStr
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;   37	      
+;   38	#ifdef DEBUG
+;   39	      printf("Command: Address -> %X Command -> %s, Data0 -> %X, Data1 -> %X, Data2 -> %X, Data3 -> %X, Data4 -> %X, Data5 -> %X, CS -> %x\n",
+;   40	             command.address, command.command, command.data[0], command.data[1], command.data[2], command.data[3], command.data[4],
+;   41	             command.data[5], command.cs);
+;   42	#endif
+;   43	      
+;   44	      // See if this command is for us. Commands with an
+;   45	      // address of 0x00 are global commands
+;   46	      if ((0x00 == command.address) || (cardAddress == command.address))
+.line 46
+	LDX	R0,-11(RR14)
+	OR	R0,R0
+	JR	Z,_1_L_18
+	LDX	R0,-11(RR14)
+	CLR	R1
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	CP	R0,R3
+	CPC	R1,R2
+	JR	NE,_1_L_21
+_1_L_18:
+;   47	      {
+;   48	        // See if checksumming is enabled. If so see if the
+;   49	        // checksums match
+;   50	        if (checksumEnabled)
+.line 50
+	CPX	_checksumEnabled,#-0
+	JR	Z,_1_L_17
+;   51	        {
+;   52	          cs = calculateChecksum(&commandStr);
+.line 52
+	LD	R1,#255
+	LD	R0,#228
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-30(RR14),R0
+	LDX	-29(RR14),R1
+;   53	#ifdef DEBUG
+;   54	          printf("Command cs -> %x, CS => %x\n", command.cs, cs);
+;   55	#endif          
+;   56	        }
+_1_L_17:
+.line 56
+;   57	      
+;   58	        // Compare the checksums
+;   59	        if ((!checksumEnabled) || (cs == command.cs))
+.line 59
+	CPX	_checksumEnabled,#-0
+	JR	Z,_1_L_15
+	LDX	R0,-9(RR14)
+	CLR	R1
+	LDX	R2,-30(RR14)
+	LDX	R3,-29(RR14)
+	CP	R0,R3
+	CPC	R1,R2
+	JR	NE,_1_L_16
+_1_L_15:
+;   60	        {
+;   61	          switch (command.command)
+.line 61
+	LDX	R1,-10(RR14)
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	LD	R2,#high(L__6)
+	LD	R3,#low(L__6)
+	CALL	__b_ucase
+	JP	@RR0
+;   62	          {
+;   63	            case 'A' :
+_1_L_3:
+.line 63
+;   64	              processA(command);
+.line 64
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__8:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__8
+	CALL	_processA
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   65	              break;
+.line 65
+	JR	_1_L_21
+;   66	            case 'B' :
+_1_L_4:
+.line 66
+;   67	              processB(command);
+.line 67
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__10:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__10
+	CALL	_processB
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   68	              break;
+.line 68
+	JR	_1_L_21
+;   69	            case 'C' :
+_1_L_5:
+.line 69
+;   70	              processC(command);
+.line 70
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__12:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__12
+	CALL	_processC
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   71	              break;
+.line 71
+	JR	_1_L_21
+;   72	            case 'E' :
+_1_L_6:
+.line 72
+;   73	              processE(command);
+.line 73
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__14:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__14
+	CALL	_processE
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   74	              break;
+.line 74
+	JR	_1_L_21
+;   75	            case 'F' :
+_1_L_7:
+.line 75
+;   76	              processF(command);
+.line 76
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__16:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__16
+	CALL	_processF
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   77	              break;
+.line 77
+	JR	_1_L_21
+;   78	            case 'G' :
+_1_L_8:
+.line 78
+;   79	              processG(command);
+.line 79
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__18:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__18
+	CALL	_processG
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   80	              break;
+.line 80
+	JR	_1_L_21
+;   81	            case 'P' :
+_1_L_9:
+.line 81
+;   82	              processP(command);
+.line 82
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__20:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__20
+	CALL	_processP
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   83	              break;
+.line 83
+	JR	_1_L_21
+;   84	            case 'R' :
+_1_L_10:
+.line 84
+;   85	              processR(command);
+.line 85
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__22:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__22
+	CALL	_processR
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   86	              break;
+.line 86
+	JR	_1_L_21
+;   87	            case 'S' :
+_1_L_11:
+.line 87
+;   88	              processS(command);
+.line 88
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__24:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__24
+	CALL	_processS
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   89	              break;
+.line 89
+	JR	_1_L_21
+;   90	            case 'T' :
+_1_L_12:
+.line 90
+;   91	              processT(command);
+.line 91
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__26:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__26
+	CALL	_processT
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   92	              break;
+.line 92
+	JR	_1_L_21
+;   93	//            case 'U' :
+;   94	//              processU(command);
+;   95	//              break;
+;   96	            case 'W' :
+_1_L_13:
+.line 96
+;   97	              processW(command);
+.line 97
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R0,#11
+	LDX	R2,4094
+	LDX	R3,4095
+	LEA	RR4,245(RR14)
+L__28:
+	LDX	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__28
+	CALL	_processW
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;   98	              break;
+.line 98
+	JR	_1_L_21
+;   99	            default :
+_1_L_14:
+.line 99
+;  100	              sendBadCmdMsg();
+.line 100
+	CALL	_sendBadCmdMsg
+;  101	              break;
+.line 101
+	JR	_1_L_21
+;  102	          }
+;  103	        }
+;  104	        else
+_1_L_16:
+.line 104
+;  105	        {
+;  106	          // Bad checksum. Tell the host the command was bad.
+;  107	          sendBadCmdMsg();
+.line 107
+	CALL	_sendBadCmdMsg
+;  108	        }
+;  109	      }
+;  110	    }
+;  111	  }
+.line 111
+	JR	_1_L_21
+;  112	} // End of processCommands
+.line 112
+	CALL	__b_framereset
+	RET	
+.endfunc "processCommands",112,"_processCommands"
+	SEGMENT ROM_DATA
+
+
+;**************************** _getCommand ***************************
+;Name                         Addr/Register   Size   Type
+;_getc                               IMPORT  -----   function
+;_select_port                        IMPORT  -----   function
+;result                              RR14-4      2   variable
+;index                               RR14-2      2   variable
+;command                             RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -4 (words)
+
+
+	.FRAME _n_getCommand,?_n_getCommand,RDATA
+	.FCALL _n_select_port
+	.FCALL _n_getc
+	.FRAME _f_getCommand,?_f_getCommand,EDATA
+	.FCALL _f_select_port
+	.FCALL _f_getc
+	SEGMENT cmd_TEXT
+;  113	
+;  114	////////////////////////////////////////////////////////
+;  115	// Get command
+;  116	// This function reads commands from the UART or TCP
+;  117	// Param command - pointer to buffer to store command
+;  118	// Return OK or ERROR if the message termination
+;  119	// character is not found
+;  120	int getCommand(char* command)
+;  121	{
+_getCommand:
+.define "_getCommand"
+.value _getCommand
+.class 2
+.type 67
+.endef
+.begfunc "getCommand",121,"_getCommand"
+.define "command"
+.class 9
+.value 4
+.type 162
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "result"
+.class 1
+.value -4
+.type 3
+.endef
+	LD	R5,#4
+	CALL	__b_frameset0
+;  122	  int index = 0;
+.line 122
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  123	  int result = OK;
+.line 123
+	CLR	R0
+	LD	R1,#1
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+;  124	  
+;  125	  // Detect which UART to talk to
+;  126	  for (;;)
+_2_L_27:
+.line 126
+;  127	    {
+;  128	    	if (U0STAT0 & 0x80)
+.line 128
+	TMX	3905,#128
+	JR	Z,_2_L_26
+;  129	      {
+;  130	      	select_port(_UART0);
+.line 130
+	PUSH	#0
+	PUSH	#0
+	CALL	_select_port
+	POP	R0
+	POP	R0
+;  131	        break;
+.line 131
+	JR	_2_L_30
+;  132	      }
+_2_L_26:
+.line 132
+;  133	    	if (U1STAT0 & 0x80)
+.line 133
+	TMX	3913,#128
+	JR	Z,_2_L_27
+;  134	      {
+;  135	      	select_port(_UART1);
+.line 135
+	PUSH	#1
+	PUSH	#0
+	CALL	_select_port
+	POP	R0
+	POP	R0
+;  136	        break;
+.line 136
+;  137	      }
+;  138	    }
+.line 138
+;  139	  
+;  140	  // Wait until the start of message character arrives
+;  141	  for (;;)
+_2_L_30:
+.line 141
+;  142	  {
+;  143	    command[index] = getc();
+.line 143
+	CALL	_getc
+	LDX	R0,-2(RR14)
+	LDX	R4,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R4
+	ADC	R2,R0
+	LDX	@RR2,R1
+;  144	    if ('[' == command[index])
+.line 144
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R1,@RR2
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	CP	R1,#91
+	CPC	R0,#-0
+	JR	NE,_2_L_30
+;  145	    {
+;  146	      break;
+.line 146
+;  147	    }
+;  148	  }
+.line 148
+;  149	  
+;  150	  index++;
+.line 150
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;  151	  
+;  152	  // Turn on RX light here
+;  153	  PAOUT &= ~RxLEDCtl;
+.line 153
+	ANDX	4051,#-9
+;  154	  
+;  155	  // Store the command until the ] is received
+;  156	  for (;;)
+_2_L_41:
+.line 156
+;  157	  {
+;  158	    command[index] = getc();
+.line 158
+	CALL	_getc
+	LDX	R0,-2(RR14)
+	LDX	R4,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R4
+	ADC	R2,R0
+	LDX	@RR2,R1
+;  159	    if (']' == command[index])
+.line 159
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R1,@RR2
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	CP	R1,#93
+	CPC	R0,#-0
+	JR	NE,_2_L_37
+;  160	    {
+;  161	      command[index + 1] = 0;
+.line 161
+	LDX	R3,-2(RR14)
+	LDX	R2,-1(RR14)
+	ADD	R2,#1
+	ADC	R3,#0
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	ADD	R1,R2
+	ADC	R0,R3
+	CLR	R2
+	LDX	@RR0,R2
+;  162	      result = OK;
+.line 162
+	CLR	R0
+	LD	R1,#1
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+;  163	      break;
+.line 163
+	JR	_2_L_43
+;  164	    }
+_2_L_37:
+.line 164
+;  165	    
+;  166	    // Try to recover if a start of message is
+;  167	    // received while in the middle of a command
+;  168	    if ('[' == command[index])
+.line 168
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R1,@RR2
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	CP	R1,#91
+	CPC	R0,#-0
+	JR	NE,_2_L_39
+;  169	    {
+;  170	      // Start a new command
+;  171	      index = 0;
+.line 171
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  172	      command[index] = '[';
+.line 172
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LD	R0,#91
+	LDX	@RR2,R0
+;  173	    }
+_2_L_39:
+.line 173
+;  174	    
+;  175	    index++;
+.line 175
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;  176	    
+;  177	    if (index > MAX_COMMAND_LENGTH)
+.line 177
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#17
+	CPC	R0,#-0
+	JR	LE,_2_L_41
+;  178	    {
+;  179	      result = ERROR;
+.line 179
+	LD	R0,#255
+	LD	R1,#255
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+;  180	      break;
+.line 180
+;  181	    }
+;  182	  }
+.line 182
+_2_L_43:
+;  183	
+;  184	  // Turn off RX light here
+;  185	  PAOUT |= RxLEDCtl;
+.line 185
+	ORX	4051,#8
+;  186	
+;  187	  return result;
+.line 187
+	LDX	R0,-4(RR14)
+	LDX	R1,-3(RR14)
+;  188	} // End of getCommand
+.line 188
+	CALL	__b_framereset
+	RET	
+.endfunc "getCommand",188,"_getCommand"
+	SEGMENT ROM_DATA
+_0temp45:
+	DB	0
+	DB	0
+	DB	0
+
+
+;**************************** _decodeCommandStr ***************************
+;Name                         Addr/Register   Size   Type
+;_asciiToNib                         IMPORT  -----   function
+;_asciiToChar                        IMPORT  -----   function
+;_f_f_memcpy                         IMPORT  -----   function
+;_0temp45                            STATIC      3   variable
+;index1                              RR14-9      2   variable
+;count                               RR14-7      2   variable
+;tempStr                             RR14-5      3   variable
+;index                               RR14-2      2   variable
+;command                             RR14+6      2   parameter
+;commandStr                          RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -11 (words)
+
+
+	.FRAME _n_decodeCommandStr,?_n_decodeCommandStr,RDATA
+	.FCALL _n_f_f_memcpy
+	.FCALL _n_asciiToChar
+	.FCALL _n_asciiToNib
+	.FRAME _f_decodeCommandStr,?_f_decodeCommandStr,EDATA
+	.FCALL _f_f_f_memcpy
+	.FCALL _f_asciiToChar
+	.FCALL _f_asciiToNib
+	SEGMENT cmd_TEXT
+;  189	
+;  190	////////////////////////////////////////////////////////
+;  191	// decodeCommandStr
+;  192	// This function takes the received command string and
+;  193	// parses the contents and coverts it to a CMD_T
+;  194	// structurte
+;  195	// Param commandStr - The received command from the host
+;  196	// Param command - CMD_T decoded command
+;  197	// Return 
+;  198	void decodeCommandStr(char* commandStr, CMD_T* command)
+;  199	{
+_decodeCommandStr:
+.define "_decodeCommandStr"
+.value _decodeCommandStr
+.class 2
+.type 65
+.endef
+.begfunc "decodeCommandStr",199,"_decodeCommandStr"
+.define "commandStr"
+.class 9
+.value 4
+.type 162
+.endef
+.define "command"
+.class 9
+.value 6
+.tag "cmd"
+.type 168
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "tempStr"
+.class 1
+.value -5
+.dim 3
+.type 98
+.endef
+.define "count"
+.class 1
+.value -7
+.type 3
+.endef
+.define "index1"
+.class 1
+.value -9
+.type 3
+.endef
+	LD	R5,#11
+	CALL	__b_frameset0
+;  200	  char tempStr[3] = 0;
+.line 200
+	LD	R0,#3
+	LEA	RR4,251(RR14)
+	LD	R2,#high(_0temp45)
+	LD	R3,#low(_0temp45)
+L__40:
+	LDC	R1,@RR2
+	LDX	@RR4,R1
+	INCW	RR4
+	INCW	RR2
+	DJNZ	R0,L__40
+;  201	  int index = 4;
+.line 201
+	CLR	R0
+	LD	R1,#4
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  202	  int index1 = 0;
+.line 202
+	CLR	R0
+	CLR	R1
+	LDX	-9(RR14),R0
+	LDX	-8(RR14),R1
+;  203	  int count = 0;
+.line 203
+	CLR	R0
+	CLR	R1
+	LDX	-7(RR14),R0
+	LDX	-6(RR14),R1
+;  204	  
+;  205	  // Get the address
+;  206	  memcpy(tempStr, &commandStr[1], 2);
+.line 206
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	PUSH	#2
+	PUSH	#0
+	LEA	RR4,1(RR2)
+	LD	R0,R4
+	PUSH	R5
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_f_memcpy
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;  207	  command->address = asciiToChar(tempStr);
+.line 207
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_asciiToChar
+	POP	R1
+	POP	R1
+	LDX	R2,6(RR14)
+	LDX	R3,7(RR14)
+	LDX	@RR2,R0
+;  208	  
+;  209	  // Get the command
+;  210	  command->command = commandStr[3];
+.line 210
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	LDX	R4,6(RR14)
+	LDX	R5,7(RR14)
+	LDX	R0,3(RR2)
+	LDX	1(RR4),R0
+;  211	  
+;  212	  // Get the data
+;  213	  while ('#' != commandStr[index])
+_3_L_51:
+.line 213
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R1,@RR2
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	CP	R1,#35
+	CPC	R0,#-0
+	JR	Z,_3_L_54
+;  214	  {
+;  215	    count++;
+.line 215
+	LDX	R2,-7(RR14)
+	LDX	R3,-6(RR14)
+	INCW	RR2
+	LDX	-7(RR14),R2
+	LDX	-6(RR14),R3
+;  216	    if (2 == count)
+.line 216
+	LDX	R0,-7(RR14)
+	LDX	R1,-6(RR14)
+	CP	R1,#2
+	CPC	R0,#-0
+	JR	NE,_3_L_50
+;  217	    {
+;  218	      // We have a hex value
+;  219	      memcpy(tempStr, &commandStr[index - 1], 2);
+.line 219
+	LDX	R1,-2(RR14)
+	LDX	R0,-1(RR14)
+	ADD	R0,#255
+	ADC	R1,#255
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R0
+	ADC	R2,R1
+	PUSH	#2
+	PUSH	#0
+	PUSH	R3
+	PUSH	R2
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_f_memcpy
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;  220	      command->data[index1++] = asciiToChar(tempStr);
+.line 220
+	LDX	R1,-9(RR14)
+	LDX	R2,-8(RR14)
+	LD	R3,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R3,R14
+	PUSH	R0
+	PUSH	R3
+	LDX	-10(RR14),R1
+	LDX	-11(RR14),R2
+	CALL	_asciiToChar
+	LDX	R2,-11(RR14)
+	LDX	R1,-10(RR14)
+	POP	R3
+	POP	R3
+	LDX	R6,6(RR14)
+	LDX	R7,7(RR14)
+	LEA	RR4,3(RR6)
+	ADD	R5,R2
+	ADC	R4,R1
+	LDX	@RR4,R0
+	LDX	R2,-9(RR14)
+	LDX	R3,-8(RR14)
+	INCW	RR2
+	LDX	-9(RR14),R2
+	LDX	-8(RR14),R3
+;  221	#ifdef DEBUG
+;  222	      printf("Temp str -> %s Data -> %X\n", tempStr, command->data[index1-1]);
+;  223	#endif
+;  224	      count = 0;
+.line 224
+	CLR	R0
+	CLR	R1
+	LDX	-7(RR14),R0
+	LDX	-6(RR14),R1
+;  225	    }
+_3_L_50:
+.line 225
+;  226	    index++;
+.line 226
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;  227	  }
+.line 227
+	JR	_3_L_51
+_3_L_54:
+;  228	  // Handle left over nibble
+;  229	  if (1 == count)
+.line 229
+	LDX	R0,-7(RR14)
+	LDX	R1,-6(RR14)
+	CP	R1,#1
+	CPC	R0,#-0
+	JR	NE,_3_L_56
+;  230	  {
+;  231	    memcpy(tempStr, &commandStr[index - 1], 1);
+.line 231
+	LDX	R1,-2(RR14)
+	LDX	R0,-1(RR14)
+	ADD	R0,#255
+	ADC	R1,#255
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R0
+	ADC	R2,R1
+	PUSH	#1
+	PUSH	#0
+	PUSH	R3
+	PUSH	R2
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_f_memcpy
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;  232	    command->data[index1] = asciiToNib(tempStr);
+.line 232
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_asciiToNib
+	POP	R1
+	POP	R1
+	LDX	R4,6(RR14)
+	LDX	R5,7(RR14)
+	LDX	R1,-9(RR14)
+	LDX	R6,-8(RR14)
+	LEA	RR2,3(RR4)
+	ADD	R3,R6
+	ADC	R2,R1
+	LDX	@RR2,R0
+;  233	#ifdef DEBUG
+;  234	    printf("Temp str -> %s Data -> %X\n", tempStr, command->data[index1]);
+;  235	#endif
+;  236	  }
+_3_L_56:
+.line 236
+;  237	  
+;  238	  // Skip #
+;  239	  index++;
+.line 239
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;  240	  
+;  241	  // Get the checksum
+;  242	    memcpy(tempStr, &commandStr[index], 2);
+.line 242
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	PUSH	#2
+	PUSH	#0
+	PUSH	R3
+	PUSH	R2
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_f_memcpy
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;  243	    command->cs = asciiToChar(tempStr);
+.line 243
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_asciiToChar
+	POP	R1
+	POP	R1
+	LDX	R2,6(RR14)
+	LDX	R3,7(RR14)
+	LDX	2(RR2),R0
+;  244	}
+.line 244
+	CALL	__b_framereset
+	RET	
+.endfunc "decodeCommandStr",244,"_decodeCommandStr"
+	SEGMENT ROM_DATA
+_1temp58:
+	DB	91
+	DB	63
+	DB	63
+	DB	48
+	DB	35
+	DB	48
+	DB	48
+	DB	93
+
+
+;**************************** _sendGoodCmdMsg ***************************
+;Name                         Addr/Register   Size   Type
+;_sendMsg                            IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_cardAddress                        IMPORT      1   variable
+;_charToAscii                        IMPORT  -----   function
+;_1temp58                            STATIC      8   variable
+;cs                                 RR14-10      2   variable
+;response                            RR14-8      8   variable
+
+
+; Aggregate Stack Size: -10 (words)
+
+
+	.FRAME _n_sendGoodCmdMsg,?_n_sendGoodCmdMsg,RDATA
+	.FCALL _n_charToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendMsg
+	.FRAME _f_sendGoodCmdMsg,?_f_sendGoodCmdMsg,EDATA
+	.FCALL _f_charToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendMsg
+	SEGMENT cmd_TEXT
+;  245	
+;  246	////////////////////////////////////////////////////////
+;  247	// sendGoodCmdMsg
+;  248	// This function sends a response to the host indicating
+;  249	// the command is OK
+;  250	// Param none
+;  251	// Return none
+;  252	void sendGoodCmdMsg(void)
+;  253	{
+_sendGoodCmdMsg:
+.define "_sendGoodCmdMsg"
+.value _sendGoodCmdMsg
+.class 2
+.type 65
+.endef
+.begfunc "sendGoodCmdMsg",253,"_sendGoodCmdMsg"
+.define "response"
+.class 1
+.value -8
+.dim 8
+.type 98
+.endef
+.define "cs"
+.class 1
+.value -10
+.type 3
+.endef
+	LD	R5,#10
+	CALL	__b_frameset0
+;  254	  // [aa0#cc]
+;  255	  // "aa" is the hex address (in ascii) echoed back.
+;  256	  // "0"  for good.
+;  257	  // "cc" Checksum   (in ascii)
+;  258	  
+;  259	  // Initialize the default good message data
+;  260	  char response[8] = {'[', '?', '?', '0', '#', '0', '0', ']'};
+.line 260
+	LD	R0,#8
+	LEA	RR4,248(RR14)
+	LD	R2,#high(_1temp58)
+	LD	R3,#low(_1temp58)
+L__47:
+	LDC	R1,@RR2
+	LDX	@RR4,R1
+	INCW	RR4
+	INCW	RR2
+	DJNZ	R0,L__47
+;  261	  int cs = 0;
+.line 261
+	CLR	R0
+	CLR	R1
+	LDX	-10(RR14),R0
+	LDX	-9(RR14),R1
+;  262	  
+;  263	  // Fill in the card address
+;  264	  charToAscii(&response[1], cardAddress);
+.line 264
+	PUSHX	_cardAddress
+	LD	R1,#255
+	LD	R0,#249
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  265	
+;  266	  // If checksumming is enabled calculate the checksum and
+;  267	  // update the response
+;  268	  if (checksumEnabled)
+.line 268
+	CPX	_checksumEnabled,#-0
+	JR	Z,_4_L_60
+;  269	  {
+;  270	    cs = calculateChecksum(&response);
+.line 270
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-10(RR14),R0
+	LDX	-9(RR14),R1
+;  271	  }
+_4_L_60:
+.line 271
+;  272	  charToAscii(&response[5], cs);
+.line 272
+	LDX	R0,-9(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#253
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  273	
+;  274	  // Send the message
+;  275	  sendMsg(&response);
+.line 275
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsg
+	POP	R0
+	POP	R0
+;  276	}
+.line 276
+	CALL	__b_framereset
+	RET	
+.endfunc "sendGoodCmdMsg",276,"_sendGoodCmdMsg"
+	SEGMENT ROM_DATA
+_2temp62:
+	DB	91
+	DB	63
+	DB	63
+	DB	49
+	DB	35
+	DB	48
+	DB	48
+	DB	93
+
+
+;**************************** _sendBadCmdMsg ***************************
+;Name                         Addr/Register   Size   Type
+;_sendMsg                            IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_cardAddress                        IMPORT      1   variable
+;_charToAscii                        IMPORT  -----   function
+;_2temp62                            STATIC      8   variable
+;cs                                 RR14-10      2   variable
+;response                            RR14-8      8   variable
+
+
+; Aggregate Stack Size: -10 (words)
+
+
+	.FRAME _n_sendBadCmdMsg,?_n_sendBadCmdMsg,RDATA
+	.FCALL _n_charToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendMsg
+	.FRAME _f_sendBadCmdMsg,?_f_sendBadCmdMsg,EDATA
+	.FCALL _f_charToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendMsg
+	SEGMENT cmd_TEXT
+;  277	
+;  278	////////////////////////////////////////////////////////
+;  279	// sendBadCmdMsg
+;  280	// This function sends a response to the host indicating
+;  281	// there was a problem with the command
+;  282	// Param none
+;  283	// Return none
+;  284	void sendBadCmdMsg(void)
+;  285	{
+_sendBadCmdMsg:
+.define "_sendBadCmdMsg"
+.value _sendBadCmdMsg
+.class 2
+.type 65
+.endef
+.begfunc "sendBadCmdMsg",285,"_sendBadCmdMsg"
+.define "response"
+.class 1
+.value -8
+.dim 8
+.type 98
+.endef
+.define "cs"
+.class 1
+.value -10
+.type 3
+.endef
+	LD	R5,#10
+	CALL	__b_frameset0
+;  286	  // [aa1#cc]
+;  287	  // "aa" is the hex address (in ascii) echoed back.
+;  288	  // "1"  for bad.
+;  289	  // "cc" Checksum   (in ascii)
+;  290	
+;  291	  // Initialize the default bad message data
+;  292	  char response[8] = {'[', '?', '?', '1', '#', '0', '0', ']'};
+.line 292
+	LD	R0,#8
+	LEA	RR4,248(RR14)
+	LD	R2,#high(_2temp62)
+	LD	R3,#low(_2temp62)
+L__52:
+	LDC	R1,@RR2
+	LDX	@RR4,R1
+	INCW	RR4
+	INCW	RR2
+	DJNZ	R0,L__52
+;  293	  int cs = 0;
+.line 293
+	CLR	R0
+	CLR	R1
+	LDX	-10(RR14),R0
+	LDX	-9(RR14),R1
+;  294	  
+;  295	  // Fill in the card address
+;  296	  charToAscii(&response[1], cardAddress);
+.line 296
+	PUSHX	_cardAddress
+	LD	R1,#255
+	LD	R0,#249
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  297	
+;  298	  
+;  299	  // If checksumming is enabled calculate the checksum and
+;  300	  // update the response
+;  301	  if (checksumEnabled)
+.line 301
+	CPX	_checksumEnabled,#-0
+	JR	Z,_5_L_64
+;  302	  {
+;  303	    cs = calculateChecksum(&response);
+.line 303
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-10(RR14),R0
+	LDX	-9(RR14),R1
+;  304	  }
+_5_L_64:
+.line 304
+;  305	  charToAscii(&response[5], cs);
+.line 305
+	LDX	R0,-9(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#253
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  306	  
+;  307	  // Send the message
+;  308	  sendMsg(&response);
+.line 308
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsg
+	POP	R0
+	POP	R0
+;  309	}
+.line 309
+	CALL	__b_framereset
+	RET	
+.endfunc "sendBadCmdMsg",309,"_sendBadCmdMsg"
+	SEGMENT ROM_DATA
+
+
+;**************************** _sendMsg ***************************
+;Name                         Addr/Register   Size   Type
+;_rs485Delay                         IMPORT  -----   function
+;_putchar                            IMPORT  -----   function
+;index                               RR14-2      2   variable
+;buffer                              RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_sendMsg,?_n_sendMsg,RDATA
+	.FCALL _n_putchar
+	.FCALL _n_rs485Delay
+	.FRAME _f_sendMsg,?_f_sendMsg,EDATA
+	.FCALL _f_putchar
+	.FCALL _f_rs485Delay
+	SEGMENT cmd_TEXT
+;  310	
+;  311	////////////////////////////////////////////////////////
+;  312	// sendMsg
+;  313	// This function takes a buffer and sends it to the host
+;  314	// Param buffer
+;  315	// Return none
+;  316	void sendMsg(char* buffer)
+;  317	{
+_sendMsg:
+.define "_sendMsg"
+.value _sendMsg
+.class 2
+.type 65
+.endef
+.begfunc "sendMsg",317,"_sendMsg"
+.define "buffer"
+.class 9
+.value 4
+.type 162
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+;  318	  int index = 0;
+.line 318
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  319	  
+;  320	  // Enable RS485 transmitter
+;  321	  PDOUT |= RS_IO_CTL;
+.line 321
+	ORX	4063,#8
+;  322	
+;  323	  // Turn on TX light here
+;  324	  PAOUT &= ~TxLEDCtl;
+.line 324
+	ANDX	4051,#-3
+;  325	  
+;  326	  do
+_6_L_67:
+.line 326
+;  327	  {
+;  328	    putchar(buffer[index]);
+.line 328
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	ADD	R1,R3
+	ADC	R0,R2
+	LDX	R2,@RR0
+	LD	R0,R2
+	RL	R0
+	SBC	R0,R0
+	PUSH	R2
+	PUSH	R0
+	CALL	_putchar
+	POP	R0
+	POP	R0
+;  329	  } while (buffer[index++] != ']');
+.line 329
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDWX	RR2,RR0
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R1,@RR2
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	CP	R1,#93
+	CPC	R0,#-0
+	JR	NE,_6_L_67
+;  330	  
+;  331	  // Turn off TX light here
+;  332	  PAOUT |= TxLEDCtl;
+.line 332
+	ORX	4051,#2
+;  333	
+;  334	  // Wait until all the RS485 characters have been
+;  335	  //  transmitted
+;  336	  rs485Delay();
+.line 336
+	CALL	_rs485Delay
+;  337	  
+;  338	  // Disable RS485 transmitter
+;  339	  PDOUT &= ~RS_IO_CTL;
+.line 339
+	ANDX	4063,#-9
+;  340	}
+.line 340
+	CALL	__b_framereset
+	RET	
+.endfunc "sendMsg",340,"_sendMsg"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processA ***************************
+;Name                         Addr/Register   Size   Type
+;_sendMsg                            IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_cardAddress                        IMPORT      1   variable
+;_charToAscii                        IMPORT  -----   function
+;_readPrivStatus                     IMPORT  -----   function
+;_readCallButtons                    IMPORT  -----   function
+;cs                                 RR14-22      2   variable
+;privacy                            RR14-20      2   variable
+;callButtons                        RR14-18      2   variable
+;response                           RR14-16     16   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: -22 (words)
+
+
+	.FRAME _n_processA,?_n_processA,RDATA
+	.FCALL _n_readCallButtons
+	.FCALL _n_readPrivStatus
+	.FCALL _n_charToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendMsg
+	.FRAME _f_processA,?_f_processA,EDATA
+	.FCALL _f_readCallButtons
+	.FCALL _f_readPrivStatus
+	.FCALL _f_charToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendMsg
+	SEGMENT cmd_TEXT
+;  341	
+;  342	////////////////////////////////////////////////////////
+;  343	// Read Callins
+;  344	// Function name: processA
+;  345	// This function reads the privacy and call ins and
+;  346	// returns a message to the host
+;  347	// Param command
+;  348	// Return none
+;  349	void processA(CMD_T command)
+;  350	{
+_processA:
+.define "_processA"
+.value _processA
+.class 2
+.type 65
+.endef
+.begfunc "processA",350,"_processA"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+.define "response"
+.class 1
+.value -16
+.dim 16
+.type 98
+.endef
+.define "callButtons"
+.class 1
+.value -18
+.type 3
+.endef
+.define "privacy"
+.class 1
+.value -20
+.type 3
+.endef
+.define "cs"
+.class 1
+.value -22
+.type 3
+.endef
+	LD	R5,#22
+	CALL	__b_frameset0
+;  351	  // [aa0ddeeffgg#cc]
+;  352	  // "aa" is the hex address (in ascii) echoed back.
+;  353	  // "0"  for good.
+;  354	  // "dd" Privacy  2 (in ascii)
+;  355	  // "ee" Privacy  1 (in ascii)
+;  356	  // "ff" Call ins 2 (in ascii)
+;  357	  // "gg" Call ins 1 (in ascii)
+;  358	  // "cc" Checksum   (in ascii)
+;  359	
+;  360	  // {91, speaker_addr_byte[0], speaker_addr_byte[1]], 48,
+;  361	  // privacy[3], privacy[2], privacy[1], privacy[0],
+;  362	  // callin[3], calln[2], callin[1], callin[0],
+;  363	  // #, checksum[1], checksum[0], 93}
+;  364	
+;  365	  int callButtons = 0;  
+.line 365
+	CLR	R0
+	CLR	R1
+	LDX	-18(RR14),R0
+	LDX	-17(RR14),R1
+;  366	  int privacy = 0;
+.line 366
+	CLR	R0
+	CLR	R1
+	LDX	-20(RR14),R0
+	LDX	-19(RR14),R1
+;  367	  char response[16];
+;  368	  int cs = 0;
+.line 368
+	CLR	R0
+	CLR	R1
+	LDX	-22(RR14),R0
+	LDX	-21(RR14),R1
+;  369	  
+;  370	  // Read the call buttons and the privacy values
+;  371	  callButtons = ~readCallButtons();
+.line 371
+	CALL	_readCallButtons
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-18(RR14),R2
+	LDX	-17(RR14),R1
+;  372	  privacy     = ~readPrivStatus();
+.line 372
+	CALL	_readPrivStatus
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-20(RR14),R2
+	LDX	-19(RR14),R1
+;  373	  
+;  374	  // Fill in the response message
+;  375	  response[0] = '[';
+.line 375
+	LD	R0,#91
+	LDX	-16(RR14),R0
+;  376	  charToAscii(&response[1],  cardAddress);
+.line 376
+	PUSHX	_cardAddress
+	LD	R1,#255
+	LD	R0,#241
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  377	  response[3] = '0';
+.line 377
+	LD	R0,#48
+	LDX	-13(RR14),R0
+;  378	  charToAscii(&response[4],  (privacy & 0xFF00) >> 8);
+.line 378
+	LDX	R0,-20(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#244
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  379	  charToAscii(&response[6],  privacy & 0x00FF);
+.line 379
+	LDX	R0,-19(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  380	  charToAscii(&response[8],  (callButtons & 0xFF00) >> 8);
+.line 380
+	LDX	R0,-18(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  381	  charToAscii(&response[10], callButtons & 0x00FF);
+.line 381
+	LDX	R0,-17(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#250
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  382	  response[12] = '#';
+.line 382
+	LD	R0,#35
+	LDX	-4(RR14),R0
+;  383	  
+;  384	  // If checksumming is enabled calculate the checksum and
+;  385	  // update the response
+;  386	  //if (checksumEnabled)
+;  387	  //{
+;  388	    cs = calculateChecksum(&response);
+.line 388
+	LD	R1,#255
+	LD	R0,#240
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-22(RR14),R0
+	LDX	-21(RR14),R1
+;  389	  //}
+;  390	 
+;  391	  charToAscii(&response[13], cs);
+.line 391
+	LDX	R0,-21(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#253
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  392	  response[15] = ']';
+.line 392
+	LD	R0,#93
+	LDX	-1(RR14),R0
+;  393	  
+;  394	  // Send the message
+;  395	  sendMsg(&response);
+.line 395
+	LD	R1,#255
+	LD	R0,#240
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsg
+	POP	R0
+	POP	R0
+;  396	}
+.line 396
+	CALL	__b_framereset
+	RET	
+.endfunc "processA",396,"_processA"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processB ***************************
+;Name                         Addr/Register   Size   Type
+;_processA                           IMPORT  -----   function
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processB,?_n_processB,RDATA
+	.FCALL _n_processA
+	.FRAME _f_processB,?_f_processB,EDATA
+	.FCALL _f_processA
+	SEGMENT cmd_TEXT
+;  397	
+;  398	////////////////////////////////////////////////////////
+;  399	// Read Callins
+;  400	// Function name: processB
+;  401	// This function reads the privacy and call ins and
+;  402	// returns a message to the host
+;  403	// Param command
+;  404	// Return none
+;  405	void processB(CMD_T command)
+;  406	{
+_processB:
+.define "_processB"
+.value _processB
+.class 2
+.type 65
+.endef
+.begfunc "processB",406,"_processB"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  407	  // [aa0ddeeffgg#cc]
+;  408	  // "aa" is the hex address (in ascii) echoed back.
+;  409	  // "0"  for good.
+;  410	  // "dd" Privacy  2 (in ascii)
+;  411	  // "ee" Privacy  1 (in ascii)
+;  412	  // "ff" Call ins 2 (in ascii)
+;  413	  // "gg" Call ins 1 (in ascii)
+;  414	  // "cc" Checksum   (in ascii)
+;  415	  
+;  416	  // Same as A command
+;  417	  processA(command);
+.line 417
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R4,#11
+	LDX	R0,4094
+	LDX	R1,4095
+	LEA	RR2,4(RR14)
+L__62:
+	LDX	R5,@RR2
+	LDX	@RR0,R5
+	INCW	RR0
+	INCW	RR2
+	DJNZ	R4,L__62
+	CALL	_processA
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;  418	}
+.line 418
+	CALL	__b_framereset
+	RET	
+.endfunc "processB",418,"_processB"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processC ***************************
+;Name                         Addr/Register   Size   Type
+;_sendGoodCmdMsg                     IMPORT  -----   function
+;_setRelays                          IMPORT  -----   function
+;_apccRelays                         IMPORT      1   variable
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processC,?_n_processC,RDATA
+	.FCALL _n_setRelays
+	.FCALL _n_sendGoodCmdMsg
+	.FRAME _f_processC,?_f_processC,EDATA
+	.FCALL _f_setRelays
+	.FCALL _f_sendGoodCmdMsg
+	SEGMENT cmd_TEXT
+;  419	
+;  420	////////////////////////////////////////////////////////
+;  421	// Global clear
+;  422	// This function reset everything to the initial
+;  423	// values
+;  424	// Param command
+;  425	// Return none
+;  426	void processC(CMD_T command)
+;  427	{
+_processC:
+.define "_processC"
+.value _processC
+.class 2
+.type 65
+.endef
+.begfunc "processC",427,"_processC"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  428	  // [aa0#cc]
+;  429	  // "aa" is the hex address (in ascii) echoed back.
+;  430	  // "0"  for good.
+;  431	  // "cc" Checksum (in ascii)
+;  432	  
+;  433	  // Clear the global relay variables
+;  434	  icChannel  = 0x0000;
+.line 434
+	LDX	_icChannel,#-0
+	LDX	_icChannel+1,#-0
+;  435	  zone       = 0x0000;
+.line 435
+	LDX	_zone,#-0
+	LDX	_zone+1,#-0
+;  436	  apccRelays = 0x00;
+.line 436
+	LDX	_apccRelays,#-0
+;  437	  
+;  438	  // Set the relays
+;  439	  setRelays();
+.line 439
+	CALL	_setRelays
+;  440	  
+;  441	  // Send the response message
+;  442	  sendGoodCmdMsg();
+.line 442
+	CALL	_sendGoodCmdMsg
+;  443	}
+.line 443
+	CALL	__b_framereset
+	RET	
+.endfunc "processC",443,"_processC"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processE ***************************
+;Name                         Addr/Register   Size   Type
+;_sendMsg                            IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_charToAscii                        IMPORT  -----   function
+;_readPrivStatus                     IMPORT  -----   function
+;_readCallButtons                    IMPORT  -----   function
+;cs                                 RR14-27      2   variable
+;emergency                          RR14-25      2   variable
+;privacy                            RR14-23      2   variable
+;callButtons                        RR14-21      2   variable
+;response                           RR14-19     19   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: -27 (words)
+
+
+	.FRAME _n_processE,?_n_processE,RDATA
+	.FCALL _n_readCallButtons
+	.FCALL _n_readPrivStatus
+	.FCALL _n_charToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendMsg
+	.FRAME _f_processE,?_f_processE,EDATA
+	.FCALL _f_readCallButtons
+	.FCALL _f_readPrivStatus
+	.FCALL _f_charToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendMsg
+	SEGMENT cmd_TEXT
+;  444	
+;  445	////////////////////////////////////////////////////////
+;  446	// Extended Read Callins
+;  447	// This function reads the privacy, call ins, and
+;  448	// emergency state and returns a message to the host
+;  449	// Param command
+;  450	// Return none
+;  451	void processE(CMD_T command)
+;  452	{
+_processE:
+.define "_processE"
+.value _processE
+.class 2
+.type 65
+.endef
+.begfunc "processE",452,"_processE"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+.define "response"
+.class 1
+.value -19
+.dim 19
+.type 98
+.endef
+.define "callButtons"
+.class 1
+.value -21
+.type 3
+.endef
+.define "privacy"
+.class 1
+.value -23
+.type 3
+.endef
+.define "emergency"
+.class 1
+.value -25
+.type 3
+.endef
+.define "cs"
+.class 1
+.value -27
+.type 3
+.endef
+	LD	R5,#27
+	CALL	__b_frameset0
+;  453	  // [aa0ddeeffgghhjj#cc]
+;  454	  // "aa" is the hex address (in ascii) echoed back.
+;  455	  // "0" for good.
+;  456	  // "dd" Privacy 2   (in ascii)
+;  457	  // "ee" Privacy 1   (in ascii)
+;  458	  // "ff" Call ins 2  (in ascii)
+;  459	  // "gg" Call ins 1  (in ascii)
+;  460	  // "hh" Emergency 2 (in ascii)
+;  461	  // "jj" Emergency 1 (in ascii)
+;  462	  // "cc" Checksum    (in ascii)
+;  463	
+;  464	  int callButtons = 0;  
+.line 464
+	CLR	R0
+	CLR	R1
+	LDX	-21(RR14),R0
+	LDX	-20(RR14),R1
+;  465	  int privacy = 0;
+.line 465
+	CLR	R0
+	CLR	R1
+	LDX	-23(RR14),R0
+	LDX	-22(RR14),R1
+;  466	  int emergency = 0;
+.line 466
+	CLR	R0
+	CLR	R1
+	LDX	-25(RR14),R0
+	LDX	-24(RR14),R1
+;  467	  char response[19];
+;  468	  int cs = 0;
+.line 468
+	CLR	R0
+	CLR	R1
+	LDX	-27(RR14),R0
+	LDX	-26(RR14),R1
+;  469	  
+;  470	  // Read the call buttons, the privacy values and
+;  471	  // the emergency call ins
+;  472	  callButtons = ~readCallButtons();
+.line 472
+	CALL	_readCallButtons
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-21(RR14),R2
+	LDX	-20(RR14),R1
+;  473	  privacy     = ~readPrivStatus();
+.line 473
+	CALL	_readPrivStatus
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-23(RR14),R2
+	LDX	-22(RR14),R1
+;  474	
+;  475	  // Fill in the response message
+;  476	  response[0] = '[';
+.line 476
+	LD	R0,#91
+	LDX	-19(RR14),R0
+;  477	  charToAscii(&response[1],  command.address);
+.line 477
+	LDX	R0,4(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#238
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  478	  response[3] = '0';
+.line 478
+	LD	R0,#48
+	LDX	-16(RR14),R0
+;  479	  charToAscii(&response[4],  (privacy & 0xFF00) >> 8);
+.line 479
+	LDX	R0,-23(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#241
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  480	  charToAscii(&response[6],  privacy & 0x00FF);
+.line 480
+	LDX	R0,-22(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#243
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  481	  charToAscii(&response[8],  (callButtons & 0xFF00) >> 8);
+.line 481
+	LDX	R0,-21(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#245
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  482	  charToAscii(&response[10], callButtons & 0x00FF);
+.line 482
+	LDX	R0,-20(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#247
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  483	  charToAscii(&response[12], (~emergency & 0xFF00) >> 8);
+.line 483
+	LDX	R0,-25(RR14)
+	COM	R0
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#249
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  484	  charToAscii(&response[14], ~emergency & 0x00FF);
+.line 484
+	LDX	R0,-24(RR14)
+	COM	R0
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  485	  response[16] = '#';
+.line 485
+	LD	R0,#35
+	LDX	-3(RR14),R0
+;  486	  
+;  487	  // If checksumming is enabled calculate the checksum and
+;  488	  // update the response
+;  489	  if (checksumEnabled)
+.line 489
+	CPX	_checksumEnabled,#-0
+	JR	Z,_10_L_75
+;  490	  {
+;  491	    cs = calculateChecksum(&response);
+.line 491
+	LD	R1,#255
+	LD	R0,#237
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-27(RR14),R0
+	LDX	-26(RR14),R1
+;  492	  }
+_10_L_75:
+.line 492
+;  493	  
+;  494	  charToAscii(&response[17], cs);
+.line 494
+	LDX	R0,-26(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#254
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  495	  response[19] = ']';
+.line 495
+	LD	R1,R15
+	LD	R0,R14
+	LD	R2,#93
+	LDX	@RR0,R2
+;  496	
+;  497	  // Send the message
+;  498	  sendMsg(&response);
+.line 498
+	LD	R1,#255
+	LD	R0,#237
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsg
+	POP	R0
+	POP	R0
+;  499	}
+.line 499
+	CALL	__b_framereset
+	RET	
+.endfunc "processE",499,"_processE"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processF ***************************
+;Name                         Addr/Register   Size   Type
+;_processE                           IMPORT  -----   function
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processF,?_n_processF,RDATA
+	.FCALL _n_processE
+	.FRAME _f_processF,?_f_processF,EDATA
+	.FCALL _f_processE
+	SEGMENT cmd_TEXT
+;  500	
+;  501	////////////////////////////////////////////////////////
+;  502	// Extended Read Callins
+;  503	// This function reads the privacy, call ins, and
+;  504	// emergency state and returns a message to the host
+;  505	// Param command
+;  506	// Return none
+;  507	void processF(CMD_T command)
+;  508	{
+_processF:
+.define "_processF"
+.value _processF
+.class 2
+.type 65
+.endef
+.begfunc "processF",508,"_processF"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  509	  // [aa0ddeeffgghhjj#cc]
+;  510	  // "aa" is the hex address (in ascii) echoed back.
+;  511	  // "0"  for good.
+;  512	  // "dd" Privacy 2   (in ascii)
+;  513	  // "ee" Privacy 1   (in ascii)
+;  514	  // "ff" Call ins 2  (in ascii)
+;  515	  // "gg" Call ins 1  (in ascii)
+;  516	  // "hh" Emergency 2 (in ascii)
+;  517	  // "jj" Emergency 1 (in ascii)
+;  518	  // "cc" Checksum    (in ascii)
+;  519	  
+;  520	  // Same as E command
+;  521	  processE(command);
+.line 521
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R4,#11
+	LDX	R0,4094
+	LDX	R1,4095
+	LEA	RR2,4(RR14)
+L__71:
+	LDX	R5,@RR2
+	LDX	@RR0,R5
+	INCW	RR0
+	INCW	RR2
+	DJNZ	R4,L__71
+	CALL	_processE
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;  522	}
+.line 522
+	CALL	__b_framereset
+	RET	
+.endfunc "processF",522,"_processF"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processG ***************************
+;Name                         Addr/Register   Size   Type
+;_sendMsg                            IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_charToAscii                        IMPORT  -----   function
+;_supervisorChannels                 IMPORT      2   variable
+;_readSupStatus                      IMPORT  -----   function
+;_readPrivStatus                     IMPORT  -----   function
+;_readCallButtons                    IMPORT  -----   function
+;cs                                 RR14-33      2   variable
+;emergency                          RR14-31      2   variable
+;privacy                            RR14-29      2   variable
+;callButtons                        RR14-27      2   variable
+;supervisor                         RR14-25      2   variable
+;response                           RR14-23     23   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: -33 (words)
+
+
+	.FRAME _n_processG,?_n_processG,RDATA
+	.FCALL _n_readCallButtons
+	.FCALL _n_readPrivStatus
+	.FCALL _n_readSupStatus
+	.FCALL _n_charToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendMsg
+	.FRAME _f_processG,?_f_processG,EDATA
+	.FCALL _f_readCallButtons
+	.FCALL _f_readPrivStatus
+	.FCALL _f_readSupStatus
+	.FCALL _f_charToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendMsg
+	SEGMENT cmd_TEXT
+;  523	
+;  524	////////////////////////////////////////////////////////
+;  525	// Extended Read Callins (New for Rev I)
+;  526	// This function reads the privacy, call ins,
+;  527	// emergency state and supervisor state and returns
+;  528	// a message to the host
+;  529	// Param command
+;  530	// Return none
+;  531	void processG(CMD_T command)
+;  532	{
+_processG:
+.define "_processG"
+.value _processG
+.class 2
+.type 65
+.endef
+.begfunc "processG",532,"_processG"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+.define "response"
+.class 1
+.value -23
+.dim 23
+.type 98
+.endef
+.define "supervisor"
+.class 1
+.value -25
+.type 3
+.endef
+.define "callButtons"
+.class 1
+.value -27
+.type 3
+.endef
+.define "privacy"
+.class 1
+.value -29
+.type 3
+.endef
+.define "emergency"
+.class 1
+.value -31
+.type 3
+.endef
+.define "cs"
+.class 1
+.value -33
+.type 3
+.endef
+	LD	R5,#33
+	CALL	__b_frameset0
+;  533	  // [aa0ddeeffgghhjjkkll#cc]
+;  534	  // "aa" is the hex address (in ascii) echoed back.
+;  535	  // "0"  for good.
+;  536	  // "dd" Privacy 2    (in ascii)
+;  537	  // "ee" Privacy 1    (in ascii)
+;  538	  // "ff" Call ins 2   (in ascii)
+;  539	  // "gg" Call ins 1   (in ascii)
+;  540	  // "hh" Emergency 2  (in ascii)
+;  541	  // "jj" Emergency 1  (in ascii)
+;  542	  // "kk" Supervisor 2 (in ascii)
+;  543	  // "ll" Supervisor 1 (in ascii)
+;  544	  // "cc" Checksum     (in ascii)
+;  545	  
+;  546	  int callButtons = 0;  
+.line 546
+	CLR	R0
+	CLR	R1
+	LDX	-27(RR14),R0
+	LDX	-26(RR14),R1
+;  547	  int privacy = 0;
+.line 547
+	CLR	R0
+	CLR	R1
+	LDX	-29(RR14),R0
+	LDX	-28(RR14),R1
+;  548	  int emergency = 0;
+.line 548
+	CLR	R0
+	CLR	R1
+	LDX	-31(RR14),R0
+	LDX	-30(RR14),R1
+;  549	  int supervisor = 0;
+.line 549
+	CLR	R0
+	CLR	R1
+	LDX	-25(RR14),R0
+	LDX	-24(RR14),R1
+;  550	  char response[23];
+;  551	  int cs = 0;
+.line 551
+	CLR	R0
+	CLR	R1
+	LDX	-33(RR14),R0
+	LDX	-32(RR14),R1
+;  552	  
+;  553	  // Read the call buttons, the privacy values and
+;  554	  // the emergency call ins
+;  555	  callButtons = ~readCallButtons();
+.line 555
+	CALL	_readCallButtons
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-27(RR14),R2
+	LDX	-26(RR14),R1
+;  556	  privacy     = ~readPrivStatus();
+.line 556
+	CALL	_readPrivStatus
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-29(RR14),R2
+	LDX	-28(RR14),R1
+;  557	  supervisor  = ~readSupStatus();
+.line 557
+	CALL	_readSupStatus
+	LD	R2,R0
+	COM	R2
+	COM	R1
+	LDX	-25(RR14),R2
+	LDX	-24(RR14),R1
+;  558	  
+;  559	  // Clear bits for active speaker channels
+;  560	  supervisor = supervisor & supervisorChannels;
+.line 560
+	LDX	R0,-24(RR14)
+	ANDX	R0,_supervisorChannels+1
+	LDX	-24(RR14),R0
+	LDX	R0,-25(RR14)
+	ANDX	R0,_supervisorChannels
+	LDX	-25(RR14),R0
+;  561	
+;  562	  // Fill in the response message
+;  563	  response[0] = '[';
+.line 563
+	LD	R0,#91
+	LDX	-23(RR14),R0
+;  564	  charToAscii(&response[1],  command.address);
+.line 564
+	LDX	R0,4(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#234
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  565	  response[3] = '0';
+.line 565
+	LD	R0,#48
+	LDX	-20(RR14),R0
+;  566	  charToAscii(&response[4],  (privacy & 0xFF00) >> 8);
+.line 566
+	LDX	R0,-29(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#237
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  567	  charToAscii(&response[6],  privacy & 0x00FF);
+.line 567
+	LDX	R0,-28(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#239
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  568	  charToAscii(&response[8],  (callButtons & 0xFF00) >> 8);
+.line 568
+	LDX	R0,-27(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#241
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  569	  charToAscii(&response[10], callButtons & 0x00FF);
+.line 569
+	LDX	R0,-26(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#243
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  570	  charToAscii(&response[12], (emergency & 0xFF00) >> 8);
+.line 570
+	LDX	R0,-31(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#245
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  571	  charToAscii(&response[14], emergency & 0x00FF);
+.line 571
+	LDX	R0,-30(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#247
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  572	  charToAscii(&response[16], (supervisor & 0xFF00) >> 8);
+.line 572
+	LDX	R0,-25(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#249
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  573	  charToAscii(&response[18], supervisor & 0x00FF);
+.line 573
+	LDX	R0,-24(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#251
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  574	  response[20] = '#';
+.line 574
+	LD	R0,#35
+	LDX	-3(RR14),R0
+;  575	  
+;  576	  // If checksumming is enabled calculate the checksum and
+;  577	  // update the response
+;  578	  if (checksumEnabled)
+.line 578
+	CPX	_checksumEnabled,#-0
+	JR	Z,_12_L_79
+;  579	  {
+;  580	    cs = calculateChecksum(&response);
+.line 580
+	LD	R1,#255
+	LD	R0,#233
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-33(RR14),R0
+	LDX	-32(RR14),R1
+;  581	  }
+_12_L_79:
+.line 581
+;  582	
+;  583	  charToAscii(&response[21], cs);
+.line 583
+	LDX	R0,-32(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#254
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  584	  response[23] = ']';
+.line 584
+	LD	R1,R15
+	LD	R0,R14
+	LD	R2,#93
+	LDX	@RR0,R2
+;  585	  
+;  586	  // Send the message
+;  587	  sendMsg(&response);
+.line 587
+	LD	R1,#255
+	LD	R0,#233
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsg
+	POP	R0
+	POP	R0
+;  588	}
+.line 588
+	CALL	__b_framereset
+	RET	
+.endfunc "processG",588,"_processG"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processP ***************************
+;Name                         Addr/Register   Size   Type
+;_sendGoodCmdMsg                     IMPORT  -----   function
+;_setRelays                          IMPORT  -----   function
+;_apccRelays                         IMPORT      1   variable
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processP,?_n_processP,RDATA
+	.FCALL _n_setRelays
+	.FCALL _n_sendGoodCmdMsg
+	.FRAME _f_processP,?_f_processP,EDATA
+	.FCALL _f_setRelays
+	.FCALL _f_sendGoodCmdMsg
+	SEGMENT cmd_TEXT
+;  589	
+;  590	////////////////////////////////////////////////////////
+;  591	// Global Page
+;  592	// This function sets the relays to perform a global
+;  593	// page. It resets the IC and zone relays
+;  594	// Param command
+;  595	// Return none
+;  596	void processP(CMD_T command)
+;  597	{
+_processP:
+.define "_processP"
+.value _processP
+.class 2
+.type 65
+.endef
+.begfunc "processP",597,"_processP"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  598	  // All page command
+;  599	  // Set the ALL Page (clear the other relays, does not include CC# relays)
+;  600	  // [aa0#cc]
+;  601	  // "aa" is the hex address (in ascii) echoed back.
+;  602	  // "0" for good.
+;  603	  // "cc" Checksum (in ascii)
+;  604	  
+;  605	  // Clear relays and set all page
+;  606	  icChannel  = 0x0000;
+.line 606
+	LDX	_icChannel,#-0
+	LDX	_icChannel+1,#-0
+;  607	  zone       = 0x0000;
+.line 607
+	LDX	_zone,#-0
+	LDX	_zone+1,#-0
+;  608	  apccRelays |= ALL_PAGE_BIT;
+.line 608
+	ORX	_apccRelays,#1
+;  609	  
+;  610	  // Set the relays
+;  611	  setRelays();
+.line 611
+	CALL	_setRelays
+;  612	  
+;  613	  // Send the response message
+;  614	  sendGoodCmdMsg();
+.line 614
+	CALL	_sendGoodCmdMsg
+;  615	}
+.line 615
+	CALL	__b_framereset
+	RET	
+.endfunc "processP",615,"_processP"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processR ***************************
+;Name                         Addr/Register   Size   Type
+;_sendMsg                            IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_apccRelays                         IMPORT      1   variable
+;_nibToAscii                         IMPORT  -----   function
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;_charToAscii                        IMPORT  -----   function
+;cs                                 RR14-18      2   variable
+;response                           RR14-16     16   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: -18 (words)
+
+
+	.FRAME _n_processR,?_n_processR,RDATA
+	.FCALL _n_charToAscii
+	.FCALL _n_nibToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendMsg
+	.FRAME _f_processR,?_f_processR,EDATA
+	.FCALL _f_charToAscii
+	.FCALL _f_nibToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendMsg
+	SEGMENT cmd_TEXT
+;  616	
+;  617	////////////////////////////////////////////////////////
+;  618	// Read Relays
+;  619	// This function reads the currently configured
+;  620	// state of the relays
+;  621	// Param command
+;  622	// Return none
+;  623	void processR(CMD_T command)
+;  624	{
+_processR:
+.define "_processR"
+.value _processR
+.class 2
+.type 65
+.endef
+.begfunc "processR",624,"_processR"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+.define "response"
+.class 1
+.value -16
+.dim 16
+.type 98
+.endef
+.define "cs"
+.class 1
+.value -18
+.type 3
+.endef
+	LD	R5,#18
+	CALL	__b_frameset0
+;  625	  // [aa0ddeeffgghh#cc]
+;  626	  // "aa" is the hex address (in ascii) echoed back.
+;  627	  // "0" for good.
+;  628	  // "dd" Relays 4 (in ascii) for Relays 25 to 32
+;  629	  // "ee" Relays 3 (in ascii) for Relays 17 to 24
+;  630	  // "ff" Relays 2 (in ascii) for Relays 9 to 16
+;  631	  // "gg" Relays 1 (in ascii) for Relays 1 to 8
+;  632	  // "hh" APCC Relays
+;  633	  // "cc" Checksum (in ascii)
+;  634	  
+;  635	  char response[16];
+;  636	  int cs = 0;
+.line 636
+	CLR	R0
+	CLR	R1
+	LDX	-18(RR14),R0
+	LDX	-17(RR14),R1
+;  637	
+;  638	  // Fill in the response message
+;  639	  response[0] = '[';
+.line 639
+	LD	R0,#91
+	LDX	-16(RR14),R0
+;  640	  charToAscii(&response[1],  command.address);
+.line 640
+	LDX	R0,4(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#241
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  641	  response[3] = '0';
+.line 641
+	LD	R0,#48
+	LDX	-13(RR14),R0
+;  642	  charToAscii(&response[4],  (icChannel & 0xFF00) >> 8);
+.line 642
+	PUSHX	_icChannel
+	LD	R1,#255
+	LD	R0,#244
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  643	  charToAscii(&response[6],  icChannel & 0x00FF);
+.line 643
+	PUSHX	_icChannel+1
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  644	  charToAscii(&response[8],  (zone & 0xFF00) >> 8);
+.line 644
+	PUSHX	_zone
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  645	  charToAscii(&response[10], zone & 0x00FF);
+.line 645
+	PUSHX	_zone+1
+	LD	R1,#255
+	LD	R0,#250
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  646	  nibToAscii(&response[12],  apccRelays & 0x00FF);
+.line 646
+	PUSHX	_apccRelays
+	LD	R1,#255
+	LD	R0,#252
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_nibToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  647	  response[13] = '#';
+.line 647
+	LD	R0,#35
+	LDX	-3(RR14),R0
+;  648	  
+;  649	  // If checksumming is enabled calculate the checksum and
+;  650	  // update the response
+;  651	  if (checksumEnabled)
+.line 651
+	CPX	_checksumEnabled,#-0
+	JR	Z,_14_L_83
+;  652	  {
+;  653	    cs = calculateChecksum(&response);
+.line 653
+	LD	R1,#255
+	LD	R0,#240
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-18(RR14),R0
+	LDX	-17(RR14),R1
+;  654	  }
+_14_L_83:
+.line 654
+;  655	  
+;  656	  charToAscii(&response[14], cs);
+.line 656
+	LDX	R0,-17(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#254
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  657	  response[16] = ']';
+.line 657
+	LD	R1,R15
+	LD	R0,R14
+	LD	R2,#93
+	LDX	@RR0,R2
+;  658	
+;  659	  // Send the message
+;  660	  sendMsg(&response);
+.line 660
+	LD	R1,#255
+	LD	R0,#240
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsg
+	POP	R0
+	POP	R0
+;  661	}
+.line 661
+	CALL	__b_framereset
+	RET	
+.endfunc "processR",661,"_processR"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processS ***************************
+;Name                         Addr/Register   Size   Type
+;_sendGoodCmdMsg                     IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processS,?_n_processS,RDATA
+	.FCALL _n_sendGoodCmdMsg
+	.FRAME _f_processS,?_f_processS,EDATA
+	.FCALL _f_sendGoodCmdMsg
+	SEGMENT cmd_TEXT
+;  662	
+;  663	////////////////////////////////////////////////////////
+;  664	// Activate Checksum Checking
+;  665	// This function enables checksumming
+;  666	// Param command
+;  667	// Return none
+;  668	void processS(CMD_T command)
+;  669	{
+_processS:
+.define "_processS"
+.value _processS
+.class 2
+.type 65
+.endef
+.begfunc "processS",669,"_processS"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  670	  // [aa0#cc]
+;  671	  // "aa" is the hex address (in ascii) echoed back.
+;  672	  // "0" for good.
+;  673	  // "cc" Checksum (in ascii)
+;  674	  
+;  675	  // Enable the checksum variable
+;  676	  checksumEnabled = TRUE;
+.line 676
+	LDX	_checksumEnabled,#1
+;  677	
+;  678	  // Send the response message
+;  679	  sendGoodCmdMsg();
+.line 679
+	CALL	_sendGoodCmdMsg
+;  680	}
+.line 680
+	CALL	__b_framereset
+	RET	
+.endfunc "processS",680,"_processS"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processT ***************************
+;Name                         Addr/Register   Size   Type
+;_sendGoodCmdMsg                     IMPORT  -----   function
+;_calculateChecksum                  IMPORT  -----   function
+;_checksumEnabled                    IMPORT      1   variable
+;_apccRelays                         IMPORT      1   variable
+;_nibToAscii                         IMPORT  -----   function
+;_supervisorChannels                 IMPORT      2   variable
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;_charToAscii                        IMPORT  -----   function
+;cs                                 RR14-22      2   variable
+;response                           RR14-20     20   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: -22 (words)
+
+
+	.FRAME _n_processT,?_n_processT,RDATA
+	.FCALL _n_charToAscii
+	.FCALL _n_nibToAscii
+	.FCALL _n_calculateChecksum
+	.FCALL _n_sendGoodCmdMsg
+	.FRAME _f_processT,?_f_processT,EDATA
+	.FCALL _f_charToAscii
+	.FCALL _f_nibToAscii
+	.FCALL _f_calculateChecksum
+	.FCALL _f_sendGoodCmdMsg
+	SEGMENT cmd_TEXT
+;  681	
+;  682	////////////////////////////////////////////////////////
+;  683	// Read Relays (New for Rev I)
+;  684	// This function reads the currently configured
+;  685	// state of the relays including the supervisor
+;  686	// relays
+;  687	// Param command
+;  688	// Return none
+;  689	void processT(CMD_T command)
+;  690	{
+_processT:
+.define "_processT"
+.value _processT
+.class 2
+.type 65
+.endef
+.begfunc "processT",690,"_processT"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+.define "response"
+.class 1
+.value -20
+.dim 20
+.type 98
+.endef
+.define "cs"
+.class 1
+.value -22
+.type 3
+.endef
+	LD	R5,#22
+	CALL	__b_frameset0
+;  691	  // [aa0ddeeffgghh#cc]
+;  692	  // "aa" is the hex address (in ascii) echoed back.
+;  693	  // "0" for good.
+;  694	  // "dd" Relays 4 (in ascii) for Relays 25 to 32
+;  695	  // "ee" Relays 3 (in ascii) for Relays 17 to 24
+;  696	  // "ff" Relays 2 (in ascii) for Relays 9 to 16
+;  697	  // "gg" Relays 1 (in ascii) for Relays 1 to 8
+;  698	  // "hh" Supervisor Relays high byte
+;  699	  // "ii" Supervisor relays low byte
+;  700	  // "jj" APCC Relays
+;  701	  // "cc" Checksum (in ascii)
+;  702	  
+;  703	  char response[20];
+;  704	  int cs = 0;
+.line 704
+	CLR	R0
+	CLR	R1
+	LDX	-22(RR14),R0
+	LDX	-21(RR14),R1
+;  705	
+;  706	  // Fill in the response message
+;  707	  response[0] = '[';
+.line 707
+	LD	R0,#91
+	LDX	-20(RR14),R0
+;  708	  charToAscii(&response[1],  command.address);
+.line 708
+	LDX	R0,4(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#237
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  709	  response[3] = '0';
+.line 709
+	LD	R0,#48
+	LDX	-17(RR14),R0
+;  710	  charToAscii(&response[4],  (icChannel & 0xFF00) >> 8);
+.line 710
+	PUSHX	_icChannel
+	LD	R1,#255
+	LD	R0,#240
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  711	  charToAscii(&response[6],  icChannel & 0x00FF);
+.line 711
+	PUSHX	_icChannel+1
+	LD	R1,#255
+	LD	R0,#242
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  712	  charToAscii(&response[8],  (zone & 0xFF00) >> 8);
+.line 712
+	PUSHX	_zone
+	LD	R1,#255
+	LD	R0,#244
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  713	  charToAscii(&response[10], zone & 0x00FF);
+.line 713
+	PUSHX	_zone+1
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  714	  charToAscii(&response[12], (supervisorChannels & 0xFF00) >> 8);
+.line 714
+	PUSHX	_supervisorChannels
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  715	  charToAscii(&response[14], supervisorChannels & 0x00FF);
+.line 715
+	PUSHX	_supervisorChannels+1
+	LD	R1,#255
+	LD	R0,#250
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  716	  nibToAscii(&response[16],  apccRelays & 0x00FF);
+.line 716
+	PUSHX	_apccRelays
+	LD	R1,#255
+	LD	R0,#252
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_nibToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  717	  response[17] = '#';
+.line 717
+	LD	R0,#35
+	LDX	-3(RR14),R0
+;  718	  
+;  719	  // If checksumming is enabled calculate the checksum and
+;  720	  // update the response
+;  721	  if (checksumEnabled)
+.line 721
+	CPX	_checksumEnabled,#-0
+	JR	Z,_16_L_87
+;  722	  {
+;  723	    cs = calculateChecksum(&response);
+.line 723
+	LD	R1,#255
+	LD	R0,#236
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_calculateChecksum
+	POP	R2
+	POP	R2
+	LDX	-22(RR14),R0
+	LDX	-21(RR14),R1
+;  724	  }
+_16_L_87:
+.line 724
+;  725	  
+;  726	  charToAscii(&response[18], cs);
+.line 726
+	LDX	R0,-21(RR14)
+	PUSH	R0
+	LD	R1,#255
+	LD	R0,#254
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_charToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  727	  response[20] = ']';
+.line 727
+	LD	R1,R15
+	LD	R0,R14
+	LD	R2,#93
+	LDX	@RR0,R2
+;  728	
+;  729	  // Send the message
+;  730	  sendGoodCmdMsg();
+.line 730
+	CALL	_sendGoodCmdMsg
+;  731	  }
+.line 731
+	CALL	__b_framereset
+	RET	
+.endfunc "processT",731,"_processT"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processU ***************************
+;Name                         Addr/Register   Size   Type
+;_processT                           IMPORT  -----   function
+;_setRelays                          IMPORT  -----   function
+;_apccRelays                         IMPORT      1   variable
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processU,?_n_processU,RDATA
+	.FCALL _n_setRelays
+	.FCALL _n_processT
+	.FRAME _f_processU,?_f_processU,EDATA
+	.FCALL _f_setRelays
+	.FCALL _f_processT
+	SEGMENT cmd_TEXT
+;  732	
+;  733	////////////////////////////////////////////////////////
+;  734	// Read Relays (New for Rev I)
+;  735	// Set Relays extended
+;  736	// This function sets the relays
+;  737	// Param command
+;  738	// Return none
+;  739	void processU(CMD_T command)
+;  740	{
+_processU:
+.define "_processU"
+.value _processU
+.class 2
+.type 65
+.endef
+.begfunc "processU",740,"_processU"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  741	  // [aa0ddeeffggh#cc]
+;  742	  // "aa" is the hex address (in ascii) echoed back.
+;  743	  // "dd" Speakers 1
+;  744	  // "ee" Speakers 2
+;  745	  // "ff" Zones 1
+;  746	  // "gg" Zones 2
+;  747	  // "h" One nibble. All page and Clock correction.
+;  748	  //                 Bit 0 is all page
+;  749	  //                 Bit 1 is clk cor 1
+;  750	  //                 bit 2 is clk cor 2
+;  751	  // "0" for good.
+;  752	  // "cc" Checksum (in ascii)
+;  753	  
+;  754	  // Set the global relay variables based on
+;  755	  // the input values
+;  756	  icChannel  = (command.data[0] << 8) | command.data[1];
+.line 756
+	LDX	R0,7(RR14)
+	LDX	R1,8(RR14)
+	LDX	_icChannel,R0
+	LDX	_icChannel+1,#-0
+	ORX	_icChannel+1,R1
+	ORX	_icChannel,#-0
+;  757	  zone       = (command.data[2] << 8) | command.data[3];
+.line 757
+	LDX	R0,9(RR14)
+	LDX	R1,10(RR14)
+	LDX	_zone,R0
+	LDX	_zone+1,#-0
+	ORX	_zone+1,R1
+	ORX	_zone,#-0
+;  758	  apccRelays = command.data[4];
+.line 758
+	LDX	R0,11(RR14)
+	LDX	_apccRelays,R0
+;  759	  
+;  760	  // Set the relays
+;  761	  setRelays();
+.line 761
+	CALL	_setRelays
+;  762	
+;  763	  // Send the response message
+;  764	  // The response for this message is to return
+;  765	  // the status of the relays from the T command
+;  766	  processT(command);
+.line 766
+	SUBX	4095,#11
+	SBCX	4094,#-0
+	LD	R4,#11
+	LDX	R0,4094
+	LDX	R1,4095
+	LEA	RR2,4(RR14)
+L__88:
+	LDX	R5,@RR2
+	LDX	@RR0,R5
+	INCW	RR0
+	INCW	RR2
+	DJNZ	R4,L__88
+	CALL	_processT
+	ATM	
+	ADDX	4095,#11
+	ADCX	4094,#-0
+;  767	}
+.line 767
+	CALL	__b_framereset
+	RET	
+.endfunc "processU",767,"_processU"
+	SEGMENT ROM_DATA
+
+
+;**************************** _processW ***************************
+;Name                         Addr/Register   Size   Type
+;_sendGoodCmdMsg                     IMPORT  -----   function
+;_setRelays                          IMPORT  -----   function
+;_apccRelays                         IMPORT      1   variable
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;command                             RR14+4     11   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_processW,?_n_processW,RDATA
+	.FCALL _n_setRelays
+	.FCALL _n_sendGoodCmdMsg
+	.FRAME _f_processW,?_f_processW,EDATA
+	.FCALL _f_setRelays
+	.FCALL _f_sendGoodCmdMsg
+	SEGMENT cmd_TEXT
+;  768	
+;  769	////////////////////////////////////////////////////////
+;  770	// Set Relays
+;  771	// This function sets the relays
+;  772	// Param command
+;  773	// Return none
+;  774	void processW(CMD_T command)
+;  775	{
+_processW:
+.define "_processW"
+.value _processW
+.class 2
+.type 65
+.endef
+.begfunc "processW",775,"_processW"
+.define "command"
+.class 9
+.value 4
+.tag "cmd"
+.type 8
+.endef
+	CALL	__b_frameset00
+;  776	  // [aa0ddeeffggh#cc]
+;  777	  // "aa" is the hex address (in ascii) echoed back.
+;  778	  // "dd" Speakers 1
+;  779	  // "ee" Speakers 2
+;  780	  // "ff" Zones 1
+;  781	  // "gg" Zones 2
+;  782	  // "h" One nibble. All page and Clock correction.
+;  783	  //                 Bit 0 is all page
+;  784	  //                 Bit 1 is clk cor 1
+;  785	  //                 bit 2 is clk cor 2
+;  786	  // "0" for good.
+;  787	  // "cc" Checksum (in ascii)
+;  788	  
+;  789	  // Set the global relay variables based on
+;  790	  // the input values
+;  791	  icChannel  = (command.data[0] << 8) | command.data[1];
+.line 791
+	LDX	R0,7(RR14)
+	LDX	R1,8(RR14)
+	LDX	_icChannel,R0
+	LDX	_icChannel+1,#-0
+	ORX	_icChannel+1,R1
+	ORX	_icChannel,#-0
+;  792	  zone       = (command.data[2] << 8) | command.data[3];
+.line 792
+	LDX	R0,9(RR14)
+	LDX	R1,10(RR14)
+	LDX	_zone,R0
+	LDX	_zone+1,#-0
+	ORX	_zone+1,R1
+	ORX	_zone,#-0
+;  793	  apccRelays = command.data[4];
+.line 793
+	LDX	R0,11(RR14)
+	LDX	_apccRelays,R0
+;  794	  
+;  795	  // Set the relays
+;  796	  setRelays();
+.line 796
+	CALL	_setRelays
+;  797	
+;  798	  // Send the response message
+;  799	  sendGoodCmdMsg();
+.line 799
+	CALL	_sendGoodCmdMsg
+;  800	}
+.line 800
+	CALL	__b_framereset
+	RET	
+.endfunc "processW",800,"_processW"
+	XREF _getc:ROM
+	XREF _setRelays:ROM
+	XREF _charToAscii:ROM
+	XREF _nibToAscii:ROM
+	XREF _asciiToChar:ROM
+	XREF _asciiToNib:ROM
+	XREF _calculateChecksum:ROM
+	XREF _readSupStatus:ROM
+	XREF _readPrivStatus:ROM
+	XREF _readCallButtons:ROM
+	XREF _rs485Delay:ROM
+	XREF _apccRelays:EDATA
+	XREF _supervisorChannels:EDATA
+	XREF _zone:EDATA
+	XREF _icChannel:EDATA
+	XREF _cardAddress:EDATA
+	XREF _checksumEnabled:EDATA
+	XREF _f_f_memcpy:ROM
+	XREF _select_port:ROM
+	XREF _putchar:ROM
+	XREF __b_ucase:ROM
+	XREF __b_framereset:ROM
+	XREF __b_frameset0:ROM
+	XREF __b_frameset00:ROM
+	XDEF _processW
+	XDEF _processU
+	XDEF _processT
+	XDEF _processS
+	XDEF _processR
+	XDEF _processP
+	XDEF _processG
+	XDEF _processF
+	XDEF _processE
+	XDEF _processC
+	XDEF _processB
+	XDEF _processA
+	XDEF _sendMsg
+	XDEF _sendBadCmdMsg
+	XDEF _sendGoodCmdMsg
+	XDEF _decodeCommandStr
+	XDEF _getCommand
+	XDEF _processCommands
+	END

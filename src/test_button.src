@@ -1,0 +1,99 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE _button_TEXT,SPACE=ROM
+	FILE	".\test_button.c"
+.debug "C"
+	SEGMENT ROM_DATA
+
+
+;**************************** _isr_C0 ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_isr_C0,?_n_isr_C0,RDATA
+	.FRAME _f_isr_C0,?_f_isr_C0,EDATA
+	SEGMENT _button_TEXT
+;    1	/*************************************************
+;    2	 *  Copyright (C) 1999-2008 by Zilog, Inc.
+;    3	 *  All Rights Reserved
+;    4	 *************************************************/
+;    5	
+;    6	#include <eZ8.h>
+;    7	#include "main.h"
+;    8	#include "test_button.h"
+;    9	
+;   10	
+;   11	//////////////////////////////////////////////////////////
+;   12	//Interrupt routine
+;   13	
+;   14	#pragma interrupt
+;   15	void isr_C0(void) 
+;   16	{
+_isr_C0:
+.define "_isr_C0"
+.value _isr_C0
+.class 2
+.type 65
+.endef
+.begfunc "isr_C0",16,"_isr_C0"
+	PUSHX	4093
+	CALL	__b_iframeset00
+;   17	//   	toggle_port();
+;   18	}
+.line 18
+	CALL	__b_iframereset
+	IRET	
+.endfunc "isr_C0",18,"_isr_C0"
+	SEGMENT ROM_DATA
+
+
+;**************************** _init_test_button ***************************
+;Name                         Addr/Register   Size   Type
+;_SET_VECTOR                         IMPORT  -----   function
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_init_test_button,?_n_init_test_button,RDATA
+	.FRAME _f_init_test_button,?_f_init_test_button,EDATA
+	SEGMENT _button_TEXT
+;   19	
+;   20	
+;   21	//////////////////////////////////////////////////////////
+;   22	//Intialize Test Button 
+;   23	void init_test_button(void)
+;   24	{
+_init_test_button:
+.define "_init_test_button"
+.value _init_test_button
+.class 2
+.type 65
+.endef
+.begfunc "init_test_button",24,"_init_test_button"
+	CALL	__b_frameset00
+;   25		SET_VECTOR(C0, isr_C0); 
+;   26		IRQ2ENH |= 0x01;	// Set Interrupt Priority High
+.line 26
+	ORX	4039,#1
+;   27		IRQ2ENL |= 0x01;	// Set Interrupt Priority High
+.line 27
+	ORX	4040,#1
+;   28	}
+.line 28
+	CALL	__b_framereset
+	RET	
+.endfunc "init_test_button",28,"_init_test_button"
+	VECTOR	C0=_isr_C0
+	XREF __b_framereset:ROM
+	XREF __b_iframereset:ROM
+	XREF __b_frameset00:ROM
+	XREF __b_iframeset00:ROM
+	XDEF _init_test_button
+	XDEF _isr_C0
+	END

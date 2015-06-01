@@ -1,0 +1,112 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE timer_TEXT,SPACE=ROM
+	FILE	".\timer.c"
+.debug "C"
+	SEGMENT ROM_DATA
+
+
+;**************************** _isr_timer0 ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_isr_timer0,?_n_isr_timer0,RDATA
+	.FRAME _f_isr_timer0,?_f_isr_timer0,EDATA
+	SEGMENT timer_TEXT
+;    1	/*************************************************
+;    2	 *  Copyright (C) 1999-2008 by Zilog, Inc.
+;    3	 *  All Rights Reserved
+;    4	 *************************************************/
+;    5	
+;    6	#include <eZ8.h>
+;    7	#include "main.h"
+;    8	#include "timer.h"
+;    9	
+;   10	//////////////////////////////////////////////////////////
+;   11	//Interrupt routine
+;   12	
+;   13	#pragma interrupt
+;   14	void isr_timer0(void) 
+;   15	{
+_isr_timer0:
+.define "_isr_timer0"
+.value _isr_timer0
+.class 2
+.type 65
+.endef
+.begfunc "isr_timer0",15,"_isr_timer0"
+	PUSHX	4093
+	CALL	__b_iframeset00
+;   16	//    setStatus(RUN);
+;   17	}
+.line 17
+	CALL	__b_iframereset
+	IRET	
+.endfunc "isr_timer0",17,"_isr_timer0"
+	SEGMENT ROM_DATA
+
+
+;**************************** _init_timer0 ***************************
+;Name                         Addr/Register   Size   Type
+;_SET_VECTOR                         IMPORT  -----   function
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_init_timer0,?_n_init_timer0,RDATA
+	.FRAME _f_init_timer0,?_f_init_timer0,EDATA
+	SEGMENT timer_TEXT
+;   18	
+;   19	//////////////////////////////////////////////////////////
+;   20	//Intialize Timer-0 
+;   21	void init_timer0(void)
+;   22	{
+_init_timer0:
+.define "_init_timer0"
+.value _init_timer0
+.class 2
+.type 65
+.endef
+.begfunc "init_timer0",22,"_init_timer0"
+	CALL	__b_frameset00
+;   23		SET_VECTOR(TIMER0, isr_timer0); 
+;   24	 	T0H		= 0xFF;	// Timer High	
+.line 24
+	LDX	3840,#255
+;   25		T0L 	= 0xFF;	// Timer Low
+.line 25
+	LDX	3841,#255
+;   26		T0RH 	= 0xFF;	// Reload Compare High
+.line 26
+	LDX	3842,#255
+;   27		T0RL 	= 0xFF;	// Reload Compare Low
+.line 27
+	LDX	3843,#255
+;   28		T0CTL 	= 0xF9;	// Continous/Prescale
+.line 28
+	LDX	3847,#249
+;   29		IRQ0ENH |= 0x20;	// Set Interrupt Priority Nominal 
+.line 29
+	ORX	4033,#32
+;   30		IRQ0ENL &= 0xDF;	// Set Interrupt Priority Nominal
+.line 30
+	ANDX	4034,#223
+;   31	}
+.line 31
+	CALL	__b_framereset
+	RET	
+.endfunc "init_timer0",31,"_init_timer0"
+	VECTOR	TIMER0=_isr_timer0
+	XREF __b_framereset:ROM
+	XREF __b_iframereset:ROM
+	XREF __b_frameset00:ROM
+	XREF __b_iframeset00:ROM
+	XDEF _init_timer0
+	XDEF _isr_timer0
+	END

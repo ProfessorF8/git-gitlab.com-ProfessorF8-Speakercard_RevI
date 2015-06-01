@@ -1,0 +1,760 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE main_TEXT,SPACE=ROM
+                           A     6    	FILE	".\main.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT FAR_BSS
+0000                       A     9    _cardAddress:
+0000                       A    10    	DS	1
+                           A    11    .define "cardAddress"
+                           A    12    .alias "_cardAddress"
+                           A    13    .class 83
+                           A    14    .value _cardAddress
+                           A    15    .type 2
+                           A    16    .endef
+                           A    17    	SEGMENT main_TEXT
+                           A    18    .begrec "fmt_type",10
+                           A    19    .define "flags"
+                           A    20    .value 0
+                           A    21    .class 8
+                           A    22    .type 2
+                           A    23    .endef
+                           A    24    .define "size"
+                           A    25    .value 1
+                           A    26    .class 8
+                           A    27    .type 2
+                           A    28    .endef
+                           A    29    .define "space"
+                           A    30    .value 2
+                           A    31    .class 8
+                           A    32    .type 2
+                           A    33    .endef
+                           A    34    .define "type"
+                           A    35    .value 3
+                           A    36    .class 8
+                           A    37    .type 2
+                           A    38    .endef
+                           A    39    .define "field_width"
+                           A    40    .value 4
+                           A    41    .class 8
+                           A    42    .type 2
+                           A    43    .endef
+                           A    44    .define "precision"
+                           A    45    .value 5
+                           A    46    .class 8
+                           A    47    .type 2
+                           A    48    .endef
+                           A    49    .define "print_leading_char"
+                           A    50    .value 6
+                           A    51    .class 8
+                           A    52    .type 2
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   2
+
+
+PC     Object              I  Line    Source main.src
+                           A    53    .endef
+                           A    54    .define "dest"
+                           A    55    .value 7
+                           A    56    .class 8
+                           A    57    .type 162
+                           A    58    .endef
+                           A    59    .define "print_len"
+                           A    60    .value 9
+                           A    61    .class 8
+                           A    62    .type 12
+                           A    63    .endef
+                           A    64    .endrec "fmt_type"
+                           A    65    .begrec "flt_fmt_data",5
+                           A    66    .define "pad_whole"
+                           A    67    .value 0
+                           A    68    .class 8
+                           A    69    .type 12
+                           A    70    .endef
+                           A    71    .define "pad_pre_fract"
+                           A    72    .value 1
+                           A    73    .class 8
+                           A    74    .type 12
+                           A    75    .endef
+                           A    76    .define "pad_post_fract"
+                           A    77    .value 2
+                           A    78    .class 8
+                           A    79    .type 12
+                           A    80    .endef
+                           A    81    .define "pad_at"
+                           A    82    .value 3
+                           A    83    .class 8
+                           A    84    .type 162
+                           A    85    .endef
+                           A    86    .endrec "flt_fmt_data"
+                           A    87    .begrec "fmt_control_data",2
+                           A    88    .define "status"
+                           A    89    .value 0
+                           A    90    .class 8
+                           A    91    .type 2
+                           A    92    .endef
+                           A    93    .define "chr"
+                           A    94    .value 1
+                           A    95    .class 8
+                           A    96    .type 2
+                           A    97    .endef
+                           A    98    .endrec "fmt_control_data"
+                           A    99    .begrec "_set_type",4
+                           A   100    .define "begin"
+                           A   101    .value 0
+                           A   102    .class 8
+                           A   103    .type 162
+                           A   104    .endef
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   3
+
+
+PC     Object              I  Line    Source main.src
+                           A   105    .define "end"
+                           A   106    .value 2
+                           A   107    .class 8
+                           A   108    .type 162
+                           A   109    .endef
+                           A   110    .endrec "_set_type"
+                           A   111    .begrec "near_set_type",2
+                           A   112    .define "begin"
+                           A   113    .value 0
+                           A   114    .class 8
+                           A   115    .type 130
+                           A   116    .endef
+                           A   117    .define "end"
+                           A   118    .value 1
+                           A   119    .class 8
+                           A   120    .type 130
+                           A   121    .endef
+                           A   122    .endrec "near_set_type"
+                           A   123    .begrec "far_set_type",4
+                           A   124    .define "begin"
+                           A   125    .value 0
+                           A   126    .class 8
+                           A   127    .type 162
+                           A   128    .endef
+                           A   129    .define "end"
+                           A   130    .value 2
+                           A   131    .class 8
+                           A   132    .type 162
+                           A   133    .endef
+                           A   134    .endrec "far_set_type"
+                           A   135    .begrec "rom_set_type",4
+                           A   136    .define "begin"
+                           A   137    .value 0
+                           A   138    .class 8
+                           A   139    .type 194
+                           A   140    .endef
+                           A   141    .define "end"
+                           A   142    .value 2
+                           A   143    .class 8
+                           A   144    .type 194
+                           A   145    .endef
+                           A   146    .endrec "rom_set_type"
+                           A   147    .begrec "flt_info",12
+                           A   148    .define "flags"
+                           A   149    .value 0
+                           A   150    .class 8
+                           A   151    .type 12
+                           A   152    .endef
+                           A   153    .define "exp"
+                           A   154    .value 1
+                           A   155    .class 8
+                           A   156    .type 2
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   4
+
+
+PC     Object              I  Line    Source main.src
+                           A   157    .endef
+                           A   158    .define "digits"
+                           A   159    .value 2
+                           A   160    .class 8
+                           A   161    .dim 10
+                           A   162    .type 108
+                           A   163    .endef
+                           A   164    .endrec "flt_info"
+                           A   165    .begrec "NONAME0",6
+                           A   166    .define "baudRate"
+                           A   167    .value 0
+                           A   168    .class 8
+                           A   169    .type 5
+                           A   170    .endef
+                           A   171    .define "stopBits"
+                           A   172    .value 4
+                           A   173    .class 8
+                           A   174    .type 12
+                           A   175    .endef
+                           A   176    .define "parity"
+                           A   177    .value 5
+                           A   178    .class 8
+                           A   179    .type 12
+                           A   180    .endef
+                           A   181    .endrec "NONAME0"
+                           A   182    .begrec "NONAME1",5
+                           A   183    .define "pBuffer"
+                           A   184    .value 0
+                           A   185    .class 8
+                           A   186    .type 172
+                           A   187    .endef
+                           A   188    .define "next_in"
+                           A   189    .value 2
+                           A   190    .class 8
+                           A   191    .type 12
+                           A   192    .endef
+                           A   193    .define "next_out"
+                           A   194    .value 3
+                           A   195    .class 8
+                           A   196    .type 12
+                           A   197    .endef
+                           A   198    .define "size"
+                           A   199    .value 4
+                           A   200    .class 8
+                           A   201    .type 12
+                           A   202    .endef
+                           A   203    .endrec "NONAME1"
+                           A   204    .begrec "cmd",11
+                           A   205    .define "address"
+                           A   206    .value 0
+                           A   207    .class 8
+                           A   208    .type 12
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   5
+
+
+PC     Object              I  Line    Source main.src
+                           A   209    .endef
+                           A   210    .define "command"
+                           A   211    .value 1
+                           A   212    .class 8
+                           A   213    .type 2
+                           A   214    .endef
+                           A   215    .define "cs"
+                           A   216    .value 2
+                           A   217    .class 8
+                           A   218    .type 12
+                           A   219    .endef
+                           A   220    .define "data"
+                           A   221    .value 3
+                           A   222    .class 8
+                           A   223    .dim 8
+                           A   224    .type 108
+                           A   225    .endef
+                           A   226    .endrec "cmd"
+                           A   227    .begrec "NONAME2",4
+                           A   228    .define "quot"
+                           A   229    .value 0
+                           A   230    .class 8
+                           A   231    .type 3
+                           A   232    .endef
+                           A   233    .define "rem"
+                           A   234    .value 2
+                           A   235    .class 8
+                           A   236    .type 3
+                           A   237    .endef
+                           A   238    .endrec "NONAME2"
+                           A   239    .begrec "NONAME3",8
+                           A   240    .define "quot"
+                           A   241    .value 0
+                           A   242    .class 8
+                           A   243    .type 5
+                           A   244    .endef
+                           A   245    .define "rem"
+                           A   246    .value 4
+                           A   247    .class 8
+                           A   248    .type 5
+                           A   249    .endef
+                           A   250    .endrec "NONAME3"
+                           A   251    	SEGMENT FAR_BSS
+0001                       A   252    _checksumEnabled:
+0001                       A   253    	DS	1
+                           A   254    .define "checksumEnabled"
+                           A   255    .alias "_checksumEnabled"
+                           A   256    .class 83
+                           A   257    .value _checksumEnabled
+                           A   258    .type 2
+                           A   259    .endef
+                           A   260    	SEGMENT FAR_DATA
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   6
+
+
+PC     Object              I  Line    Source main.src
+0000                       A   261    _icChannel:
+0000 0000                  A   262    	DW	0
+                           A   263    .define "icChannel"
+                           A   264    .alias "_icChannel"
+                           A   265    .class 69
+                           A   266    .value _icChannel
+                           A   267    .type 3
+                           A   268    .endef
+0002                       A   269    _zone:
+0002 0000                  A   270    	DW	0
+                           A   271    .define "zone"
+                           A   272    .alias "_zone"
+                           A   273    .class 69
+                           A   274    .value _zone
+                           A   275    .type 3
+                           A   276    .endef
+0004                       A   277    _supervisorChannels:
+0004 0000                  A   278    	DW	0
+                           A   279    .define "supervisorChannels"
+                           A   280    .alias "_supervisorChannels"
+                           A   281    .class 69
+                           A   282    .value _supervisorChannels
+                           A   283    .type 3
+                           A   284    .endef
+0006                       A   285    _apccRelays:
+0006 00                    A   286    	DB	0
+                           A   287    .define "apccRelays"
+                           A   288    .alias "_apccRelays"
+                           A   289    .class 69
+                           A   290    .value _apccRelays
+                           A   291    .type 2
+                           A   292    .endef
+0007                       A   293    _tibboOnline:
+0007 0000                  A   294    	DW	0
+                           A   295    .define "tibboOnline"
+                           A   296    .alias "_tibboOnline"
+                           A   297    .class 69
+                           A   298    .value _tibboOnline
+                           A   299    .type 3
+                           A   300    .endef
+                           A   301    	SEGMENT ROM_DATA
+                           A   302    
+                           A   303    
+                           A   304    ;**************************** _main ***********
+                           A   305    ;Name                         Addr/Register   S
+                           A   306    ;_processCommands                    IMPORT  --
+                           A   307    ;_tibboOnline                        STATIC    
+                           A   308    ;_initTibbo                          IMPORT  --
+                           A   309    ;_zone                               STATIC    
+                           A   310    ;_setZone                            IMPORT  --
+                           A   311    ;_icChannel                          STATIC    
+                           A   312    ;_setICChannel                       IMPORT  --
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   7
+
+
+PC     Object              I  Line    Source main.src
+                           A   313    ;_clearPgmRlyCtl                     IMPORT  --
+                           A   314    ;_setPgmRlyCtl                       IMPORT  --
+                           A   315    ;_clearClkCor2Ctl                    IMPORT  --
+                           A   316    ;_setClkCor2Ctl                      IMPORT  --
+                           A   317    ;_clearClkCor1Ctl                    IMPORT  --
+                           A   318    ;_delay                              IMPORT  --
+                           A   319    ;_setClkCor1Ctl                      IMPORT  --
+                           A   320    ;_updateSupervisor                   IMPORT  --
+                           A   321    ;_cardAddress                        STATIC    
+                           A   322    ;_readAddress                        IMPORT  --
+                           A   323    ;_Init                               IMPORT  --
+                           A   324    ;callButtons                         RR14-4    
+                           A   325    ;index                               RR14-2    
+                           A   326    
+                           A   327    
+                           A   328    ; Aggregate Stack Size: -4 (words)
+                           A   329    
+                           A   330    
+                           A   331    	.FRAME _n_main,?_n_main,RDATA
+                           A   332    	.FCALL _n_Init
+                           A   333    	.FCALL _n_readAddress
+                           A   334    	.FCALL _n_updateSupervisor
+                           A   335    	.FCALL _n_setClkCor1Ctl
+                           A   336    	.FCALL _n_delay
+                           A   337    	.FCALL _n_clearClkCor1Ctl
+                           A   338    	.FCALL _n_setClkCor2Ctl
+                           A   339    	.FCALL _n_clearClkCor2Ctl
+                           A   340    	.FCALL _n_setPgmRlyCtl
+                           A   341    	.FCALL _n_clearPgmRlyCtl
+                           A   342    	.FCALL _n_setICChannel
+                           A   343    	.FCALL _n_setZone
+                           A   344    	.FCALL _n_initTibbo
+                           A   345    	.FCALL _n_processCommands
+                           A   346    	.FRAME _f_main,?_f_main,EDATA
+                           A   347    	.FCALL _f_Init
+                           A   348    	.FCALL _f_readAddress
+                           A   349    	.FCALL _f_updateSupervisor
+                           A   350    	.FCALL _f_setClkCor1Ctl
+                           A   351    	.FCALL _f_delay
+                           A   352    	.FCALL _f_clearClkCor1Ctl
+                           A   353    	.FCALL _f_setClkCor2Ctl
+                           A   354    	.FCALL _f_clearClkCor2Ctl
+                           A   355    	.FCALL _f_setPgmRlyCtl
+                           A   356    	.FCALL _f_clearPgmRlyCtl
+                           A   357    	.FCALL _f_setICChannel
+                           A   358    	.FCALL _f_setZone
+                           A   359    	.FCALL _f_initTibbo
+                           A   360    	.FCALL _f_processCommands
+                           A   361    ;    1	/**************************************
+                           A   362    ;    2	 * Teradon Speaker Card Rev I firmware 
+                           A   363    ;    3	 *  
+                           A   364    ;    4	 **************************************
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   8
+
+
+PC     Object              I  Line    Source main.src
+                           A   365    ;    5	#include <eZ8.h>
+                           A   366    ;    6	#include <stdio.h>
+                           A   367    ;    7	#include <sio.h> // non-standard I/O
+                           A   368    ;    8	#include "main.h"
+                           A   369    ;    9	#include "cmd.h"
+                           A   370    ;   10	#include "timer.h"
+                           A   371    ;   11	#include "test_button.h"
+                           A   372    ;   12	#include "uart.h"
+                           A   373    ;   13	#include "string.h"
+                           A   374    ;   14	#include "stdlib.h"
+                           A   375    ;   15	#include "init.h"
+                           A   376    ;   16	#include "util.h"
+                           A   377    ;   17	#include "tibbo.h"
+                           A   378    ;   18	
+                           A   379    ;   19	///////////////////////////////////////
+                           A   380    ;   20	// Global variables
+                           A   381    ;   21	char cardAddress;
+                           A   382    ;   22	char checksumEnabled;
+                           A   383    ;   23	int  icChannel          = 0;
+                           A   384    ;   24	int  zone               = 0;
+                           A   385    ;   25	int  supervisorChannels = 0;
+                           A   386    ;   26	char apccRelays         = 0; // Bit 0 i
+                           A   387    ;   27	                             // Bit 1 i
+                           A   388    ;   28	                             // Bit 2 i
+                           A   389    ;   29	int  tibboOnline        = 0;
+                           A   390    	SEGMENT main_TEXT
+                           A   391    ;   30	
+                           A   392    ;   31	///////////////////////////////////////
+                           A   393    ;   32	// Main program begins here 
+                           A   394    ;   33	void main ()
+                           A   395    ;   34	{
+0000                       A   396    _main:
+                           A   397    .define "_main"
+                           A   398    .value _main
+                           A   399    .class 2
+                           A   400    .type 65
+                           A   401    .endef
+                           A   402    .begfunc "main",34,"_main"
+                           A   403    .define "index"
+                           A   404    .class 1
+                           A   405    .value -2
+                           A   406    .type 3
+                           A   407    .endef
+                           A   408    .define "callButtons"
+                           A   409    .class 1
+                           A   410    .value -4
+                           A   411    .type 3
+                           A   412    .endef
+0000 5C04                  A   413    	LD	R5,#4
+0002 D6 0000               A   414    	CALL	__b_frameset0
+                           A   415    ;   35	  int index;
+                           A   416    ;   36	  int callButtons = 0;
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   9
+
+
+PC     Object              I  Line    Source main.src
+                           A   417    .line 36
+0005 B0E0                  A   418    	CLR	R0
+0007 B0E1                  A   419    	CLR	R1
+0009 89E0FC                A   420    	LDX	-4(RR14),R0
+000C 89E1FD                A   421    	LDX	-3(RR14),R1
+                           A   422    ;   37	
+                           A   423    ;   38	  // perform initialization
+                           A   424    ;   39	  Init ( );
+                           A   425    .line 39
+000F D6 0000               A   426    	CALL	_Init
+                           A   427    ;   40		
+                           A   428    ;   41	  // Read the card address from the dip
+                           A   429    ;   42	  cardAddress = readAddress();
+                           A   430    .line 42
+0012 D6 0000               A   431    	CALL	_readAddress
+0015 940000                A   432    	LDX	_cardAddress,R0
+                           A   433    ;   43	
+                           A   434    ;   44	  // Set the supervisor relays
+                           A   435    ;   45	  updateSupervisor(0x0000);    
+                           A   436    .line 45
+0018 1F7000                A   437    	PUSH	#0
+001B 1F7000                A   438    	PUSH	#0
+001E D6 0000               A   439    	CALL	_updateSupervisor
+0021 50E0                  A   440    	POP	R0
+0023 50E0                  A   441    	POP	R0
+                           A   442    ;   46	
+                           A   443    ;   47	  // Use the card address switch settin
+                           A   444    ;   48	  // to indicate that a selftest should
+                           A   445    ;   49	  if (0 == cardAddress)
+                           A   446    .line 49
+0025 A9000000              A   447    	CPX	_cardAddress,#-0
+0029 ED 01 01              A   448    	JR	NE,_1_L_13
+                           A   449    ;   50	  {
+                           A   450    ;   51	    // Do selftest
+                           A   451    ;   52	    setClkCor1Ctl();
+                           A   452    .line 52
+002C D6 0000               A   453    	CALL	_setClkCor1Ctl
+                           A   454    ;   53	    delay();
+                           A   455    .line 53
+002F D6 0000               A   456    	CALL	_delay
+                           A   457    ;   54	    clearClkCor1Ctl();
+                           A   458    .line 54
+0032 D6 0000               A   459    	CALL	_clearClkCor1Ctl
+                           A   460    ;   55	    setClkCor2Ctl();
+                           A   461    .line 55
+0035 D6 0000               A   462    	CALL	_setClkCor2Ctl
+                           A   463    ;   56	    delay();
+                           A   464    .line 56
+0038 D6 0000               A   465    	CALL	_delay
+                           A   466    ;   57	    clearClkCor2Ctl();
+                           A   467    .line 57
+003B D6 0000               A   468    	CALL	_clearClkCor2Ctl
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:  10
+
+
+PC     Object              I  Line    Source main.src
+                           A   469    ;   58	    setPgmRlyCtl();
+                           A   470    .line 58
+003E D6 0000               A   471    	CALL	_setPgmRlyCtl
+                           A   472    ;   59	    delay();
+                           A   473    .line 59
+0041 D6 0000               A   474    	CALL	_delay
+                           A   475    ;   60	    clearPgmRlyCtl();
+                           A   476    .line 60
+0044 D6 0000               A   477    	CALL	_clearPgmRlyCtl
+0047 8B 11                 A   478    	JR	_1_L_1
+                           A   479    ;   61	
+                           A   480    ;   62	    // Cycle channels
+                           A   481    ;   63	    for (index = 0; index < 16; index++
+0049                       A   482    _1_L_2:
+                           A   483    .line 63
+0049 880EFE                A   484    	LDX	R0,-2(RR14)
+004C 881EFF                A   485    	LDX	R1,-1(RR14)
+004F A6E110                A   486    	CP	R1,#16
+0052 1FA6E000              A   487    	CPC	R0,#-0
+0056 1B 0E                 A   488    	JR	LT,_1_L_4
+0058 8B 3C                 A   489    	JR	_1_L_5
+005A                       A   490    _1_L_1:
+005A B0E0                  A   491    	CLR	R0
+005C B0E1                  A   492    	CLR	R1
+005E 89E0FE                A   493    	LDX	-2(RR14),R0
+0061 89E1FF                A   494    	LDX	-1(RR14),R1
+0064 8B E3                 A   495    	JR	_1_L_2
+0066                       A   496    _1_L_4:
+                           A   497    ;   64	    {
+                           A   498    ;   65	      setICChannel(0x0001 << index + 1)
+                           A   499    .line 65
+0066 880EFF                A   500    	LDX	R0,-1(RR14)
+0069 0E                    A   501    	INC	R0
+006A B0E1                  A   502    	CLR	R1
+006C 2C01                  A   503    	LD	R2,#1
+006E 4200                  A   504    	OR	R0,R0
+0070 6B 06                 A   505    	JR	Z,L__9
+0072                       A   506    L__10:
+0072 0222                  A   507    	ADD	R2,R2
+0074 1211                  A   508    	ADC	R1,R1
+0076 0A FA                 A   509    	DJNZ	R0,L__10
+0078                       A   510    L__9:
+0078 70E2                  A   511    	PUSH	R2
+007A 70E1                  A   512    	PUSH	R1
+007C D6 0000               A   513    	CALL	_setICChannel
+007F 50E0                  A   514    	POP	R0
+0081 50E0                  A   515    	POP	R0
+                           A   516    ;   66	      delay();
+                           A   517    .line 66
+0083 D6 0000               A   518    	CALL	_delay
+                           A   519    .line 63
+0086 882EFE                A   520    	LDX	R2,-2(RR14)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:  11
+
+
+PC     Object              I  Line    Source main.src
+0089 883EFF                A   521    	LDX	R3,-1(RR14)
+008C A0E2                  A   522    	INCW	RR2
+008E 89E2FE                A   523    	LDX	-2(RR14),R2
+0091 89E3FF                A   524    	LDX	-1(RR14),R3
+                           A   525    ;   67	    }
+                           A   526    .line 67
+0094 8B B3                 A   527    	JR	_1_L_2
+0096                       A   528    _1_L_5:
+                           A   529    ;   68	
+                           A   530    ;   69	    // Set the channels back to 0
+                           A   531    ;   70	    setICChannel(icChannel);
+                           A   532    .line 70
+0096 C8 0010               A   533    	PUSHX	_icChannel+1
+0099 C8 0000               A   534    	PUSHX	_icChannel
+009C D6 0000               A   535    	CALL	_setICChannel
+009F 50E0                  A   536    	POP	R0
+00A1 50E0                  A   537    	POP	R0
+00A3 8B 11                 A   538    	JR	_1_L_7
+                           A   539    ;   71	  
+                           A   540    ;   72	    // Cycle zone
+                           A   541    ;   73	    for (index = 0; index < 16; index++
+00A5                       A   542    _1_L_8:
+                           A   543    .line 73
+00A5 880EFE                A   544    	LDX	R0,-2(RR14)
+00A8 881EFF                A   545    	LDX	R1,-1(RR14)
+00AB A6E110                A   546    	CP	R1,#16
+00AE 1FA6E000              A   547    	CPC	R0,#-0
+00B2 1B 0E                 A   548    	JR	LT,_1_L_10
+00B4 8B 3C                 A   549    	JR	_1_L_11
+00B6                       A   550    _1_L_7:
+00B6 B0E0                  A   551    	CLR	R0
+00B8 B0E1                  A   552    	CLR	R1
+00BA 89E0FE                A   553    	LDX	-2(RR14),R0
+00BD 89E1FF                A   554    	LDX	-1(RR14),R1
+00C0 8B E3                 A   555    	JR	_1_L_8
+00C2                       A   556    _1_L_10:
+                           A   557    ;   74	    {
+                           A   558    ;   75	      setZone(0x0001 << index + 1);
+                           A   559    .line 75
+00C2 880EFF                A   560    	LDX	R0,-1(RR14)
+00C5 0E                    A   561    	INC	R0
+00C6 B0E1                  A   562    	CLR	R1
+00C8 2C01                  A   563    	LD	R2,#1
+00CA 4200                  A   564    	OR	R0,R0
+00CC 6B 06                 A   565    	JR	Z,L__11
+00CE                       A   566    L__12:
+00CE 0222                  A   567    	ADD	R2,R2
+00D0 1211                  A   568    	ADC	R1,R1
+00D2 0A FA                 A   569    	DJNZ	R0,L__12
+00D4                       A   570    L__11:
+00D4 70E2                  A   571    	PUSH	R2
+00D6 70E1                  A   572    	PUSH	R1
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:  12
+
+
+PC     Object              I  Line    Source main.src
+00D8 D6 0000               A   573    	CALL	_setZone
+00DB 50E0                  A   574    	POP	R0
+00DD 50E0                  A   575    	POP	R0
+                           A   576    ;   76	      delay();
+                           A   577    .line 76
+00DF D6 0000               A   578    	CALL	_delay
+                           A   579    .line 73
+00E2 882EFE                A   580    	LDX	R2,-2(RR14)
+00E5 883EFF                A   581    	LDX	R3,-1(RR14)
+00E8 A0E2                  A   582    	INCW	RR2
+00EA 89E2FE                A   583    	LDX	-2(RR14),R2
+00ED 89E3FF                A   584    	LDX	-1(RR14),R3
+                           A   585    ;   77	    }
+                           A   586    .line 77
+00F0 8B B3                 A   587    	JR	_1_L_8
+00F2                       A   588    _1_L_11:
+                           A   589    ;   78	
+                           A   590    ;   79	    // Set zone back to 0
+                           A   591    ;   80	    setZone(zone);
+                           A   592    .line 80
+00F2 C8 0030               A   593    	PUSHX	_zone+1
+00F5 C8 0020               A   594    	PUSHX	_zone
+00F8 D6 0000               A   595    	CALL	_setZone
+00FB 50E0                  A   596    	POP	R0
+00FD 50E0                  A   597    	POP	R0
+                           A   598    ;   81	  }
+                           A   599    ;   82	  else
+                           A   600    .line 82
+00FF 8B 1A                 A   601    	JR	_1_L_17
+0101                       A   602    _1_L_13:
+                           A   603    ;   83	  {
+                           A   604    ;   84	    // Set the channels to 0
+                           A   605    ;   85	    setICChannel(icChannel);
+                           A   606    .line 85
+0101 C8 0010               A   607    	PUSHX	_icChannel+1
+0104 C8 0000               A   608    	PUSHX	_icChannel
+0107 D6 0000               A   609    	CALL	_setICChannel
+010A 50E0                  A   610    	POP	R0
+010C 50E0                  A   611    	POP	R0
+                           A   612    ;   86	
+                           A   613    ;   87	    // Set zone to 0
+                           A   614    ;   88	    setZone(zone);
+                           A   615    .line 88
+010E C8 0030               A   616    	PUSHX	_zone+1
+0111 C8 0020               A   617    	PUSHX	_zone
+0114 D6 0000               A   618    	CALL	_setZone
+0117 50E0                  A   619    	POP	R0
+0119 50E0                  A   620    	POP	R0
+                           A   621    ;   89	  }
+011B                       A   622    _1_L_17:
+                           A   623    .line 89
+                           A   624    ;   90	  
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:  13
+
+
+PC     Object              I  Line    Source main.src
+                           A   625    ;   91	  
+                           A   626    ;   92	  // Some card addresses are not allowe
+                           A   627    ;   93	  // to RS232 module. If the address sw
+                           A   628    ;   94	  // do not attemp to initialize the mo
+                           A   629    ;   95	  if ((0 != cardAddress) && (1 != cardA
+                           A   630    .line 95
+011B A9000000              A   631    	CPX	_cardAddress,#-0
+011F 6B 28                 A   632    	JR	Z,_1_L_18
+0121 A9010000              A   633    	CPX	_cardAddress,#1
+0125 6B 22                 A   634    	JR	Z,_1_L_18
+0127 A9FF0000              A   635    	CPX	_cardAddress,#255
+012B 6B 1C                 A   636    	JR	Z,_1_L_18
+                           A   637    ;   96	  {
+                           A   638    ;   97	  // Initialize the Tibbo Ethernet to R
+                           A   639    ;   98	  tibboOnline = (initTibbo() == OK);
+                           A   640    .line 98
+012D D6 0000               A   641    	CALL	_initTibbo
+0130 A6E101                A   642    	CP	R1,#1
+0133 1FA6E000              A   643    	CPC	R0,#-0
+0137 EB 06                 A   644    	JR	NE,L__7
+0139 B0E0                  A   645    	CLR	R0
+013B 1C01                  A   646    	LD	R1,#1
+013D 8B 04                 A   647    	JR	L__8
+013F                       A   648    L__7:
+013F B0E0                  A   649    	CLR	R0
+0141 B0E1                  A   650    	CLR	R1
+0143                       A   651    L__8:
+0143 940007                A   652    	LDX	_tibboOnline,R0
+0146 941008                A   653    	LDX	_tibboOnline+1,R1
+                           A   654    ;   99	  }
+0149                       A   655    _1_L_18:
+                           A   656    .line 99
+                           A   657    ;  100	
+                           A   658    ;  101	  // Go to the command processing loop
+                           A   659    ;  102	  processCommands(cardAddress);  
+                           A   660    .line 102
+0149 841000                A   661    	LDX	R1,_cardAddress
+014C E4E1E0                A   662    	LD	R0,R1
+014F 90E0                  A   663    	RL	R0
+0151 3200                  A   664    	SBC	R0,R0
+0153 70E1                  A   665    	PUSH	R1
+0155 70E0                  A   666    	PUSH	R0
+0157 D6 0000               A   667    	CALL	_processCommands
+015A 50E0                  A   668    	POP	R0
+015C 50E0                  A   669    	POP	R0
+                           A   670    ;  103	} //End of main program
+                           A   671    .line 103
+015E D6 0000               A   672    	CALL	__b_framereset
+0161 AF                    A   673    	RET	
+                           A   674    .endfunc "main",103,"_main"
+                           A   675    	XREF _initTibbo:ROM
+                           A   676    	XREF _readAddress:ROM
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:  14
+
+
+PC     Object              I  Line    Source main.src
+                           A   677    	XREF _updateSupervisor:ROM
+                           A   678    	XREF _delay:ROM
+                           A   679    	XREF _setZone:ROM
+                           A   680    	XREF _setICChannel:ROM
+                           A   681    	XREF _clearPgmRlyCtl:ROM
+                           A   682    	XREF _setPgmRlyCtl:ROM
+                           A   683    	XREF _clearClkCor2Ctl:ROM
+                           A   684    	XREF _clearClkCor1Ctl:ROM
+                           A   685    	XREF _setClkCor2Ctl:ROM
+                           A   686    	XREF _setClkCor1Ctl:ROM
+                           A   687    	XREF _Init:ROM
+                           A   688    	XREF _processCommands:ROM
+                           A   689    	XREF __b_framereset:ROM
+                           A   690    	XREF __b_frameset0:ROM
+                           A   691    	XDEF _main
+                           A   692    	XDEF _tibboOnline
+                           A   693    	XDEF _apccRelays
+                           A   694    	XDEF _supervisorChannels
+                           A   695    	XDEF _zone
+                           A   696    	XDEF _icChannel
+                           A   697    	XDEF _checksumEnabled
+                           A   698    	XDEF _cardAddress
+                           A   699    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 700

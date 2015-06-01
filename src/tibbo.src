@@ -1,0 +1,2059 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE tibbo_TEXT,SPACE=ROM
+	FILE	".\tibbo.c"
+.debug "C"
+	SEGMENT ROM_DATA
+_0temp2:
+	DB	2
+	DB	71
+	DB	73
+	DB	80
+	DB	13
+_1temp3:
+	DB	2
+	DB	83
+	DB	70
+	DB	67
+	DB	48
+	DB	13
+_2temp4:
+	DB	2
+	DB	83
+	DB	84
+	DB	80
+	DB	49
+	DB	13
+_3temp5:
+	DB	2
+	DB	83
+	DB	73
+	DB	80
+	DB	49
+	DB	57
+	DB	50
+	DB	46
+	DB	49
+	DB	54
+	DB	57
+	DB	46
+	DB	48
+	DB	48
+	DB	49
+	DB	46
+	DB	48
+	DB	48
+	DB	48
+	DB	13
+_4temp0:
+	DB	2
+	DB	86
+	DB	13
+_5temp1:
+	DB	2
+	DB	73
+	DB	13
+
+
+;**************************** _initTibbo ***************************
+;Name                         Addr/Register   Size   Type
+;_resetTibbo                         IMPORT  -----   function
+;___print_putch                      IMPORT  -----   function
+;__u_stoa                            IMPORT  -----   function
+;_cardAddress                        IMPORT      1   variable
+;_checkIPAddr                        IMPORT  -----   function
+;_f_f_strncpy                        IMPORT  -----   function
+;_readUart                           IMPORT  -----   function
+;_sendMsgTibbo                       IMPORT  -----   function
+;_f_memset                           IMPORT  -----   function
+;_enableTibboSerialProgramming       IMPORT  -----   function
+;_mSecDelay                          IMPORT  -----   function
+;_releaseTibboReset                  IMPORT  -----   function
+;_init_uart0                         IMPORT  -----   function
+;_3temp5                             STATIC     20   variable
+;_2temp4                             STATIC      6   variable
+;_1temp3                             STATIC      6   variable
+;_0temp2                             STATIC      5   variable
+;_5temp1                             STATIC      3   variable
+;_4temp0                             STATIC      3   variable
+;count                             RR14-179      2   variable
+;tibboFC                           RR14-177      6   variable
+;IPAddrResponse                    RR14-171     16   variable
+;tibboGIP                          RR14-155      5   variable
+;tibboVersion                      RR14-150      3   variable
+;tibboTP                           RR14-147      6   variable
+;tibboInit                         RR14-141      3   variable
+;tibboIP                           RR14-138     20   variable
+;initFlag                          RR14-118      2   variable
+;EOS                               RR14-116      2   variable
+;result                            RR14-114      2   variable
+;tibboResponse                     RR14-112    100   variable
+;bytesRead                          RR14-12      2   variable
+;___clr_print_fmt                    IMPORT  -----   function
+
+
+; Aggregate Stack Size: -179 (words)
+
+
+	.FRAME _n_initTibbo,?_n_initTibbo,RDATA
+	.FCALL _n___clr_print_fmt
+	.FCALL _n_init_uart0
+	.FCALL _n_releaseTibboReset
+	.FCALL _n_mSecDelay
+	.FCALL _n_enableTibboSerialProgramming
+	.FCALL _n_f_memset
+	.FCALL _n_sendMsgTibbo
+	.FCALL _n_readUart
+	.FCALL _n_f_f_strncpy
+	.FCALL _n_checkIPAddr
+	.FCALL _n__u_stoa
+	.FCALL _n___print_putch
+	.FCALL _n_resetTibbo
+	.FRAME _f_initTibbo,?_f_initTibbo,EDATA
+	.FCALL _f___clr_print_fmt
+	.FCALL _f_init_uart0
+	.FCALL _f_releaseTibboReset
+	.FCALL _f_mSecDelay
+	.FCALL _f_enableTibboSerialProgramming
+	.FCALL _f_f_memset
+	.FCALL _f_sendMsgTibbo
+	.FCALL _f_readUart
+	.FCALL _f_f_f_strncpy
+	.FCALL _f_checkIPAddr
+	.FCALL _f__u_stoa
+	.FCALL _f___print_putch
+	.FCALL _f_resetTibbo
+	SEGMENT tibbo_TEXT
+.begrec "fmt_type",10
+.define "flags"
+.value 0
+.class 8
+.type 2
+.endef
+.define "size"
+.value 1
+.class 8
+.type 2
+.endef
+.define "space"
+.value 2
+.class 8
+.type 2
+.endef
+.define "type"
+.value 3
+.class 8
+.type 2
+.endef
+.define "field_width"
+.value 4
+.class 8
+.type 2
+.endef
+.define "precision"
+.value 5
+.class 8
+.type 2
+.endef
+.define "print_leading_char"
+.value 6
+.class 8
+.type 2
+.endef
+.define "dest"
+.value 7
+.class 8
+.type 162
+.endef
+.define "print_len"
+.value 9
+.class 8
+.type 12
+.endef
+.endrec "fmt_type"
+.begrec "flt_fmt_data",5
+.define "pad_whole"
+.value 0
+.class 8
+.type 12
+.endef
+.define "pad_pre_fract"
+.value 1
+.class 8
+.type 12
+.endef
+.define "pad_post_fract"
+.value 2
+.class 8
+.type 12
+.endef
+.define "pad_at"
+.value 3
+.class 8
+.type 162
+.endef
+.endrec "flt_fmt_data"
+.begrec "fmt_control_data",2
+.define "status"
+.value 0
+.class 8
+.type 2
+.endef
+.define "chr"
+.value 1
+.class 8
+.type 2
+.endef
+.endrec "fmt_control_data"
+.begrec "_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 162
+.endef
+.define "end"
+.value 2
+.class 8
+.type 162
+.endef
+.endrec "_set_type"
+.begrec "near_set_type",2
+.define "begin"
+.value 0
+.class 8
+.type 130
+.endef
+.define "end"
+.value 1
+.class 8
+.type 130
+.endef
+.endrec "near_set_type"
+.begrec "far_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 162
+.endef
+.define "end"
+.value 2
+.class 8
+.type 162
+.endef
+.endrec "far_set_type"
+.begrec "rom_set_type",4
+.define "begin"
+.value 0
+.class 8
+.type 194
+.endef
+.define "end"
+.value 2
+.class 8
+.type 194
+.endef
+.endrec "rom_set_type"
+.begrec "flt_info",12
+.define "flags"
+.value 0
+.class 8
+.type 12
+.endef
+.define "exp"
+.value 1
+.class 8
+.type 2
+.endef
+.define "digits"
+.value 2
+.class 8
+.dim 10
+.type 108
+.endef
+.endrec "flt_info"
+.begrec "NONAME0",4
+.define "quot"
+.value 0
+.class 8
+.type 3
+.endef
+.define "rem"
+.value 2
+.class 8
+.type 3
+.endef
+.endrec "NONAME0"
+.begrec "NONAME1",8
+.define "quot"
+.value 0
+.class 8
+.type 5
+.endef
+.define "rem"
+.value 4
+.class 8
+.type 5
+.endef
+.endrec "NONAME1"
+;    1	#include <stdio.h>
+;    2	#include <eZ8.h>
+;    3	#include <string.h>
+;    4	#include <stdlib.h>
+;    5	#include "main.h"
+;    6	#include "util.h"
+;    7	#include "tibbo.h"
+;    8	#include "uart.h"
+;    9	
+;   10	
+;   11	////////////////////////////////////////////////////////
+;   12	// initTibbo
+;   13	// This function checks to see if the Tibbo Ethernet
+;   14	// module is istalled and working. If it is then it
+;   15	// will be initialized and made ready for use.
+;   16	// Param none
+;   17	// Return OK or ERROR
+;   18	int initTibbo( void )
+;   19	{
+_initTibbo:
+.define "_initTibbo"
+.value _initTibbo
+.class 2
+.type 67
+.endef
+.begfunc "initTibbo",19,"_initTibbo"
+	LD	R5,#179
+	CALL	__b_frameset0
+.line 19
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	___clr_print_fmt
+	POP	R0
+	POP	R0
+.define "bytesRead"
+.class 1
+.value -12
+.type 3
+.endef
+.define "tibboResponse"
+.class 1
+.value -112
+.dim 100
+.type 98
+.endef
+.define "result"
+.class 1
+.value -114
+.type 3
+.endef
+.define "EOS"
+.class 1
+.value -116
+.type 3
+.endef
+.define "initFlag"
+.class 1
+.value -118
+.type 3
+.endef
+.define "tibboIP"
+.class 1
+.value -138
+.dim 20
+.type 98
+.endef
+.define "tibboInit"
+.class 1
+.value -141
+.dim 3
+.type 98
+.endef
+.define "tibboTP"
+.class 1
+.value -147
+.dim 6
+.type 98
+.endef
+.define "tibboVersion"
+.class 1
+.value -150
+.dim 3
+.type 98
+.endef
+.define "tibboGIP"
+.class 1
+.value -155
+.dim 5
+.type 98
+.endef
+.define "IPAddrResponse"
+.class 1
+.value -171
+.dim 16
+.type 98
+.endef
+.define "tibboFC"
+.class 1
+.value -177
+.dim 6
+.type 98
+.endef
+.define "count"
+.class 1
+.value -179
+.type 3
+.endef
+;   20	  char tibboVersion[] = {0x02, 'V', 0x0D};
+.line 20
+	LD	R0,#3
+	LEA	RR2,106(RR14)
+	DEC	R2
+	LD	R4,#high(_4temp0)
+	LD	R5,#low(_4temp0)
+L__1:
+	LDC	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__1
+;   21	  char tibboInit[] = {0x02, 'I', 0x0D};
+.line 21
+	LD	R0,#3
+	LEA	RR2,115(RR14)
+	DEC	R2
+	LD	R4,#high(_5temp1)
+	LD	R5,#low(_5temp1)
+L__3:
+	LDC	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__3
+;   22	  char tibboGIP[] = {0x02, 'G', 'I', 'P', 0x0D};
+.line 22
+	LD	R0,#5
+	LEA	RR2,101(RR14)
+	DEC	R2
+	LD	R4,#high(_0temp2)
+	LD	R5,#low(_0temp2)
+L__5:
+	LDC	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__5
+;   23	
+;   24	  
+;   25	  char tibboFC[] = {0x02, 'S', 'F', 'C', '0', 0x0D};
+.line 25
+	LD	R0,#6
+	LEA	RR2,79(RR14)
+	DEC	R2
+	LD	R4,#high(_1temp3)
+	LD	R5,#low(_1temp3)
+L__7:
+	LDC	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__7
+;   26	  char tibboTP[] = {0x02, 'S', 'T', 'P', '1', 0x0D};
+.line 26
+	LD	R0,#6
+	LEA	RR2,109(RR14)
+	DEC	R2
+	LD	R4,#high(_2temp4)
+	LD	R5,#low(_2temp4)
+L__9:
+	LDC	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__9
+;   27	  char tibboIP[] = {0x02, 'S', 'I', 'P', '1', '9', '2', '.', '1', '6', '9', '.', '0', '0', '1', '.', '0', '0', '0', 0x0D}; 
+.line 27
+	LD	R0,#20
+	LEA	RR2,118(RR14)
+	DEC	R2
+	LD	R4,#high(_3temp5)
+	LD	R5,#low(_3temp5)
+L__11:
+	LDC	R1,@RR4
+	LDX	@RR2,R1
+	INCW	RR2
+	INCW	RR4
+	DJNZ	R0,L__11
+;   28	  char tibboResponse[100];
+;   29	  int  result = 0;
+.line 29
+	CLR	R0
+	CLR	R1
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;   30		int  count = 0;
+.line 30
+	LEA	RR2,77(RR14)
+	DEC	R2
+	CLR	R0
+	CLR	R1
+	LDX	@RR2,R0
+	LDX	1(RR2),R1
+;   31	  int  bytesRead;
+;   32	  int  EOS = 0;
+.line 32
+	CLR	R0
+	CLR	R1
+	LDX	-116(RR14),R0
+	LDX	-115(RR14),R1
+;   33	  int  initFlag = 0;    
+.line 33
+	CLR	R0
+	CLR	R1
+	LDX	-118(RR14),R0
+	LDX	-117(RR14),R1
+;   34	    
+;   35	  char IPAddrResponse[16];  
+;   36	
+;   37	  // Lets talk Tibbo
+;   38	  init_uart0();  // Intialize Uart 0 connected to Tibbo EM200
+.line 38
+	CALL	_init_uart0
+;   39	                 // Ethernet to RS-232 module
+;   40	
+;   41	  // Enable the Tibbo Ethernet to RS232 module
+;   42	  releaseTibboReset();
+.line 42
+	CALL	_releaseTibboReset
+;   43	  
+;   44	  // Wait for the module to come up
+;   45		mSecDelay(200);
+.line 45
+	PUSH	#200
+	PUSH	#0
+	CALL	_mSecDelay
+	POP	R0
+	POP	R0
+;   46	  
+;   47	  // Put the Tibbo module in programming mode
+;   48	  enableTibboSerialProgramming();
+.line 48
+	CALL	_enableTibboSerialProgramming
+;   49		
+;   50	  for (;;)
+;   51		{
+;   52	    // Get the version
+;   53	    memset(tibboResponse, 0, 100);
+.line 53
+	PUSH	#100
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_memset
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;   54	    sendMsgTibbo(tibboVersion, sizeof(tibboVersion));
+.line 54
+	PUSH	#3
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#106
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;   55	    bytesRead = readUart(tibboResponse, UART0, 20, 50);
+.line 55
+	PUSH	#50
+	PUSH	#0
+	PUSH	#20
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;   56	  
+;   57	    if (bytesRead <= 0)
+.line 57
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	GT,_1_L_9
+;   58	    {
+;   59	    	// No response from Tibbo, Try to initialize the
+;   60	      // module
+;   61	      memset(tibboResponse, 0, 100);
+.line 61
+	PUSH	#100
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_memset
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;   62	      sendMsgTibbo(tibboInit, sizeof(tibboInit));
+.line 62
+	PUSH	#3
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#115
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;   63	      bytesRead = readUart(tibboResponse, UART0, 20, 500);
+.line 63
+	PUSH	#244
+	PUSH	#1
+	PUSH	#20
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;   64	    
+;   65	      if (bytesRead <= 0)
+.line 65
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	GT,_1_L_7
+;   66	      {
+;   67	        // No response to init command so exit
+;   68	        result = ERROR;
+.line 68
+	LD	R0,#255
+	LD	R1,#255
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;   69	        break;
+.line 69
+	JR	_1_L_29
+;   70	      }
+;   71	      else
+_1_L_7:
+.line 71
+;   72	      {
+;   73	      	// We got a response, Set initFlag
+;   74	        initFlag = 1;
+.line 74
+	CLR	R0
+	LD	R1,#1
+	LDX	-118(RR14),R0
+	LDX	-117(RR14),R1
+;   75	      }
+;   76	    }
+_1_L_9:
+.line 76
+;   77	    
+;   78	    // See if the IP address is correct
+;   79	    memset(tibboResponse, 0, 100);
+.line 79
+	PUSH	#100
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_memset
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;   80	    sendMsgTibbo(tibboGIP, sizeof(tibboGIP));
+.line 80
+	PUSH	#5
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#101
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;   81	    bytesRead = readUart(tibboResponse, UART0, 20, 50);
+.line 81
+	PUSH	#50
+	PUSH	#0
+	PUSH	#20
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;   82	    
+;   83	    if (bytesRead > 0)
+.line 83
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	LE,_1_L_25
+;   84	    {
+;   85	      // Find the end of the IP address string
+;   86	      while(0x0D != tibboResponse[EOS])
+_1_L_11:
+.line 86
+	LDX	R0,-116(RR14)
+	LDX	R1,-115(RR14)
+	LEA	RR2,144(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R0,@RR2
+	CP	R0,#13
+	JR	Z,_1_L_13
+;   87	      {
+;   88	      	EOS++;
+.line 88
+	LDX	R2,-116(RR14)
+	LDX	R3,-115(RR14)
+	INCW	RR2
+	LDX	-116(RR14),R2
+	LDX	-115(RR14),R3
+;   89	      }
+.line 89
+	JR	_1_L_11
+_1_L_13:
+;   90	      strncpy(IPAddrResponse, &tibboResponse[2], 
+;   91	              EOS - 2);
+.line 91
+	LDX	R1,-116(RR14)
+	LDX	R0,-115(RR14)
+	ADD	R0,#254
+	ADC	R1,#255
+	PUSH	R0
+	PUSH	R1
+	LD	R1,#255
+	LD	R0,#146
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	LD	R1,#255
+	LD	R0,#85
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_f_strncpy
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;   92	     	if (!initFlag && !checkIPAddr(IPAddrResponse, IPAddrOctet1,
+.line 92
+	LDX	R0,-118(RR14)
+	LDX	R1,-117(RR14)
+	OR	R0,R1
+	JR	NE,_1_L_25
+;   93	                       IPAddrOctet2, IPAddrOctet3,
+;   94	                       IPAddrOctet4))
+.line 94
+	LDX	R1,_cardAddress
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	PUSH	R1
+	PUSH	R0
+	PUSH	#1
+	PUSH	#0
+	PUSH	#169
+	PUSH	#0
+	PUSH	#192
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#85
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_checkIPAddr
+	ATM	
+	ADDX	4095,#10
+	ADCX	4094,#-0
+	LD	R2,R0
+	OR	R2,R1
+	JR	NE,_1_L_25
+;   95	      {
+;   96	      	// IP address is not OK so init Tibbo Ethernet to
+;   97	        // RS232 module and then set it.
+;   98	        memset(tibboResponse, 0, 100);
+.line 98
+	PUSH	#100
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_f_memset
+	ATM	
+	ADDX	4095,#6
+	ADCX	4094,#-0
+;   99	        sendMsgTibbo(tibboInit, sizeof(tibboInit));
+.line 99
+	PUSH	#3
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#115
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;  100	        bytesRead = readUart(tibboResponse, UART0, 20, 500);
+.line 100
+	PUSH	#244
+	PUSH	#1
+	PUSH	#20
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;  101	    
+;  102	        if (bytesRead <= 0)
+.line 102
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	GT,_1_L_16
+;  103	        {
+;  104	          // No response to init command so exit
+;  105	          result = ERROR;
+.line 105
+	LD	R0,#255
+	LD	R1,#255
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;  106	          break;
+.line 106
+	JR	_1_L_29
+;  107	        }
+;  108	        else
+_1_L_16:
+.line 108
+;  109	        {
+;  110	      	  // We got a response, Set initFlag
+;  111	          initFlag = 1;
+.line 111
+	CLR	R0
+	LD	R1,#1
+	LDX	-118(RR14),R0
+	LDX	-117(RR14),R1
+;  112	        }
+;  113	      }
+;  114	    }
+_1_L_25:
+.line 114
+;  115	    
+;  116	    if (initFlag)
+.line 116
+	LDX	R0,-118(RR14)
+	LDX	R1,-117(RR14)
+	OR	R0,R1
+	JR	Z,_1_L_26
+;  117	    {
+;  118	      // Set the Flow Contorl for the serial
+;  119	      // side of the Tibbo module to disabled
+;  120	      sendMsgTibbo(tibboFC, sizeof(tibboFC));
+.line 120
+	PUSH	#6
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#79
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;  121	      bytesRead = readUart(tibboResponse, UART0, 3, 50);
+.line 121
+	PUSH	#50
+	PUSH	#0
+	PUSH	#3
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;  122	      if (bytesRead <= 0)
+.line 122
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	GT,_1_L_20
+;  123	      {
+;  124	        // No response so set ERROR and exit
+;  125	        result = ERROR;
+.line 125
+	LD	R0,#255
+	LD	R1,#255
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;  126	        break;
+.line 126
+	JR	_1_L_29
+;  127	      }
+_1_L_20:
+.line 127
+;  128	
+;  129	      // Set the Transport Protocol for the network
+;  130	      // side of the Tibbo module to TCP
+;  131	      sendMsgTibbo(tibboTP, sizeof(tibboTP));
+.line 131
+	PUSH	#6
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#109
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;  132	      bytesRead = readUart(tibboResponse, UART0, 3, 50);
+.line 132
+	PUSH	#50
+	PUSH	#0
+	PUSH	#3
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;  133	      if (bytesRead <= 0)
+.line 133
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	GT,_1_L_22
+;  134	      {
+;  135	        // No response so set ERROR and exit
+;  136	        result = ERROR;
+.line 136
+	LD	R0,#255
+	LD	R1,#255
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;  137	        break;
+.line 137
+	JR	_1_L_29
+;  138	      }
+_1_L_22:
+.line 138
+;  139	 
+;  140	      // Fill in IP address
+;  141	      sprintf(&tibboIP[4], "%03d.%03d.%03d.%03d",
+;  142	              IPAddrOctet1, IPAddrOctet2,
+;  143	              IPAddrOctet3, IPAddrOctet4);
+.line 143
+	LD	R1,#255
+	LD	R0,#122
+	ADD	R0,R15
+	ADC	R1,R14
+	LDX	-3(RR14),R1
+	LDX	-2(RR14),R0
+	LD	R0,#3
+	LDX	-6(RR14),R0
+	LEA	RR2,246(RR14)
+	LD	R0,#64
+	LDX	@RR2,R0
+	PUSH	#192
+	PUSH	#0
+	LD	R0,R2
+	PUSH	R3
+	PUSH	R0
+	CALL	__u_stoa
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+	PUSH	#46
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	___print_putch
+	POP	R0
+	POP	R0
+	POP	R0
+	LD	R0,#3
+	LDX	-6(RR14),R0
+	LEA	RR2,246(RR14)
+	LD	R0,#64
+	LDX	@RR2,R0
+	PUSH	#169
+	PUSH	#0
+	LD	R0,R2
+	PUSH	R3
+	PUSH	R0
+	CALL	__u_stoa
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+	PUSH	#46
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	___print_putch
+	POP	R0
+	POP	R0
+	POP	R0
+	LD	R0,#3
+	LDX	-6(RR14),R0
+	LEA	RR2,246(RR14)
+	LD	R0,#64
+	LDX	@RR2,R0
+	PUSH	#1
+	PUSH	#0
+	LD	R0,R2
+	PUSH	R3
+	PUSH	R0
+	CALL	__u_stoa
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+	PUSH	#46
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	___print_putch
+	POP	R0
+	POP	R0
+	POP	R0
+	LD	R0,#3
+	LDX	-6(RR14),R0
+	LEA	RR2,246(RR14)
+	LD	R0,#64
+	LDX	@RR2,R0
+	LDX	R1,_cardAddress
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	PUSH	R1
+	PUSH	R0
+	LD	R0,R2
+	PUSH	R3
+	PUSH	R0
+	CALL	__u_stoa
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	___print_putch
+	POP	R0
+	POP	R0
+	POP	R0
+;  144	      tibboIP[19] = 0x0D;
+.line 144
+	LD	R0,#13
+	LDX	-119(RR14),R0
+;  145	      sendMsgTibbo(tibboIP, sizeof(tibboIP));
+.line 145
+	PUSH	#20
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#118
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_sendMsgTibbo
+	POP	R0
+	POP	R0
+	POP	R0
+	POP	R0
+;  146	      bytesRead = readUart(tibboResponse, UART0, 3, 50);
+.line 146
+	PUSH	#50
+	PUSH	#0
+	PUSH	#3
+	PUSH	#0
+	PUSH	#0
+	PUSH	#0
+	LD	R1,#255
+	LD	R0,#144
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	CALL	_readUart
+	ATM	
+	ADDX	4095,#8
+	ADCX	4094,#-0
+	LDX	-12(RR14),R0
+	LDX	-11(RR14),R1
+;  147	      if (bytesRead <= 0)
+.line 147
+	LDX	R0,-12(RR14)
+	LDX	R1,-11(RR14)
+	CP	R1,#0
+	CPC	R0,#-0
+	JR	GT,_1_L_26
+;  148	      {
+;  149	        // No response so set ERROR and exit
+;  150	        result = ERROR;
+.line 150
+	LD	R0,#255
+	LD	R1,#255
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;  151	        break;
+.line 151
+	JR	_1_L_29
+;  152	      }
+;  153	    }
+_1_L_26:
+.line 153
+;  154	    result = 1;
+.line 154
+	CLR	R0
+	LD	R1,#1
+	LDX	-114(RR14),R0
+	LDX	-113(RR14),R1
+;  155	    break;
+;  156	  }
+_1_L_29:
+.line 156
+;  157	
+;  158	  // Reset the Tibbo module
+;  159	  resetTibbo();
+.line 159
+	CALL	_resetTibbo
+;  160	
+;  161	  return result;	
+.line 161
+	LDX	R0,-114(RR14)
+	LDX	R1,-113(RR14)
+;  162	}
+.line 162
+	CALL	__b_framereset
+	RET	
+.endfunc "initTibbo",162,"_initTibbo"
+	SEGMENT ROM_DATA
+
+
+;**************************** _parseIPAddrString ***************************
+;Name                         Addr/Register   Size   Type
+;_f_atoi                             IMPORT  -----   function
+;_f_f_strtok                         IMPORT  -----   function
+;t                                   RR14-2      2   variable
+;octet4                             RR14+12      2   parameter
+;octet3                             RR14+10      2   parameter
+;octet2                              RR14+8      2   parameter
+;octet1                              RR14+6      2   parameter
+;IPAddrString                        RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	SEGMENT FAR_TXT
+L__25:
+	DB	"."
+	DB	0
+L__26:
+	DB	"."
+	DB	0
+L__27:
+	DB	"."
+	DB	0
+L__28:
+	DB	"."
+	DB	0
+	.FRAME _n_parseIPAddrString,?_n_parseIPAddrString,RDATA
+	.FCALL _n_f_f_strtok
+	.FCALL _n_f_atoi
+	.FRAME _f_parseIPAddrString,?_f_parseIPAddrString,EDATA
+	.FCALL _f_f_f_strtok
+	.FCALL _f_f_atoi
+	SEGMENT tibbo_TEXT
+;  163	
+;  164	////////////////////////////////////////////////////////
+;  165	// parseIPAddrString
+;  166	// This function takes an IP address string in the form
+;  167	// of 192.168.1.1 and returns the idividual nibbles as
+;  168	// integers
+;  169	// Param char* IPAddrString
+;  170	// Param int*  octet1
+;  171	// Param int*  octet2
+;  172	// Param int*  octet3
+;  173	// Param int*  octet4
+;  174	// Return OK or ERROR
+;  175	void parseIPAddrString(char* IPAddrString, int* octet1, int* octet2, int* octet3, int* octet4)
+;  176	{
+_parseIPAddrString:
+.define "_parseIPAddrString"
+.value _parseIPAddrString
+.class 2
+.type 65
+.endef
+.begfunc "parseIPAddrString",176,"_parseIPAddrString"
+.define "IPAddrString"
+.class 9
+.value 4
+.type 162
+.endef
+.define "octet1"
+.class 9
+.value 6
+.type 163
+.endef
+.define "octet2"
+.class 9
+.value 8
+.type 163
+.endef
+.define "octet3"
+.class 9
+.value 10
+.type 163
+.endef
+.define "octet4"
+.class 9
+.value 12
+.type 163
+.endef
+.define "t"
+.class 1
+.value -2
+.type 162
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+;  177	  char* t;
+;  178	  
+;  179	  t = strtok(IPAddrString, ".");
+.line 179
+	PUSH	#low(L__25)
+	PUSH	#high(L__25)
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_f_f_strtok
+	POP	R2
+	POP	R2
+	POP	R2
+	POP	R2
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  180	  *octet1 = atoi(t);
+.line 180
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_f_atoi
+	POP	R2
+	POP	R2
+	LDX	R2,6(RR14)
+	LDX	R3,7(RR14)
+	LDX	@RR2,R0
+	LDX	1(RR2),R1
+;  181	  
+;  182	  t = strtok(NULL, ".");
+.line 182
+	PUSH	#low(L__26)
+	PUSH	#high(L__26)
+	PUSH	#0
+	PUSH	#0
+	CALL	_f_f_strtok
+	POP	R2
+	POP	R2
+	POP	R2
+	POP	R2
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  183	  *octet2 = atoi(t);
+.line 183
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_f_atoi
+	POP	R2
+	POP	R2
+	LDX	R2,8(RR14)
+	LDX	R3,9(RR14)
+	LDX	@RR2,R0
+	LDX	1(RR2),R1
+;  184	
+;  185	  t = strtok(NULL, ".");
+.line 185
+	PUSH	#low(L__27)
+	PUSH	#high(L__27)
+	PUSH	#0
+	PUSH	#0
+	CALL	_f_f_strtok
+	POP	R2
+	POP	R2
+	POP	R2
+	POP	R2
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  186	  *octet3 = atoi(t);
+.line 186
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_f_atoi
+	POP	R2
+	POP	R2
+	LDX	R2,10(RR14)
+	LDX	R3,11(RR14)
+	LDX	@RR2,R0
+	LDX	1(RR2),R1
+;  187	
+;  188	  t = strtok(NULL, ".");
+.line 188
+	PUSH	#low(L__28)
+	PUSH	#high(L__28)
+	PUSH	#0
+	PUSH	#0
+	CALL	_f_f_strtok
+	POP	R2
+	POP	R2
+	POP	R2
+	POP	R2
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  189	  *octet4 = atoi(t);
+.line 189
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_f_atoi
+	POP	R2
+	POP	R2
+	LDX	R2,12(RR14)
+	LDX	R3,13(RR14)
+	LDX	@RR2,R0
+	LDX	1(RR2),R1
+;  190	}
+.line 190
+	CALL	__b_framereset
+	RET	
+.endfunc "parseIPAddrString",190,"_parseIPAddrString"
+	SEGMENT ROM_DATA
+
+
+;**************************** _checkIPAddr ***************************
+;Name                         Addr/Register   Size   Type
+;IPAddr1Octet4                      RR14-10      2   variable
+;IPAddr1Octet1                       RR14-8      2   variable
+;IPAddr1Octet3                       RR14-6      2   variable
+;IPAddr1Octet2                       RR14-4      2   variable
+;temp38                              RR14-2      2   variable
+;IPAddr2Octet4                      RR14+12      2   parameter
+;IPAddr2Octet3                      RR14+10      2   parameter
+;IPAddr2Octet2                       RR14+8      2   parameter
+;IPAddr2Octet1                       RR14+6      2   parameter
+;IPAddrString1                       RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -10 (words)
+
+
+	.FRAME _n_checkIPAddr,?_n_checkIPAddr,RDATA
+	.FCALL _n_parseIPAddrString
+	.FRAME _f_checkIPAddr,?_f_checkIPAddr,EDATA
+	.FCALL _f_parseIPAddrString
+	SEGMENT tibbo_TEXT
+;  191	
+;  192	#if 0
+;  193	
+;  194	////////////////////////////////////////////////////////
+;  195	// compareIPAddrStrings
+;  196	// This function takes two IP address strings in the form
+;  197	// of 192.168.1.1 and compares them. Returns TRUE if they
+;  198	// are the same address
+;  199	// Param char* IPAddrString1
+;  200	// Param char* IPAddrString2
+;  201	// Return OK or ERROR
+;  202	int compareIPAddrStrings(char* IPAddrString1, char* IPAddrString2)
+;  203	{
+;  204	  int IPAddr1Octet1, IPAddr1Octet2, IPAddr1Octet3, IPAddr1Octet4; 
+;  205	  int IPAddr2Octet1, IPAddr2Octet2, IPAddr2Octet3, IPAddr2Octet4;
+;  206	
+;  207	  parseIPAddrString(IPAddrString1, &IPAddr1Octet1, &IPAddr1Octet2,
+;  208	                    &IPAddr1Octet3, &IPAddr1Octet4);    
+;  209	  parseIPAddrString(IPAddrString2, &IPAddr2Octet1, &IPAddr2Octet2,
+;  210	                    &IPAddr2Octet3, &IPAddr2Octet4);
+;  211	
+;  212	  return((IPAddr1Octet1 == IPAddr2Octet1) &&
+;  213	         (IPAddr1Octet2 == IPAddr2Octet2) &&
+;  214	         (IPAddr1Octet3 == IPAddr2Octet3) &&
+;  215	         (IPAddr1Octet4 == IPAddr2Octet4));  
+;  216	}
+;  217	
+;  218	#endif
+;  219	
+;  220	////////////////////////////////////////////////////////
+;  221	// checkIPAddr
+;  222	// This function takes an IP address string in the form
+;  223	// of 192.168.1.1 and compares them to 4 octets. Returns TRUE if they
+;  224	// are the same address
+;  225	// Param char* IPAddrString1
+;  226	// Param int   IPAddrOctet1;
+;  227	// Param int   IPAddrOctet2;
+;  228	// Param int   IPAddrOctet3;
+;  229	// Param int   IPAddrOctet4;
+;  230	// Return 1 or 0
+;  231	int checkIPAddr(char* IPAddrString1, int IPAddr2Octet1,
+;  232	                int IPAddr2Octet2, int IPAddr2Octet3,
+;  233	                int IPAddr2Octet4)
+;  234	{
+_checkIPAddr:
+.define "_checkIPAddr"
+.value _checkIPAddr
+.class 2
+.type 67
+.endef
+.begfunc "checkIPAddr",234,"_checkIPAddr"
+.define "IPAddrString1"
+.class 9
+.value 4
+.type 162
+.endef
+.define "IPAddr2Octet1"
+.class 9
+.value 6
+.type 3
+.endef
+.define "IPAddr2Octet2"
+.class 9
+.value 8
+.type 3
+.endef
+.define "IPAddr2Octet3"
+.class 9
+.value 10
+.type 3
+.endef
+.define "IPAddr2Octet4"
+.class 9
+.value 12
+.type 3
+.endef
+.define "IPAddr1Octet2"
+.class 1
+.value -4
+.type 3
+.endef
+.define "IPAddr1Octet3"
+.class 1
+.value -6
+.type 3
+.endef
+.define "IPAddr1Octet1"
+.class 1
+.value -8
+.type 3
+.endef
+.define "IPAddr1Octet4"
+.class 1
+.value -10
+.type 3
+.endef
+	LD	R5,#10
+	CALL	__b_frameset0
+;  235	  int IPAddr1Octet1, IPAddr1Octet2, IPAddr1Octet3, IPAddr1Octet4; 
+;  236	
+;  237	  parseIPAddrString(IPAddrString1, &IPAddr1Octet1, &IPAddr1Octet2,
+;  238	                    &IPAddr1Octet3, &IPAddr1Octet4);    
+.line 238
+	LD	R1,#255
+	LD	R0,#246
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	LD	R1,#255
+	LD	R0,#250
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	LD	R1,#255
+	LD	R0,#252
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	LD	R1,#255
+	LD	R0,#248
+	ADD	R0,R15
+	ADC	R1,R14
+	PUSH	R0
+	PUSH	R1
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_parseIPAddrString
+	ATM	
+	ADDX	4095,#10
+	ADCX	4094,#-0
+;  239	
+;  240	  return((IPAddr1Octet1 == IPAddr2Octet1) &&
+.line 240
+	LDX	R0,-8(RR14)
+	LDX	R1,-7(RR14)
+	LDX	R2,6(RR14)
+	LDX	R3,7(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	NE,_3_L_36
+;  241	         (IPAddr1Octet2 == IPAddr2Octet2) &&
+.line 241
+	LDX	R0,-4(RR14)
+	LDX	R1,-3(RR14)
+	LDX	R2,8(RR14)
+	LDX	R3,9(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	NE,_3_L_36
+;  242	         (IPAddr1Octet3 == IPAddr2Octet3) &&
+.line 242
+	LDX	R0,-6(RR14)
+	LDX	R1,-5(RR14)
+	LDX	R2,10(RR14)
+	LDX	R3,11(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	NE,_3_L_36
+;  243	         (IPAddr1Octet4 == IPAddr2Octet4));  
+.line 243
+	LDX	R0,-10(RR14)
+	LDX	R1,-9(RR14)
+	LDX	R2,12(RR14)
+	LDX	R3,13(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	NE,_3_L_36
+;  244	}
+.line 244
+	CLR	R0
+	LD	R1,#1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_3_L_37
+_3_L_36:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+_3_L_37:
+.line 243
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+.line 244
+	CALL	__b_framereset
+	RET	
+.endfunc "checkIPAddr",244,"_checkIPAddr"
+	SEGMENT ROM_DATA
+
+
+;**************************** _sendMsgTibbo ***************************
+;Name                         Addr/Register   Size   Type
+;_putchar                            IMPORT  -----   function
+;index                               RR14-2      2   variable
+;size                                RR14+6      2   parameter
+;buffer                              RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_sendMsgTibbo,?_n_sendMsgTibbo,RDATA
+	.FCALL _n_putchar
+	.FRAME _f_sendMsgTibbo,?_f_sendMsgTibbo,EDATA
+	.FCALL _f_putchar
+	SEGMENT tibbo_TEXT
+;  245	
+;  246	#if 0
+;  247	////////////////////////////////////////////////////////
+;  248	// checkTibbo
+;  249	// This function checks to see if the Tibbo Ethernet
+;  250	// module is istalled.\
+;  251	// Param none
+;  252	// Return OK or ERROR
+;  253	int checkTibbo( void )
+;  254	{
+;  255	  char tibboVersion[] = {0x02, 'V', 0x0D};
+;  256	  char tibboVersionResponse[20];
+;  257	  int result = 0;
+;  258		int count = 0;
+;  259		
+;  260	  for (;;)
+;  261		{
+;  262	    memset(tibboVersionResponse, 0, 20);
+;  263	    sendMsgTibbo(tibboVersion, sizeof(tibboVersion));
+;  264	    result = readUart(tibboVersionResponse, UART0, 20, 500);
+;  265	    if (result > 0)
+;  266	    {
+;  267	      result = OK;
+;  268	      break;
+;  269	    }
+;  270	    count++;
+;  271	    if (3 <= count)
+;  272	    {
+;  273	      result = ERROR;
+;  274	      break;
+;  275	    }
+;  276	  }
+;  277	  return result;
+;  278	}
+;  279	#endif
+;  280	
+;  281	////////////////////////////////////////////////////////
+;  282	// sendMsgTibbo
+;  283	// This function takes a buffer and sends it to the
+;  284	// Tibbo Ethernet to RS232 module
+;  285	// Param buffer
+;  286	// Param size
+;  287	// Return none
+;  288	void sendMsgTibbo(char* buffer, int size)
+;  289	{
+_sendMsgTibbo:
+.define "_sendMsgTibbo"
+.value _sendMsgTibbo
+.class 2
+.type 65
+.endef
+.begfunc "sendMsgTibbo",289,"_sendMsgTibbo"
+.define "buffer"
+.class 9
+.value 4
+.type 162
+.endef
+.define "size"
+.class 9
+.value 6
+.type 3
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+;  290	  int index = 0;
+.line 290
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  291	  
+;  292	  // Turn on TX light here
+;  293	  PAOUT &= ~TxLEDCtl;
+.line 293
+	ANDX	4051,#-3
+	JR	_4_L_41
+;  294	  
+;  295	  for(index = 0; index<size; index++)
+_4_L_42:
+.line 295
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,6(RR14)
+	LDX	R3,7(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	LT,_4_L_44
+	JR	_4_L_45
+_4_L_41:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_4_L_42
+_4_L_44:
+;  296		putchar(buffer[index]);
+.line 296
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	ADD	R1,R3
+	ADC	R0,R2
+	LDX	R2,@RR0
+	LD	R0,R2
+	RL	R0
+	SBC	R0,R0
+	PUSH	R2
+	PUSH	R0
+	CALL	_putchar
+	POP	R0
+	POP	R0
+.line 295
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+.line 296
+	JR	_4_L_42
+_4_L_45:
+;  297	  
+;  298	  // Turn off TX light here
+;  299	  PAOUT |= TxLEDCtl;
+.line 299
+	ORX	4051,#2
+;  300	}
+.line 300
+	CALL	__b_framereset
+	RET	
+.endfunc "sendMsgTibbo",300,"_sendMsgTibbo"
+	SEGMENT ROM_DATA
+
+
+;**************************** _resetTibbo ***************************
+;Name                         Addr/Register   Size   Type
+;_delay                              IMPORT  -----   function
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_resetTibbo,?_n_resetTibbo,RDATA
+	.FCALL _n_delay
+	.FRAME _f_resetTibbo,?_f_resetTibbo,EDATA
+	.FCALL _f_delay
+	SEGMENT tibbo_TEXT
+;  301	
+;  302	
+;  303	#if 0
+;  304	////////////////////////////////////////////////////////
+;  305	// Get message Tibboo
+;  306	// This function reads repsonses back from the Tibbo
+;  307	// module when it is in the programming mode
+;  308	// Return OK or ERROR if the message length is
+;  309	// correct or not
+;  310	int getMsgTibbo(char* buffer, int count)
+;  311	{
+;  312	  int index = 0;
+;  313	  int result = OK;
+;  314	  
+;  315	  // Turn on RX light here
+;  316	  PAOUT &= ~RxLEDCtl;
+;  317	  
+;  318	  // Store the data until the count is received
+;  319	  for (;;)
+;  320	  {
+;  321	    buffer[index++] = getc();
+;  322	    if (index >= count)
+;  323	    {
+;  324	      result = OK;
+;  325	      break;
+;  326	    }
+;  327	    
+;  328	    if (index > MAX_TIBBO_MSG_LENGTH)
+;  329	    {
+;  330	      result = ERROR;
+;  331	      break;
+;  332	    }
+;  333	  }
+;  334	
+;  335	  // Turn off RX light here
+;  336	  PAOUT |= RxLEDCtl;
+;  337	
+;  338	  return result;
+;  339	} // End of getMsgTibbo
+;  340	#endif
+;  341	
+;  342	////////////////////////////////////////////////////////
+;  343	// resetTibbo
+;  344	// This function resets the Tibbo Ethernet to RS232
+;  345	// module
+;  346	// Param none
+;  347	// Return none
+;  348	void resetTibbo(void)
+;  349	{
+_resetTibbo:
+.define "_resetTibbo"
+.value _resetTibbo
+.class 2
+.type 65
+.endef
+.begfunc "resetTibbo",349,"_resetTibbo"
+	CALL	__b_frameset00
+;  350	  PAOUT |= IP_RST;
+.line 350
+	ORX	4051,#4
+;  351	  delay();
+.line 351
+	CALL	_delay
+;  352	  PAOUT &= ~IP_RST;
+.line 352
+	ANDX	4051,#-5
+;  353	}
+.line 353
+	CALL	__b_framereset
+	RET	
+.endfunc "resetTibbo",353,"_resetTibbo"
+	SEGMENT ROM_DATA
+
+
+;**************************** _releaseTibboReset ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_releaseTibboReset,?_n_releaseTibboReset,RDATA
+	.FRAME _f_releaseTibboReset,?_f_releaseTibboReset,EDATA
+	SEGMENT tibbo_TEXT
+;  354	
+;  355	////////////////////////////////////////////////////////
+;  356	// releaseTibboReset
+;  357	// This function removes the reset from the Tibbo
+;  358	// Ethernet to RS232 serial module
+;  359	// Param none
+;  360	// Return none
+;  361	void releaseTibboReset(void)
+;  362	{
+_releaseTibboReset:
+.define "_releaseTibboReset"
+.value _releaseTibboReset
+.class 2
+.type 65
+.endef
+.begfunc "releaseTibboReset",362,"_releaseTibboReset"
+	CALL	__b_frameset00
+;  363	  PAOUT &= ~IP_RST;
+.line 363
+	ANDX	4051,#-5
+;  364	}
+.line 364
+	CALL	__b_framereset
+	RET	
+.endfunc "releaseTibboReset",364,"_releaseTibboReset"
+	SEGMENT ROM_DATA
+
+
+;**************************** _enableTibboSerialProgramming ***************************
+;Name                         Addr/Register   Size   Type
+;_clearAR                            IMPORT  -----   function
+;_delay                              IMPORT  -----   function
+;_setAR                              IMPORT  -----   function
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_enableTibboSerialProgramming,?_n_enableTibboSerialProgramming,RDATA
+	.FCALL _n_setAR
+	.FCALL _n_delay
+	.FCALL _n_clearAR
+	.FRAME _f_enableTibboSerialProgramming,?_f_enableTibboSerialProgramming,EDATA
+	.FCALL _f_setAR
+	.FCALL _f_delay
+	.FCALL _f_clearAR
+	SEGMENT tibbo_TEXT
+;  365	
+;  366	////////////////////////////////////////////////////////
+;  367	// enableTibboSerialProgramming
+;  368	// This function sets the MD input on the Tibbo Ethernet
+;  369	// to serial module enabling programming from the serial
+;  370	// port
+;  371	// Param none
+;  372	// Return none
+;  373	void enableTibboSerialProgramming(void)
+;  374	{
+_enableTibboSerialProgramming:
+.define "_enableTibboSerialProgramming"
+.value _enableTibboSerialProgramming
+.class 2
+.type 65
+.endef
+.begfunc "enableTibboSerialProgramming",374,"_enableTibboSerialProgramming"
+	CALL	__b_frameset00
+;  375		setAR(MD);
+.line 375
+	PUSH	#6
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  376		delay();
+.line 376
+	CALL	_delay
+;  377		delay();
+.line 377
+	CALL	_delay
+;  378		delay();
+.line 378
+	CALL	_delay
+;  379		delay();
+.line 379
+	CALL	_delay
+;  380		clearAR();
+.line 380
+	CALL	_clearAR
+.line 381
+	CALL	__b_framereset
+	RET	
+.endfunc "enableTibboSerialProgramming",381,"_enableTibboSerialProgramming"
+	XREF _readUart:ROM
+	XREF _init_uart0:ROM
+	XREF _cardAddress:EDATA
+	XREF _mSecDelay:ROM
+	XREF _delay:ROM
+	XREF _clearAR:ROM
+	XREF _setAR:ROM
+	XREF _f_atoi:ROM
+	XREF _f_memset:ROM
+	XREF _f_f_strtok:ROM
+	XREF _f_f_strncpy:ROM
+	XREF _putchar:ROM
+	XREF ___clr_print_fmt:ROM
+	XREF __u_stoa:ROM
+	XREF ___print_putch:ROM
+	XREF __b_framereset:ROM
+	XREF __b_frameset0:ROM
+	XREF __b_frameset00:ROM
+	XDEF _enableTibboSerialProgramming
+	XDEF _releaseTibboReset
+	XDEF _resetTibbo
+	XDEF _sendMsgTibbo
+	XDEF _checkIPAddr
+	XDEF _parseIPAddrString
+	XDEF _initTibbo
+	END

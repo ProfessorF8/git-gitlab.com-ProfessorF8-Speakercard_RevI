@@ -1,0 +1,2224 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE tibbo_TEXT,SPACE=ROM
+                           A     6    	FILE	".\tibbo.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT ROM_DATA
+0000                       A     9    _0temp2:
+0000 02                    A    10    	DB	2
+0001 47                    A    11    	DB	71
+0002 49                    A    12    	DB	73
+0003 50                    A    13    	DB	80
+0004 0D                    A    14    	DB	13
+0005                       A    15    _1temp3:
+0005 02                    A    16    	DB	2
+0006 53                    A    17    	DB	83
+0007 46                    A    18    	DB	70
+0008 43                    A    19    	DB	67
+0009 30                    A    20    	DB	48
+000A 0D                    A    21    	DB	13
+000B                       A    22    _2temp4:
+000B 02                    A    23    	DB	2
+000C 53                    A    24    	DB	83
+000D 54                    A    25    	DB	84
+000E 50                    A    26    	DB	80
+000F 31                    A    27    	DB	49
+0010 0D                    A    28    	DB	13
+0011                       A    29    _3temp5:
+0011 02                    A    30    	DB	2
+0012 53                    A    31    	DB	83
+0013 49                    A    32    	DB	73
+0014 50                    A    33    	DB	80
+0015 31                    A    34    	DB	49
+0016 39                    A    35    	DB	57
+0017 32                    A    36    	DB	50
+0018 2E                    A    37    	DB	46
+0019 31                    A    38    	DB	49
+001A 36                    A    39    	DB	54
+001B 39                    A    40    	DB	57
+001C 2E                    A    41    	DB	46
+001D 30                    A    42    	DB	48
+001E 30                    A    43    	DB	48
+001F 31                    A    44    	DB	49
+0020 2E                    A    45    	DB	46
+0021 30                    A    46    	DB	48
+0022 30                    A    47    	DB	48
+0023 30                    A    48    	DB	48
+0024 0D                    A    49    	DB	13
+0025                       A    50    _4temp0:
+0025 02                    A    51    	DB	2
+0026 56                    A    52    	DB	86
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   2
+
+
+PC     Object              I  Line    Source tibbo.src
+0027 0D                    A    53    	DB	13
+0028                       A    54    _5temp1:
+0028 02                    A    55    	DB	2
+0029 49                    A    56    	DB	73
+002A 0D                    A    57    	DB	13
+                           A    58    
+                           A    59    
+                           A    60    ;**************************** _initTibbo ******
+                           A    61    ;Name                         Addr/Register   S
+                           A    62    ;_resetTibbo                         IMPORT  --
+                           A    63    ;___print_putch                      IMPORT  --
+                           A    64    ;__u_stoa                            IMPORT  --
+                           A    65    ;_cardAddress                        IMPORT    
+                           A    66    ;_checkIPAddr                        IMPORT  --
+                           A    67    ;_f_f_strncpy                        IMPORT  --
+                           A    68    ;_readUart                           IMPORT  --
+                           A    69    ;_sendMsgTibbo                       IMPORT  --
+                           A    70    ;_f_memset                           IMPORT  --
+                           A    71    ;_enableTibboSerialProgramming       IMPORT  --
+                           A    72    ;_mSecDelay                          IMPORT  --
+                           A    73    ;_releaseTibboReset                  IMPORT  --
+                           A    74    ;_init_uart0                         IMPORT  --
+                           A    75    ;_3temp5                             STATIC    
+                           A    76    ;_2temp4                             STATIC    
+                           A    77    ;_1temp3                             STATIC    
+                           A    78    ;_0temp2                             STATIC    
+                           A    79    ;_5temp1                             STATIC    
+                           A    80    ;_4temp0                             STATIC    
+                           A    81    ;count                             RR14-179    
+                           A    82    ;tibboFC                           RR14-177    
+                           A    83    ;IPAddrResponse                    RR14-171    
+                           A    84    ;tibboGIP                          RR14-155    
+                           A    85    ;tibboVersion                      RR14-150    
+                           A    86    ;tibboTP                           RR14-147    
+                           A    87    ;tibboInit                         RR14-141    
+                           A    88    ;tibboIP                           RR14-138    
+                           A    89    ;initFlag                          RR14-118    
+                           A    90    ;EOS                               RR14-116    
+                           A    91    ;result                            RR14-114    
+                           A    92    ;tibboResponse                     RR14-112    
+                           A    93    ;bytesRead                          RR14-12    
+                           A    94    ;___clr_print_fmt                    IMPORT  --
+                           A    95    
+                           A    96    
+                           A    97    ; Aggregate Stack Size: -179 (words)
+                           A    98    
+                           A    99    
+                           A   100    	.FRAME _n_initTibbo,?_n_initTibbo,RDATA
+                           A   101    	.FCALL _n___clr_print_fmt
+                           A   102    	.FCALL _n_init_uart0
+                           A   103    	.FCALL _n_releaseTibboReset
+                           A   104    	.FCALL _n_mSecDelay
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   3
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   105    	.FCALL _n_enableTibboSerialProgramming
+                           A   106    	.FCALL _n_f_memset
+                           A   107    	.FCALL _n_sendMsgTibbo
+                           A   108    	.FCALL _n_readUart
+                           A   109    	.FCALL _n_f_f_strncpy
+                           A   110    	.FCALL _n_checkIPAddr
+                           A   111    	.FCALL _n__u_stoa
+                           A   112    	.FCALL _n___print_putch
+                           A   113    	.FCALL _n_resetTibbo
+                           A   114    	.FRAME _f_initTibbo,?_f_initTibbo,EDATA
+                           A   115    	.FCALL _f___clr_print_fmt
+                           A   116    	.FCALL _f_init_uart0
+                           A   117    	.FCALL _f_releaseTibboReset
+                           A   118    	.FCALL _f_mSecDelay
+                           A   119    	.FCALL _f_enableTibboSerialProgramming
+                           A   120    	.FCALL _f_f_memset
+                           A   121    	.FCALL _f_sendMsgTibbo
+                           A   122    	.FCALL _f_readUart
+                           A   123    	.FCALL _f_f_f_strncpy
+                           A   124    	.FCALL _f_checkIPAddr
+                           A   125    	.FCALL _f__u_stoa
+                           A   126    	.FCALL _f___print_putch
+                           A   127    	.FCALL _f_resetTibbo
+                           A   128    	SEGMENT tibbo_TEXT
+                           A   129    .begrec "fmt_type",10
+                           A   130    .define "flags"
+                           A   131    .value 0
+                           A   132    .class 8
+                           A   133    .type 2
+                           A   134    .endef
+                           A   135    .define "size"
+                           A   136    .value 1
+                           A   137    .class 8
+                           A   138    .type 2
+                           A   139    .endef
+                           A   140    .define "space"
+                           A   141    .value 2
+                           A   142    .class 8
+                           A   143    .type 2
+                           A   144    .endef
+                           A   145    .define "type"
+                           A   146    .value 3
+                           A   147    .class 8
+                           A   148    .type 2
+                           A   149    .endef
+                           A   150    .define "field_width"
+                           A   151    .value 4
+                           A   152    .class 8
+                           A   153    .type 2
+                           A   154    .endef
+                           A   155    .define "precision"
+                           A   156    .value 5
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   4
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   157    .class 8
+                           A   158    .type 2
+                           A   159    .endef
+                           A   160    .define "print_leading_char"
+                           A   161    .value 6
+                           A   162    .class 8
+                           A   163    .type 2
+                           A   164    .endef
+                           A   165    .define "dest"
+                           A   166    .value 7
+                           A   167    .class 8
+                           A   168    .type 162
+                           A   169    .endef
+                           A   170    .define "print_len"
+                           A   171    .value 9
+                           A   172    .class 8
+                           A   173    .type 12
+                           A   174    .endef
+                           A   175    .endrec "fmt_type"
+                           A   176    .begrec "flt_fmt_data",5
+                           A   177    .define "pad_whole"
+                           A   178    .value 0
+                           A   179    .class 8
+                           A   180    .type 12
+                           A   181    .endef
+                           A   182    .define "pad_pre_fract"
+                           A   183    .value 1
+                           A   184    .class 8
+                           A   185    .type 12
+                           A   186    .endef
+                           A   187    .define "pad_post_fract"
+                           A   188    .value 2
+                           A   189    .class 8
+                           A   190    .type 12
+                           A   191    .endef
+                           A   192    .define "pad_at"
+                           A   193    .value 3
+                           A   194    .class 8
+                           A   195    .type 162
+                           A   196    .endef
+                           A   197    .endrec "flt_fmt_data"
+                           A   198    .begrec "fmt_control_data",2
+                           A   199    .define "status"
+                           A   200    .value 0
+                           A   201    .class 8
+                           A   202    .type 2
+                           A   203    .endef
+                           A   204    .define "chr"
+                           A   205    .value 1
+                           A   206    .class 8
+                           A   207    .type 2
+                           A   208    .endef
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   5
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   209    .endrec "fmt_control_data"
+                           A   210    .begrec "_set_type",4
+                           A   211    .define "begin"
+                           A   212    .value 0
+                           A   213    .class 8
+                           A   214    .type 162
+                           A   215    .endef
+                           A   216    .define "end"
+                           A   217    .value 2
+                           A   218    .class 8
+                           A   219    .type 162
+                           A   220    .endef
+                           A   221    .endrec "_set_type"
+                           A   222    .begrec "near_set_type",2
+                           A   223    .define "begin"
+                           A   224    .value 0
+                           A   225    .class 8
+                           A   226    .type 130
+                           A   227    .endef
+                           A   228    .define "end"
+                           A   229    .value 1
+                           A   230    .class 8
+                           A   231    .type 130
+                           A   232    .endef
+                           A   233    .endrec "near_set_type"
+                           A   234    .begrec "far_set_type",4
+                           A   235    .define "begin"
+                           A   236    .value 0
+                           A   237    .class 8
+                           A   238    .type 162
+                           A   239    .endef
+                           A   240    .define "end"
+                           A   241    .value 2
+                           A   242    .class 8
+                           A   243    .type 162
+                           A   244    .endef
+                           A   245    .endrec "far_set_type"
+                           A   246    .begrec "rom_set_type",4
+                           A   247    .define "begin"
+                           A   248    .value 0
+                           A   249    .class 8
+                           A   250    .type 194
+                           A   251    .endef
+                           A   252    .define "end"
+                           A   253    .value 2
+                           A   254    .class 8
+                           A   255    .type 194
+                           A   256    .endef
+                           A   257    .endrec "rom_set_type"
+                           A   258    .begrec "flt_info",12
+                           A   259    .define "flags"
+                           A   260    .value 0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   6
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   261    .class 8
+                           A   262    .type 12
+                           A   263    .endef
+                           A   264    .define "exp"
+                           A   265    .value 1
+                           A   266    .class 8
+                           A   267    .type 2
+                           A   268    .endef
+                           A   269    .define "digits"
+                           A   270    .value 2
+                           A   271    .class 8
+                           A   272    .dim 10
+                           A   273    .type 108
+                           A   274    .endef
+                           A   275    .endrec "flt_info"
+                           A   276    .begrec "NONAME0",4
+                           A   277    .define "quot"
+                           A   278    .value 0
+                           A   279    .class 8
+                           A   280    .type 3
+                           A   281    .endef
+                           A   282    .define "rem"
+                           A   283    .value 2
+                           A   284    .class 8
+                           A   285    .type 3
+                           A   286    .endef
+                           A   287    .endrec "NONAME0"
+                           A   288    .begrec "NONAME1",8
+                           A   289    .define "quot"
+                           A   290    .value 0
+                           A   291    .class 8
+                           A   292    .type 5
+                           A   293    .endef
+                           A   294    .define "rem"
+                           A   295    .value 4
+                           A   296    .class 8
+                           A   297    .type 5
+                           A   298    .endef
+                           A   299    .endrec "NONAME1"
+                           A   300    ;    1	#include <stdio.h>
+                           A   301    ;    2	#include <eZ8.h>
+                           A   302    ;    3	#include <string.h>
+                           A   303    ;    4	#include <stdlib.h>
+                           A   304    ;    5	#include "main.h"
+                           A   305    ;    6	#include "util.h"
+                           A   306    ;    7	#include "tibbo.h"
+                           A   307    ;    8	#include "uart.h"
+                           A   308    ;    9	
+                           A   309    ;   10	
+                           A   310    ;   11	///////////////////////////////////////
+                           A   311    ;   12	// initTibbo
+                           A   312    ;   13	// This function checks to see if the T
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   7
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   313    ;   14	// module is istalled and working. If i
+                           A   314    ;   15	// will be initialized and made ready f
+                           A   315    ;   16	// Param none
+                           A   316    ;   17	// Return OK or ERROR
+                           A   317    ;   18	int initTibbo( void )
+                           A   318    ;   19	{
+0000                       A   319    _initTibbo:
+                           A   320    .define "_initTibbo"
+                           A   321    .value _initTibbo
+                           A   322    .class 2
+                           A   323    .type 67
+                           A   324    .endef
+                           A   325    .begfunc "initTibbo",19,"_initTibbo"
+0000 5CB3                  A   326    	LD	R5,#179
+0002 D6 0000               A   327    	CALL	__b_frameset0
+                           A   328    .line 19
+0005 1CFF                  A   329    	LD	R1,#255
+0007 0CF6                  A   330    	LD	R0,#246
+0009 020F                  A   331    	ADD	R0,R15
+000B 121E                  A   332    	ADC	R1,R14
+000D 70E0                  A   333    	PUSH	R0
+000F 70E1                  A   334    	PUSH	R1
+0011 D6 0000               A   335    	CALL	___clr_print_fmt
+0014 50E0                  A   336    	POP	R0
+0016 50E0                  A   337    	POP	R0
+                           A   338    .define "bytesRead"
+                           A   339    .class 1
+                           A   340    .value -12
+                           A   341    .type 3
+                           A   342    .endef
+                           A   343    .define "tibboResponse"
+                           A   344    .class 1
+                           A   345    .value -112
+                           A   346    .dim 100
+                           A   347    .type 98
+                           A   348    .endef
+                           A   349    .define "result"
+                           A   350    .class 1
+                           A   351    .value -114
+                           A   352    .type 3
+                           A   353    .endef
+                           A   354    .define "EOS"
+                           A   355    .class 1
+                           A   356    .value -116
+                           A   357    .type 3
+                           A   358    .endef
+                           A   359    .define "initFlag"
+                           A   360    .class 1
+                           A   361    .value -118
+                           A   362    .type 3
+                           A   363    .endef
+                           A   364    .define "tibboIP"
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   8
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   365    .class 1
+                           A   366    .value -138
+                           A   367    .dim 20
+                           A   368    .type 98
+                           A   369    .endef
+                           A   370    .define "tibboInit"
+                           A   371    .class 1
+                           A   372    .value -141
+                           A   373    .dim 3
+                           A   374    .type 98
+                           A   375    .endef
+                           A   376    .define "tibboTP"
+                           A   377    .class 1
+                           A   378    .value -147
+                           A   379    .dim 6
+                           A   380    .type 98
+                           A   381    .endef
+                           A   382    .define "tibboVersion"
+                           A   383    .class 1
+                           A   384    .value -150
+                           A   385    .dim 3
+                           A   386    .type 98
+                           A   387    .endef
+                           A   388    .define "tibboGIP"
+                           A   389    .class 1
+                           A   390    .value -155
+                           A   391    .dim 5
+                           A   392    .type 98
+                           A   393    .endef
+                           A   394    .define "IPAddrResponse"
+                           A   395    .class 1
+                           A   396    .value -171
+                           A   397    .dim 16
+                           A   398    .type 98
+                           A   399    .endef
+                           A   400    .define "tibboFC"
+                           A   401    .class 1
+                           A   402    .value -177
+                           A   403    .dim 6
+                           A   404    .type 98
+                           A   405    .endef
+                           A   406    .define "count"
+                           A   407    .class 1
+                           A   408    .value -179
+                           A   409    .type 3
+                           A   410    .endef
+                           A   411    ;   20	  char tibboVersion[] = {0x02, 'V', 0x0
+                           A   412    .line 20
+0018 0C03                  A   413    	LD	R0,#3
+001A 992E6A                A   414    	LEA	RR2,106(RR14)
+001D 30E2                  A   415    	DEC	R2
+001F 4C 00                 A   416    	LD	R4,#high(_4temp0)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:   9
+
+
+PC     Object              I  Line    Source tibbo.src
+0021 5C 25                 A   417    	LD	R5,#low(_4temp0)
+0023                       A   418    L__1:
+0023 C214                  A   419    	LDC	R1,@RR4
+0025 96E1E2                A   420    	LDX	@RR2,R1
+0028 A0E2                  A   421    	INCW	RR2
+002A A0E4                  A   422    	INCW	RR4
+002C 0A F5                 A   423    	DJNZ	R0,L__1
+                           A   424    ;   21	  char tibboInit[] = {0x02, 'I', 0x0D};
+                           A   425    .line 21
+002E 0C03                  A   426    	LD	R0,#3
+0030 992E73                A   427    	LEA	RR2,115(RR14)
+0033 30E2                  A   428    	DEC	R2
+0035 4C 00                 A   429    	LD	R4,#high(_5temp1)
+0037 5C 28                 A   430    	LD	R5,#low(_5temp1)
+0039                       A   431    L__3:
+0039 C214                  A   432    	LDC	R1,@RR4
+003B 96E1E2                A   433    	LDX	@RR2,R1
+003E A0E2                  A   434    	INCW	RR2
+0040 A0E4                  A   435    	INCW	RR4
+0042 0A F5                 A   436    	DJNZ	R0,L__3
+                           A   437    ;   22	  char tibboGIP[] = {0x02, 'G', 'I', 'P
+                           A   438    .line 22
+0044 0C05                  A   439    	LD	R0,#5
+0046 992E65                A   440    	LEA	RR2,101(RR14)
+0049 30E2                  A   441    	DEC	R2
+004B 4C 00                 A   442    	LD	R4,#high(_0temp2)
+004D 5C 00                 A   443    	LD	R5,#low(_0temp2)
+004F                       A   444    L__5:
+004F C214                  A   445    	LDC	R1,@RR4
+0051 96E1E2                A   446    	LDX	@RR2,R1
+0054 A0E2                  A   447    	INCW	RR2
+0056 A0E4                  A   448    	INCW	RR4
+0058 0A F5                 A   449    	DJNZ	R0,L__5
+                           A   450    ;   23	
+                           A   451    ;   24	  
+                           A   452    ;   25	  char tibboFC[] = {0x02, 'S', 'F', 'C'
+                           A   453    .line 25
+005A 0C06                  A   454    	LD	R0,#6
+005C 992E4F                A   455    	LEA	RR2,79(RR14)
+005F 30E2                  A   456    	DEC	R2
+0061 4C 00                 A   457    	LD	R4,#high(_1temp3)
+0063 5C 05                 A   458    	LD	R5,#low(_1temp3)
+0065                       A   459    L__7:
+0065 C214                  A   460    	LDC	R1,@RR4
+0067 96E1E2                A   461    	LDX	@RR2,R1
+006A A0E2                  A   462    	INCW	RR2
+006C A0E4                  A   463    	INCW	RR4
+006E 0A F5                 A   464    	DJNZ	R0,L__7
+                           A   465    ;   26	  char tibboTP[] = {0x02, 'S', 'T', 'P'
+                           A   466    .line 26
+0070 0C06                  A   467    	LD	R0,#6
+0072 992E6D                A   468    	LEA	RR2,109(RR14)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  10
+
+
+PC     Object              I  Line    Source tibbo.src
+0075 30E2                  A   469    	DEC	R2
+0077 4C 00                 A   470    	LD	R4,#high(_2temp4)
+0079 5C 0B                 A   471    	LD	R5,#low(_2temp4)
+007B                       A   472    L__9:
+007B C214                  A   473    	LDC	R1,@RR4
+007D 96E1E2                A   474    	LDX	@RR2,R1
+0080 A0E2                  A   475    	INCW	RR2
+0082 A0E4                  A   476    	INCW	RR4
+0084 0A F5                 A   477    	DJNZ	R0,L__9
+                           A   478    ;   27	  char tibboIP[] = {0x02, 'S', 'I', 'P'
+                           A   479    .line 27
+0086 0C14                  A   480    	LD	R0,#20
+0088 992E76                A   481    	LEA	RR2,118(RR14)
+008B 30E2                  A   482    	DEC	R2
+008D 4C 00                 A   483    	LD	R4,#high(_3temp5)
+008F 5C 11                 A   484    	LD	R5,#low(_3temp5)
+0091                       A   485    L__11:
+0091 C214                  A   486    	LDC	R1,@RR4
+0093 96E1E2                A   487    	LDX	@RR2,R1
+0096 A0E2                  A   488    	INCW	RR2
+0098 A0E4                  A   489    	INCW	RR4
+009A 0A F5                 A   490    	DJNZ	R0,L__11
+                           A   491    ;   28	  char tibboResponse[100];
+                           A   492    ;   29	  int  result = 0;
+                           A   493    .line 29
+009C B0E0                  A   494    	CLR	R0
+009E B0E1                  A   495    	CLR	R1
+00A0 89E08E                A   496    	LDX	-114(RR14),R0
+00A3 89E18F                A   497    	LDX	-113(RR14),R1
+                           A   498    ;   30		int  count = 0;
+                           A   499    .line 30
+00A6 992E4D                A   500    	LEA	RR2,77(RR14)
+00A9 30E2                  A   501    	DEC	R2
+00AB B0E0                  A   502    	CLR	R0
+00AD B0E1                  A   503    	CLR	R1
+00AF 96E0E2                A   504    	LDX	@RR2,R0
+00B2 892101                A   505    	LDX	1(RR2),R1
+                           A   506    ;   31	  int  bytesRead;
+                           A   507    ;   32	  int  EOS = 0;
+                           A   508    .line 32
+00B5 B0E0                  A   509    	CLR	R0
+00B7 B0E1                  A   510    	CLR	R1
+00B9 89E08C                A   511    	LDX	-116(RR14),R0
+00BC 89E18D                A   512    	LDX	-115(RR14),R1
+                           A   513    ;   33	  int  initFlag = 0;    
+                           A   514    .line 33
+00BF B0E0                  A   515    	CLR	R0
+00C1 B0E1                  A   516    	CLR	R1
+00C3 89E08A                A   517    	LDX	-118(RR14),R0
+00C6 89E18B                A   518    	LDX	-117(RR14),R1
+                           A   519    ;   34	    
+                           A   520    ;   35	  char IPAddrResponse[16];  
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  11
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   521    ;   36	
+                           A   522    ;   37	  // Lets talk Tibbo
+                           A   523    ;   38	  init_uart0();  // Intialize Uart 0 co
+                           A   524    .line 38
+00C9 D6 0000               A   525    	CALL	_init_uart0
+                           A   526    ;   39	                 // Ethernet to RS-232 
+                           A   527    ;   40	
+                           A   528    ;   41	  // Enable the Tibbo Ethernet to RS232
+                           A   529    ;   42	  releaseTibboReset();
+                           A   530    .line 42
+00CC D6 084F               A   531    	CALL	_releaseTibboReset
+                           A   532    ;   43	  
+                           A   533    ;   44	  // Wait for the module to come up
+                           A   534    ;   45		mSecDelay(200);
+                           A   535    .line 45
+00CF 1F70C8                A   536    	PUSH	#200
+00D2 1F7000                A   537    	PUSH	#0
+00D5 D6 0000               A   538    	CALL	_mSecDelay
+00D8 50E0                  A   539    	POP	R0
+00DA 50E0                  A   540    	POP	R0
+                           A   541    ;   46	  
+                           A   542    ;   47	  // Put the Tibbo module in programmin
+                           A   543    ;   48	  enableTibboSerialProgramming();
+                           A   544    .line 48
+00DC D6 085A               A   545    	CALL	_enableTibboSerialProgramming
+                           A   546    ;   49		
+                           A   547    ;   50	  for (;;)
+                           A   548    ;   51		{
+                           A   549    ;   52	    // Get the version
+                           A   550    ;   53	    memset(tibboResponse, 0, 100);
+                           A   551    .line 53
+00DF 1F7064                A   552    	PUSH	#100
+00E2 1F7000                A   553    	PUSH	#0
+00E5 1F7000                A   554    	PUSH	#0
+00E8 1F7000                A   555    	PUSH	#0
+00EB 1CFF                  A   556    	LD	R1,#255
+00ED 0C90                  A   557    	LD	R0,#144
+00EF 020F                  A   558    	ADD	R0,R15
+00F1 121E                  A   559    	ADC	R1,R14
+00F3 70E0                  A   560    	PUSH	R0
+00F5 70E1                  A   561    	PUSH	R1
+00F7 D6 0000               A   562    	CALL	_f_memset
+00FA 2F                    A   563    	ATM	
+00FB 09060FFF              A   564    	ADDX	4095,#6
+00FF 19000FFE              A   565    	ADCX	4094,#-0
+                           A   566    ;   54	    sendMsgTibbo(tibboVersion, sizeof(t
+                           A   567    .line 54
+0103 1F7003                A   568    	PUSH	#3
+0106 1F7000                A   569    	PUSH	#0
+0109 1CFF                  A   570    	LD	R1,#255
+010B 0C6A                  A   571    	LD	R0,#106
+010D 020F                  A   572    	ADD	R0,R15
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  12
+
+
+PC     Object              I  Line    Source tibbo.src
+010F 121E                  A   573    	ADC	R1,R14
+0111 70E0                  A   574    	PUSH	R0
+0113 70E1                  A   575    	PUSH	R1
+0115 D6 07CA               A   576    	CALL	_sendMsgTibbo
+0118 50E0                  A   577    	POP	R0
+011A 50E0                  A   578    	POP	R0
+011C 50E0                  A   579    	POP	R0
+011E 50E0                  A   580    	POP	R0
+                           A   581    ;   55	    bytesRead = readUart(tibboResponse,
+                           A   582    .line 55
+0120 1F7032                A   583    	PUSH	#50
+0123 1F7000                A   584    	PUSH	#0
+0126 1F7014                A   585    	PUSH	#20
+0129 1F7000                A   586    	PUSH	#0
+012C 1F7000                A   587    	PUSH	#0
+012F 1F7000                A   588    	PUSH	#0
+0132 1CFF                  A   589    	LD	R1,#255
+0134 0C90                  A   590    	LD	R0,#144
+0136 020F                  A   591    	ADD	R0,R15
+0138 121E                  A   592    	ADC	R1,R14
+013A 70E0                  A   593    	PUSH	R0
+013C 70E1                  A   594    	PUSH	R1
+013E D6 0000               A   595    	CALL	_readUart
+0141 2F                    A   596    	ATM	
+0142 09080FFF              A   597    	ADDX	4095,#8
+0146 19000FFE              A   598    	ADCX	4094,#-0
+014A 89E0F4                A   599    	LDX	-12(RR14),R0
+014D 89E1F5                A   600    	LDX	-11(RR14),R1
+                           A   601    ;   56	  
+                           A   602    ;   57	    if (bytesRead <= 0)
+                           A   603    .line 57
+0150 880EF4                A   604    	LDX	R0,-12(RR14)
+0153 881EF5                A   605    	LDX	R1,-11(RR14)
+0156 A6E100                A   606    	CP	R1,#0
+0159 1FA6E000              A   607    	CPC	R0,#-0
+015D AD 01 F7              A   608    	JR	GT,_1_L_9
+                           A   609    ;   58	    {
+                           A   610    ;   59	    	// No response from Tibbo, Try 
+                           A   611    ;   60	      // module
+                           A   612    ;   61	      memset(tibboResponse, 0, 100);
+                           A   613    .line 61
+0160 1F7064                A   614    	PUSH	#100
+0163 1F7000                A   615    	PUSH	#0
+0166 1F7000                A   616    	PUSH	#0
+0169 1F7000                A   617    	PUSH	#0
+016C 1CFF                  A   618    	LD	R1,#255
+016E 0C90                  A   619    	LD	R0,#144
+0170 020F                  A   620    	ADD	R0,R15
+0172 121E                  A   621    	ADC	R1,R14
+0174 70E0                  A   622    	PUSH	R0
+0176 70E1                  A   623    	PUSH	R1
+0178 D6 0000               A   624    	CALL	_f_memset
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  13
+
+
+PC     Object              I  Line    Source tibbo.src
+017B 2F                    A   625    	ATM	
+017C 09060FFF              A   626    	ADDX	4095,#6
+0180 19000FFE              A   627    	ADCX	4094,#-0
+                           A   628    ;   62	      sendMsgTibbo(tibboInit, sizeof(ti
+                           A   629    .line 62
+0184 1F7003                A   630    	PUSH	#3
+0187 1F7000                A   631    	PUSH	#0
+018A 1CFF                  A   632    	LD	R1,#255
+018C 0C73                  A   633    	LD	R0,#115
+018E 020F                  A   634    	ADD	R0,R15
+0190 121E                  A   635    	ADC	R1,R14
+0192 70E0                  A   636    	PUSH	R0
+0194 70E1                  A   637    	PUSH	R1
+0196 D6 07CA               A   638    	CALL	_sendMsgTibbo
+0199 50E0                  A   639    	POP	R0
+019B 50E0                  A   640    	POP	R0
+019D 50E0                  A   641    	POP	R0
+019F 50E0                  A   642    	POP	R0
+                           A   643    ;   63	      bytesRead = readUart(tibboRespons
+                           A   644    .line 63
+01A1 1F70F4                A   645    	PUSH	#244
+01A4 1F7001                A   646    	PUSH	#1
+01A7 1F7014                A   647    	PUSH	#20
+01AA 1F7000                A   648    	PUSH	#0
+01AD 1F7000                A   649    	PUSH	#0
+01B0 1F7000                A   650    	PUSH	#0
+01B3 1CFF                  A   651    	LD	R1,#255
+01B5 0C90                  A   652    	LD	R0,#144
+01B7 020F                  A   653    	ADD	R0,R15
+01B9 121E                  A   654    	ADC	R1,R14
+01BB 70E0                  A   655    	PUSH	R0
+01BD 70E1                  A   656    	PUSH	R1
+01BF D6 0000               A   657    	CALL	_readUart
+01C2 2F                    A   658    	ATM	
+01C3 09080FFF              A   659    	ADDX	4095,#8
+01C7 19000FFE              A   660    	ADCX	4094,#-0
+01CB 89E0F4                A   661    	LDX	-12(RR14),R0
+01CE 89E1F5                A   662    	LDX	-11(RR14),R1
+                           A   663    ;   64	    
+                           A   664    ;   65	      if (bytesRead <= 0)
+                           A   665    .line 65
+01D1 880EF4                A   666    	LDX	R0,-12(RR14)
+01D4 881EF5                A   667    	LDX	R1,-11(RR14)
+01D7 A6E100                A   668    	CP	R1,#0
+01DA 1FA6E000              A   669    	CPC	R0,#-0
+01DE AB 0D                 A   670    	JR	GT,_1_L_7
+                           A   671    ;   66	      {
+                           A   672    ;   67	        // No response to init command 
+                           A   673    ;   68	        result = ERROR;
+                           A   674    .line 68
+01E0 0CFF                  A   675    	LD	R0,#255
+01E2 1CFF                  A   676    	LD	R1,#255
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  14
+
+
+PC     Object              I  Line    Source tibbo.src
+01E4 89E08E                A   677    	LDX	-114(RR14),R0
+01E7 89E18F                A   678    	LDX	-113(RR14),R1
+                           A   679    ;   69	        break;
+                           A   680    .line 69
+01EA 8D 06 11              A   681    	JR	_1_L_29
+                           A   682    ;   70	      }
+                           A   683    ;   71	      else
+01ED                       A   684    _1_L_7:
+                           A   685    .line 71
+                           A   686    ;   72	      {
+                           A   687    ;   73	      	// We got a response, Set initF
+                           A   688    ;   74	        initFlag = 1;
+                           A   689    .line 74
+01ED B0E0                  A   690    	CLR	R0
+01EF 1C01                  A   691    	LD	R1,#1
+01F1 89E08A                A   692    	LDX	-118(RR14),R0
+01F4 89E18B                A   693    	LDX	-117(RR14),R1
+                           A   694    ;   75	      }
+                           A   695    ;   76	    }
+01F7                       A   696    _1_L_9:
+                           A   697    .line 76
+                           A   698    ;   77	    
+                           A   699    ;   78	    // See if the IP address is correct
+                           A   700    ;   79	    memset(tibboResponse, 0, 100);
+                           A   701    .line 79
+01F7 1F7064                A   702    	PUSH	#100
+01FA 1F7000                A   703    	PUSH	#0
+01FD 1F7000                A   704    	PUSH	#0
+0200 1F7000                A   705    	PUSH	#0
+0203 1CFF                  A   706    	LD	R1,#255
+0205 0C90                  A   707    	LD	R0,#144
+0207 020F                  A   708    	ADD	R0,R15
+0209 121E                  A   709    	ADC	R1,R14
+020B 70E0                  A   710    	PUSH	R0
+020D 70E1                  A   711    	PUSH	R1
+020F D6 0000               A   712    	CALL	_f_memset
+0212 2F                    A   713    	ATM	
+0213 09060FFF              A   714    	ADDX	4095,#6
+0217 19000FFE              A   715    	ADCX	4094,#-0
+                           A   716    ;   80	    sendMsgTibbo(tibboGIP, sizeof(tibbo
+                           A   717    .line 80
+021B 1F7005                A   718    	PUSH	#5
+021E 1F7000                A   719    	PUSH	#0
+0221 1CFF                  A   720    	LD	R1,#255
+0223 0C65                  A   721    	LD	R0,#101
+0225 020F                  A   722    	ADD	R0,R15
+0227 121E                  A   723    	ADC	R1,R14
+0229 70E0                  A   724    	PUSH	R0
+022B 70E1                  A   725    	PUSH	R1
+022D D6 07CA               A   726    	CALL	_sendMsgTibbo
+0230 50E0                  A   727    	POP	R0
+0232 50E0                  A   728    	POP	R0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  15
+
+
+PC     Object              I  Line    Source tibbo.src
+0234 50E0                  A   729    	POP	R0
+0236 50E0                  A   730    	POP	R0
+                           A   731    ;   81	    bytesRead = readUart(tibboResponse,
+                           A   732    .line 81
+0238 1F7032                A   733    	PUSH	#50
+023B 1F7000                A   734    	PUSH	#0
+023E 1F7014                A   735    	PUSH	#20
+0241 1F7000                A   736    	PUSH	#0
+0244 1F7000                A   737    	PUSH	#0
+0247 1F7000                A   738    	PUSH	#0
+024A 1CFF                  A   739    	LD	R1,#255
+024C 0C90                  A   740    	LD	R0,#144
+024E 020F                  A   741    	ADD	R0,R15
+0250 121E                  A   742    	ADC	R1,R14
+0252 70E0                  A   743    	PUSH	R0
+0254 70E1                  A   744    	PUSH	R1
+0256 D6 0000               A   745    	CALL	_readUart
+0259 2F                    A   746    	ATM	
+025A 09080FFF              A   747    	ADDX	4095,#8
+025E 19000FFE              A   748    	ADCX	4094,#-0
+0262 89E0F4                A   749    	LDX	-12(RR14),R0
+0265 89E1F5                A   750    	LDX	-11(RR14),R1
+                           A   751    ;   82	    
+                           A   752    ;   83	    if (bytesRead > 0)
+                           A   753    .line 83
+0268 880EF4                A   754    	LDX	R0,-12(RR14)
+026B 881EF5                A   755    	LDX	R1,-11(RR14)
+026E A6E100                A   756    	CP	R1,#0
+0271 1FA6E000              A   757    	CPC	R0,#-0
+0275 2D 03 B3              A   758    	JR	LE,_1_L_25
+                           A   759    ;   84	    {
+                           A   760    ;   85	      // Find the end of the IP address
+                           A   761    ;   86	      while(0x0D != tibboResponse[EOS])
+0278                       A   762    _1_L_11:
+                           A   763    .line 86
+0278 880E8C                A   764    	LDX	R0,-116(RR14)
+027B 881E8D                A   765    	LDX	R1,-115(RR14)
+027E 992E90                A   766    	LEA	RR2,144(RR14)
+0281 0231                  A   767    	ADD	R3,R1
+0283 1220                  A   768    	ADC	R2,R0
+0285 86E2E0                A   769    	LDX	R0,@RR2
+0288 A6E00D                A   770    	CP	R0,#13
+028B 6B 10                 A   771    	JR	Z,_1_L_13
+                           A   772    ;   87	      {
+                           A   773    ;   88	      	EOS++;
+                           A   774    .line 88
+028D 882E8C                A   775    	LDX	R2,-116(RR14)
+0290 883E8D                A   776    	LDX	R3,-115(RR14)
+0293 A0E2                  A   777    	INCW	RR2
+0295 89E28C                A   778    	LDX	-116(RR14),R2
+0298 89E38D                A   779    	LDX	-115(RR14),R3
+                           A   780    ;   89	      }
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  16
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A   781    .line 89
+029B 8B DB                 A   782    	JR	_1_L_11
+029D                       A   783    _1_L_13:
+                           A   784    ;   90	      strncpy(IPAddrResponse, &tibboRes
+                           A   785    ;   91	              EOS - 2);
+                           A   786    .line 91
+029D 881E8C                A   787    	LDX	R1,-116(RR14)
+02A0 880E8D                A   788    	LDX	R0,-115(RR14)
+02A3 06E0FE                A   789    	ADD	R0,#254
+02A6 16E1FF                A   790    	ADC	R1,#255
+02A9 70E0                  A   791    	PUSH	R0
+02AB 70E1                  A   792    	PUSH	R1
+02AD 1CFF                  A   793    	LD	R1,#255
+02AF 0C92                  A   794    	LD	R0,#146
+02B1 020F                  A   795    	ADD	R0,R15
+02B3 121E                  A   796    	ADC	R1,R14
+02B5 70E0                  A   797    	PUSH	R0
+02B7 70E1                  A   798    	PUSH	R1
+02B9 1CFF                  A   799    	LD	R1,#255
+02BB 0C55                  A   800    	LD	R0,#85
+02BD 020F                  A   801    	ADD	R0,R15
+02BF 121E                  A   802    	ADC	R1,R14
+02C1 70E0                  A   803    	PUSH	R0
+02C3 70E1                  A   804    	PUSH	R1
+02C5 D6 0000               A   805    	CALL	_f_f_strncpy
+02C8 2F                    A   806    	ATM	
+02C9 09060FFF              A   807    	ADDX	4095,#6
+02CD 19000FFE              A   808    	ADCX	4094,#-0
+                           A   809    ;   92	     	if (!initFlag && !checkIPAddr(I
+                           A   810    .line 92
+02D1 880E8A                A   811    	LDX	R0,-118(RR14)
+02D4 881E8B                A   812    	LDX	R1,-117(RR14)
+02D7 4201                  A   813    	OR	R0,R1
+02D9 ED 03 B3              A   814    	JR	NE,_1_L_25
+                           A   815    ;   93	                       IPAddrOctet2, IP
+                           A   816    ;   94	                       IPAddrOctet4))
+                           A   817    .line 94
+02DC 841000                A   818    	LDX	R1,_cardAddress
+02DF E4E1E0                A   819    	LD	R0,R1
+02E2 90E0                  A   820    	RL	R0
+02E4 3200                  A   821    	SBC	R0,R0
+02E6 70E1                  A   822    	PUSH	R1
+02E8 70E0                  A   823    	PUSH	R0
+02EA 1F7001                A   824    	PUSH	#1
+02ED 1F7000                A   825    	PUSH	#0
+02F0 1F70A9                A   826    	PUSH	#169
+02F3 1F7000                A   827    	PUSH	#0
+02F6 1F70C0                A   828    	PUSH	#192
+02F9 1F7000                A   829    	PUSH	#0
+02FC 1CFF                  A   830    	LD	R1,#255
+02FE 0C55                  A   831    	LD	R0,#85
+0300 020F                  A   832    	ADD	R0,R15
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  17
+
+
+PC     Object              I  Line    Source tibbo.src
+0302 121E                  A   833    	ADC	R1,R14
+0304 70E0                  A   834    	PUSH	R0
+0306 70E1                  A   835    	PUSH	R1
+0308 D6 0713               A   836    	CALL	_checkIPAddr
+030B 2F                    A   837    	ATM	
+030C 090A0FFF              A   838    	ADDX	4095,#10
+0310 19000FFE              A   839    	ADCX	4094,#-0
+0314 E4E0E2                A   840    	LD	R2,R0
+0317 4221                  A   841    	OR	R2,R1
+0319 ED 03 B3              A   842    	JR	NE,_1_L_25
+                           A   843    ;   95	      {
+                           A   844    ;   96	      	// IP address is not OK so init
+                           A   845    ;   97	        // RS232 module and then set it
+                           A   846    ;   98	        memset(tibboResponse, 0, 100);
+                           A   847    .line 98
+031C 1F7064                A   848    	PUSH	#100
+031F 1F7000                A   849    	PUSH	#0
+0322 1F7000                A   850    	PUSH	#0
+0325 1F7000                A   851    	PUSH	#0
+0328 1CFF                  A   852    	LD	R1,#255
+032A 0C90                  A   853    	LD	R0,#144
+032C 020F                  A   854    	ADD	R0,R15
+032E 121E                  A   855    	ADC	R1,R14
+0330 70E0                  A   856    	PUSH	R0
+0332 70E1                  A   857    	PUSH	R1
+0334 D6 0000               A   858    	CALL	_f_memset
+0337 2F                    A   859    	ATM	
+0338 09060FFF              A   860    	ADDX	4095,#6
+033C 19000FFE              A   861    	ADCX	4094,#-0
+                           A   862    ;   99	        sendMsgTibbo(tibboInit, sizeof(
+                           A   863    .line 99
+0340 1F7003                A   864    	PUSH	#3
+0343 1F7000                A   865    	PUSH	#0
+0346 1CFF                  A   866    	LD	R1,#255
+0348 0C73                  A   867    	LD	R0,#115
+034A 020F                  A   868    	ADD	R0,R15
+034C 121E                  A   869    	ADC	R1,R14
+034E 70E0                  A   870    	PUSH	R0
+0350 70E1                  A   871    	PUSH	R1
+0352 D6 07CA               A   872    	CALL	_sendMsgTibbo
+0355 50E0                  A   873    	POP	R0
+0357 50E0                  A   874    	POP	R0
+0359 50E0                  A   875    	POP	R0
+035B 50E0                  A   876    	POP	R0
+                           A   877    ;  100	        bytesRead = readUart(tibboRespo
+                           A   878    .line 100
+035D 1F70F4                A   879    	PUSH	#244
+0360 1F7001                A   880    	PUSH	#1
+0363 1F7014                A   881    	PUSH	#20
+0366 1F7000                A   882    	PUSH	#0
+0369 1F7000                A   883    	PUSH	#0
+036C 1F7000                A   884    	PUSH	#0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  18
+
+
+PC     Object              I  Line    Source tibbo.src
+036F 1CFF                  A   885    	LD	R1,#255
+0371 0C90                  A   886    	LD	R0,#144
+0373 020F                  A   887    	ADD	R0,R15
+0375 121E                  A   888    	ADC	R1,R14
+0377 70E0                  A   889    	PUSH	R0
+0379 70E1                  A   890    	PUSH	R1
+037B D6 0000               A   891    	CALL	_readUart
+037E 2F                    A   892    	ATM	
+037F 09080FFF              A   893    	ADDX	4095,#8
+0383 19000FFE              A   894    	ADCX	4094,#-0
+0387 89E0F4                A   895    	LDX	-12(RR14),R0
+038A 89E1F5                A   896    	LDX	-11(RR14),R1
+                           A   897    ;  101	    
+                           A   898    ;  102	        if (bytesRead <= 0)
+                           A   899    .line 102
+038D 880EF4                A   900    	LDX	R0,-12(RR14)
+0390 881EF5                A   901    	LDX	R1,-11(RR14)
+0393 A6E100                A   902    	CP	R1,#0
+0396 1FA6E000              A   903    	CPC	R0,#-0
+039A AB 0D                 A   904    	JR	GT,_1_L_16
+                           A   905    ;  103	        {
+                           A   906    ;  104	          // No response to init comman
+                           A   907    ;  105	          result = ERROR;
+                           A   908    .line 105
+039C 0CFF                  A   909    	LD	R0,#255
+039E 1CFF                  A   910    	LD	R1,#255
+03A0 89E08E                A   911    	LDX	-114(RR14),R0
+03A3 89E18F                A   912    	LDX	-113(RR14),R1
+                           A   913    ;  106	          break;
+                           A   914    .line 106
+03A6 8D 06 11              A   915    	JR	_1_L_29
+                           A   916    ;  107	        }
+                           A   917    ;  108	        else
+03A9                       A   918    _1_L_16:
+                           A   919    .line 108
+                           A   920    ;  109	        {
+                           A   921    ;  110	      	  // We got a response, Set ini
+                           A   922    ;  111	          initFlag = 1;
+                           A   923    .line 111
+03A9 B0E0                  A   924    	CLR	R0
+03AB 1C01                  A   925    	LD	R1,#1
+03AD 89E08A                A   926    	LDX	-118(RR14),R0
+03B0 89E18B                A   927    	LDX	-117(RR14),R1
+                           A   928    ;  112	        }
+                           A   929    ;  113	      }
+                           A   930    ;  114	    }
+03B3                       A   931    _1_L_25:
+                           A   932    .line 114
+                           A   933    ;  115	    
+                           A   934    ;  116	    if (initFlag)
+                           A   935    .line 116
+03B3 880E8A                A   936    	LDX	R0,-118(RR14)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  19
+
+
+PC     Object              I  Line    Source tibbo.src
+03B6 881E8B                A   937    	LDX	R1,-117(RR14)
+03B9 4201                  A   938    	OR	R0,R1
+03BB 6D 06 07              A   939    	JR	Z,_1_L_26
+                           A   940    ;  117	    {
+                           A   941    ;  118	      // Set the Flow Contorl for the s
+                           A   942    ;  119	      // side of the Tibbo module to di
+                           A   943    ;  120	      sendMsgTibbo(tibboFC, sizeof(tibb
+                           A   944    .line 120
+03BE 1F7006                A   945    	PUSH	#6
+03C1 1F7000                A   946    	PUSH	#0
+03C4 1CFF                  A   947    	LD	R1,#255
+03C6 0C4F                  A   948    	LD	R0,#79
+03C8 020F                  A   949    	ADD	R0,R15
+03CA 121E                  A   950    	ADC	R1,R14
+03CC 70E0                  A   951    	PUSH	R0
+03CE 70E1                  A   952    	PUSH	R1
+03D0 D6 07CA               A   953    	CALL	_sendMsgTibbo
+03D3 50E0                  A   954    	POP	R0
+03D5 50E0                  A   955    	POP	R0
+03D7 50E0                  A   956    	POP	R0
+03D9 50E0                  A   957    	POP	R0
+                           A   958    ;  121	      bytesRead = readUart(tibboRespons
+                           A   959    .line 121
+03DB 1F7032                A   960    	PUSH	#50
+03DE 1F7000                A   961    	PUSH	#0
+03E1 1F7003                A   962    	PUSH	#3
+03E4 1F7000                A   963    	PUSH	#0
+03E7 1F7000                A   964    	PUSH	#0
+03EA 1F7000                A   965    	PUSH	#0
+03ED 1CFF                  A   966    	LD	R1,#255
+03EF 0C90                  A   967    	LD	R0,#144
+03F1 020F                  A   968    	ADD	R0,R15
+03F3 121E                  A   969    	ADC	R1,R14
+03F5 70E0                  A   970    	PUSH	R0
+03F7 70E1                  A   971    	PUSH	R1
+03F9 D6 0000               A   972    	CALL	_readUart
+03FC 2F                    A   973    	ATM	
+03FD 09080FFF              A   974    	ADDX	4095,#8
+0401 19000FFE              A   975    	ADCX	4094,#-0
+0405 89E0F4                A   976    	LDX	-12(RR14),R0
+0408 89E1F5                A   977    	LDX	-11(RR14),R1
+                           A   978    ;  122	      if (bytesRead <= 0)
+                           A   979    .line 122
+040B 880EF4                A   980    	LDX	R0,-12(RR14)
+040E 881EF5                A   981    	LDX	R1,-11(RR14)
+0411 A6E100                A   982    	CP	R1,#0
+0414 1FA6E000              A   983    	CPC	R0,#-0
+0418 AB 0D                 A   984    	JR	GT,_1_L_20
+                           A   985    ;  123	      {
+                           A   986    ;  124	        // No response so set ERROR and
+                           A   987    ;  125	        result = ERROR;
+                           A   988    .line 125
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  20
+
+
+PC     Object              I  Line    Source tibbo.src
+041A 0CFF                  A   989    	LD	R0,#255
+041C 1CFF                  A   990    	LD	R1,#255
+041E 89E08E                A   991    	LDX	-114(RR14),R0
+0421 89E18F                A   992    	LDX	-113(RR14),R1
+                           A   993    ;  126	        break;
+                           A   994    .line 126
+0424 8D 06 11              A   995    	JR	_1_L_29
+                           A   996    ;  127	      }
+0427                       A   997    _1_L_20:
+                           A   998    .line 127
+                           A   999    ;  128	
+                           A  1000    ;  129	      // Set the Transport Protocol for
+                           A  1001    ;  130	      // side of the Tibbo module to TC
+                           A  1002    ;  131	      sendMsgTibbo(tibboTP, sizeof(tibb
+                           A  1003    .line 131
+0427 1F7006                A  1004    	PUSH	#6
+042A 1F7000                A  1005    	PUSH	#0
+042D 1CFF                  A  1006    	LD	R1,#255
+042F 0C6D                  A  1007    	LD	R0,#109
+0431 020F                  A  1008    	ADD	R0,R15
+0433 121E                  A  1009    	ADC	R1,R14
+0435 70E0                  A  1010    	PUSH	R0
+0437 70E1                  A  1011    	PUSH	R1
+0439 D6 07CA               A  1012    	CALL	_sendMsgTibbo
+043C 50E0                  A  1013    	POP	R0
+043E 50E0                  A  1014    	POP	R0
+0440 50E0                  A  1015    	POP	R0
+0442 50E0                  A  1016    	POP	R0
+                           A  1017    ;  132	      bytesRead = readUart(tibboRespons
+                           A  1018    .line 132
+0444 1F7032                A  1019    	PUSH	#50
+0447 1F7000                A  1020    	PUSH	#0
+044A 1F7003                A  1021    	PUSH	#3
+044D 1F7000                A  1022    	PUSH	#0
+0450 1F7000                A  1023    	PUSH	#0
+0453 1F7000                A  1024    	PUSH	#0
+0456 1CFF                  A  1025    	LD	R1,#255
+0458 0C90                  A  1026    	LD	R0,#144
+045A 020F                  A  1027    	ADD	R0,R15
+045C 121E                  A  1028    	ADC	R1,R14
+045E 70E0                  A  1029    	PUSH	R0
+0460 70E1                  A  1030    	PUSH	R1
+0462 D6 0000               A  1031    	CALL	_readUart
+0465 2F                    A  1032    	ATM	
+0466 09080FFF              A  1033    	ADDX	4095,#8
+046A 19000FFE              A  1034    	ADCX	4094,#-0
+046E 89E0F4                A  1035    	LDX	-12(RR14),R0
+0471 89E1F5                A  1036    	LDX	-11(RR14),R1
+                           A  1037    ;  133	      if (bytesRead <= 0)
+                           A  1038    .line 133
+0474 880EF4                A  1039    	LDX	R0,-12(RR14)
+0477 881EF5                A  1040    	LDX	R1,-11(RR14)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  21
+
+
+PC     Object              I  Line    Source tibbo.src
+047A A6E100                A  1041    	CP	R1,#0
+047D 1FA6E000              A  1042    	CPC	R0,#-0
+0481 AB 0D                 A  1043    	JR	GT,_1_L_22
+                           A  1044    ;  134	      {
+                           A  1045    ;  135	        // No response so set ERROR and
+                           A  1046    ;  136	        result = ERROR;
+                           A  1047    .line 136
+0483 0CFF                  A  1048    	LD	R0,#255
+0485 1CFF                  A  1049    	LD	R1,#255
+0487 89E08E                A  1050    	LDX	-114(RR14),R0
+048A 89E18F                A  1051    	LDX	-113(RR14),R1
+                           A  1052    ;  137	        break;
+                           A  1053    .line 137
+048D 8D 06 11              A  1054    	JR	_1_L_29
+                           A  1055    ;  138	      }
+0490                       A  1056    _1_L_22:
+                           A  1057    .line 138
+                           A  1058    ;  139	 
+                           A  1059    ;  140	      // Fill in IP address
+                           A  1060    ;  141	      sprintf(&tibboIP[4], "%03d.%03d.%
+                           A  1061    ;  142	              IPAddrOctet1, IPAddrOctet
+                           A  1062    ;  143	              IPAddrOctet3, IPAddrOctet
+                           A  1063    .line 143
+0490 1CFF                  A  1064    	LD	R1,#255
+0492 0C7A                  A  1065    	LD	R0,#122
+0494 020F                  A  1066    	ADD	R0,R15
+0496 121E                  A  1067    	ADC	R1,R14
+0498 89E1FD                A  1068    	LDX	-3(RR14),R1
+049B 89E0FE                A  1069    	LDX	-2(RR14),R0
+049E 0C03                  A  1070    	LD	R0,#3
+04A0 89E0FA                A  1071    	LDX	-6(RR14),R0
+04A3 992EF6                A  1072    	LEA	RR2,246(RR14)
+04A6 0C40                  A  1073    	LD	R0,#64
+04A8 96E0E2                A  1074    	LDX	@RR2,R0
+04AB 1F70C0                A  1075    	PUSH	#192
+04AE 1F7000                A  1076    	PUSH	#0
+04B1 E4E2E0                A  1077    	LD	R0,R2
+04B4 70E3                  A  1078    	PUSH	R3
+04B6 70E0                  A  1079    	PUSH	R0
+04B8 D6 0000               A  1080    	CALL	__u_stoa
+04BB 50E0                  A  1081    	POP	R0
+04BD 50E0                  A  1082    	POP	R0
+04BF 50E0                  A  1083    	POP	R0
+04C1 50E0                  A  1084    	POP	R0
+04C3 1F702E                A  1085    	PUSH	#46
+04C6 1CFF                  A  1086    	LD	R1,#255
+04C8 0CF6                  A  1087    	LD	R0,#246
+04CA 020F                  A  1088    	ADD	R0,R15
+04CC 121E                  A  1089    	ADC	R1,R14
+04CE 70E0                  A  1090    	PUSH	R0
+04D0 70E1                  A  1091    	PUSH	R1
+04D2 D6 0000               A  1092    	CALL	___print_putch
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  22
+
+
+PC     Object              I  Line    Source tibbo.src
+04D5 50E0                  A  1093    	POP	R0
+04D7 50E0                  A  1094    	POP	R0
+04D9 50E0                  A  1095    	POP	R0
+04DB 0C03                  A  1096    	LD	R0,#3
+04DD 89E0FA                A  1097    	LDX	-6(RR14),R0
+04E0 992EF6                A  1098    	LEA	RR2,246(RR14)
+04E3 0C40                  A  1099    	LD	R0,#64
+04E5 96E0E2                A  1100    	LDX	@RR2,R0
+04E8 1F70A9                A  1101    	PUSH	#169
+04EB 1F7000                A  1102    	PUSH	#0
+04EE E4E2E0                A  1103    	LD	R0,R2
+04F1 70E3                  A  1104    	PUSH	R3
+04F3 70E0                  A  1105    	PUSH	R0
+04F5 D6 0000               A  1106    	CALL	__u_stoa
+04F8 50E0                  A  1107    	POP	R0
+04FA 50E0                  A  1108    	POP	R0
+04FC 50E0                  A  1109    	POP	R0
+04FE 50E0                  A  1110    	POP	R0
+0500 1F702E                A  1111    	PUSH	#46
+0503 1CFF                  A  1112    	LD	R1,#255
+0505 0CF6                  A  1113    	LD	R0,#246
+0507 020F                  A  1114    	ADD	R0,R15
+0509 121E                  A  1115    	ADC	R1,R14
+050B 70E0                  A  1116    	PUSH	R0
+050D 70E1                  A  1117    	PUSH	R1
+050F D6 0000               A  1118    	CALL	___print_putch
+0512 50E0                  A  1119    	POP	R0
+0514 50E0                  A  1120    	POP	R0
+0516 50E0                  A  1121    	POP	R0
+0518 0C03                  A  1122    	LD	R0,#3
+051A 89E0FA                A  1123    	LDX	-6(RR14),R0
+051D 992EF6                A  1124    	LEA	RR2,246(RR14)
+0520 0C40                  A  1125    	LD	R0,#64
+0522 96E0E2                A  1126    	LDX	@RR2,R0
+0525 1F7001                A  1127    	PUSH	#1
+0528 1F7000                A  1128    	PUSH	#0
+052B E4E2E0                A  1129    	LD	R0,R2
+052E 70E3                  A  1130    	PUSH	R3
+0530 70E0                  A  1131    	PUSH	R0
+0532 D6 0000               A  1132    	CALL	__u_stoa
+0535 50E0                  A  1133    	POP	R0
+0537 50E0                  A  1134    	POP	R0
+0539 50E0                  A  1135    	POP	R0
+053B 50E0                  A  1136    	POP	R0
+053D 1F702E                A  1137    	PUSH	#46
+0540 1CFF                  A  1138    	LD	R1,#255
+0542 0CF6                  A  1139    	LD	R0,#246
+0544 020F                  A  1140    	ADD	R0,R15
+0546 121E                  A  1141    	ADC	R1,R14
+0548 70E0                  A  1142    	PUSH	R0
+054A 70E1                  A  1143    	PUSH	R1
+054C D6 0000               A  1144    	CALL	___print_putch
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  23
+
+
+PC     Object              I  Line    Source tibbo.src
+054F 50E0                  A  1145    	POP	R0
+0551 50E0                  A  1146    	POP	R0
+0553 50E0                  A  1147    	POP	R0
+0555 0C03                  A  1148    	LD	R0,#3
+0557 89E0FA                A  1149    	LDX	-6(RR14),R0
+055A 992EF6                A  1150    	LEA	RR2,246(RR14)
+055D 0C40                  A  1151    	LD	R0,#64
+055F 96E0E2                A  1152    	LDX	@RR2,R0
+0562 841000                A  1153    	LDX	R1,_cardAddress
+0565 E4E1E0                A  1154    	LD	R0,R1
+0568 90E0                  A  1155    	RL	R0
+056A 3200                  A  1156    	SBC	R0,R0
+056C 70E1                  A  1157    	PUSH	R1
+056E 70E0                  A  1158    	PUSH	R0
+0570 E4E2E0                A  1159    	LD	R0,R2
+0573 70E3                  A  1160    	PUSH	R3
+0575 70E0                  A  1161    	PUSH	R0
+0577 D6 0000               A  1162    	CALL	__u_stoa
+057A 50E0                  A  1163    	POP	R0
+057C 50E0                  A  1164    	POP	R0
+057E 50E0                  A  1165    	POP	R0
+0580 50E0                  A  1166    	POP	R0
+0582 1F7000                A  1167    	PUSH	#0
+0585 1CFF                  A  1168    	LD	R1,#255
+0587 0CF6                  A  1169    	LD	R0,#246
+0589 020F                  A  1170    	ADD	R0,R15
+058B 121E                  A  1171    	ADC	R1,R14
+058D 70E0                  A  1172    	PUSH	R0
+058F 70E1                  A  1173    	PUSH	R1
+0591 D6 0000               A  1174    	CALL	___print_putch
+0594 50E0                  A  1175    	POP	R0
+0596 50E0                  A  1176    	POP	R0
+0598 50E0                  A  1177    	POP	R0
+                           A  1178    ;  144	      tibboIP[19] = 0x0D;
+                           A  1179    .line 144
+059A 0C0D                  A  1180    	LD	R0,#13
+059C 89E089                A  1181    	LDX	-119(RR14),R0
+                           A  1182    ;  145	      sendMsgTibbo(tibboIP, sizeof(tibb
+                           A  1183    .line 145
+059F 1F7014                A  1184    	PUSH	#20
+05A2 1F7000                A  1185    	PUSH	#0
+05A5 1CFF                  A  1186    	LD	R1,#255
+05A7 0C76                  A  1187    	LD	R0,#118
+05A9 020F                  A  1188    	ADD	R0,R15
+05AB 121E                  A  1189    	ADC	R1,R14
+05AD 70E0                  A  1190    	PUSH	R0
+05AF 70E1                  A  1191    	PUSH	R1
+05B1 D6 07CA               A  1192    	CALL	_sendMsgTibbo
+05B4 50E0                  A  1193    	POP	R0
+05B6 50E0                  A  1194    	POP	R0
+05B8 50E0                  A  1195    	POP	R0
+05BA 50E0                  A  1196    	POP	R0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  24
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1197    ;  146	      bytesRead = readUart(tibboRespons
+                           A  1198    .line 146
+05BC 1F7032                A  1199    	PUSH	#50
+05BF 1F7000                A  1200    	PUSH	#0
+05C2 1F7003                A  1201    	PUSH	#3
+05C5 1F7000                A  1202    	PUSH	#0
+05C8 1F7000                A  1203    	PUSH	#0
+05CB 1F7000                A  1204    	PUSH	#0
+05CE 1CFF                  A  1205    	LD	R1,#255
+05D0 0C90                  A  1206    	LD	R0,#144
+05D2 020F                  A  1207    	ADD	R0,R15
+05D4 121E                  A  1208    	ADC	R1,R14
+05D6 70E0                  A  1209    	PUSH	R0
+05D8 70E1                  A  1210    	PUSH	R1
+05DA D6 0000               A  1211    	CALL	_readUart
+05DD 2F                    A  1212    	ATM	
+05DE 09080FFF              A  1213    	ADDX	4095,#8
+05E2 19000FFE              A  1214    	ADCX	4094,#-0
+05E6 89E0F4                A  1215    	LDX	-12(RR14),R0
+05E9 89E1F5                A  1216    	LDX	-11(RR14),R1
+                           A  1217    ;  147	      if (bytesRead <= 0)
+                           A  1218    .line 147
+05EC 880EF4                A  1219    	LDX	R0,-12(RR14)
+05EF 881EF5                A  1220    	LDX	R1,-11(RR14)
+05F2 A6E100                A  1221    	CP	R1,#0
+05F5 1FA6E000              A  1222    	CPC	R0,#-0
+05F9 AB 0C                 A  1223    	JR	GT,_1_L_26
+                           A  1224    ;  148	      {
+                           A  1225    ;  149	        // No response so set ERROR and
+                           A  1226    ;  150	        result = ERROR;
+                           A  1227    .line 150
+05FB 0CFF                  A  1228    	LD	R0,#255
+05FD 1CFF                  A  1229    	LD	R1,#255
+05FF 89E08E                A  1230    	LDX	-114(RR14),R0
+0602 89E18F                A  1231    	LDX	-113(RR14),R1
+                           A  1232    ;  151	        break;
+                           A  1233    .line 151
+0605 8B 0A                 A  1234    	JR	_1_L_29
+                           A  1235    ;  152	      }
+                           A  1236    ;  153	    }
+0607                       A  1237    _1_L_26:
+                           A  1238    .line 153
+                           A  1239    ;  154	    result = 1;
+                           A  1240    .line 154
+0607 B0E0                  A  1241    	CLR	R0
+0609 1C01                  A  1242    	LD	R1,#1
+060B 89E08E                A  1243    	LDX	-114(RR14),R0
+060E 89E18F                A  1244    	LDX	-113(RR14),R1
+                           A  1245    ;  155	    break;
+                           A  1246    ;  156	  }
+0611                       A  1247    _1_L_29:
+                           A  1248    .line 156
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  25
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1249    ;  157	
+                           A  1250    ;  158	  // Reset the Tibbo module
+                           A  1251    ;  159	  resetTibbo();
+                           A  1252    .line 159
+0611 D6 083D               A  1253    	CALL	_resetTibbo
+                           A  1254    ;  160	
+                           A  1255    ;  161	  return result;	
+                           A  1256    .line 161
+0614 880E8E                A  1257    	LDX	R0,-114(RR14)
+0617 881E8F                A  1258    	LDX	R1,-113(RR14)
+                           A  1259    ;  162	}
+                           A  1260    .line 162
+061A D6 0000               A  1261    	CALL	__b_framereset
+061D AF                    A  1262    	RET	
+                           A  1263    .endfunc "initTibbo",162,"_initTibbo"
+                           A  1264    	SEGMENT ROM_DATA
+                           A  1265    
+                           A  1266    
+                           A  1267    ;**************************** _parseIPAddrStrin
+                           A  1268    ;Name                         Addr/Register   S
+                           A  1269    ;_f_atoi                             IMPORT  --
+                           A  1270    ;_f_f_strtok                         IMPORT  --
+                           A  1271    ;t                                   RR14-2    
+                           A  1272    ;octet4                             RR14+12    
+                           A  1273    ;octet3                             RR14+10    
+                           A  1274    ;octet2                              RR14+8    
+                           A  1275    ;octet1                              RR14+6    
+                           A  1276    ;IPAddrString                        RR14+4    
+                           A  1277    
+                           A  1278    
+                           A  1279    ; Aggregate Stack Size: -2 (words)
+                           A  1280    
+                           A  1281    
+                           A  1282    	SEGMENT FAR_TXT
+0000                       A  1283    L__25:
+0000 2E                    A  1284    	DB	"."
+0001 00                    A  1285    	DB	0
+0002                       A  1286    L__26:
+0002 2E                    A  1287    	DB	"."
+0003 00                    A  1288    	DB	0
+0004                       A  1289    L__27:
+0004 2E                    A  1290    	DB	"."
+0005 00                    A  1291    	DB	0
+0006                       A  1292    L__28:
+0006 2E                    A  1293    	DB	"."
+0007 00                    A  1294    	DB	0
+                           A  1295    	.FRAME _n_parseIPAddrString,?_n_parseIPAddr
+                           A  1296    	.FCALL _n_f_f_strtok
+                           A  1297    	.FCALL _n_f_atoi
+                           A  1298    	.FRAME _f_parseIPAddrString,?_f_parseIPAddr
+                           A  1299    	.FCALL _f_f_f_strtok
+                           A  1300    	.FCALL _f_f_atoi
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  26
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1301    	SEGMENT tibbo_TEXT
+                           A  1302    ;  163	
+                           A  1303    ;  164	///////////////////////////////////////
+                           A  1304    ;  165	// parseIPAddrString
+                           A  1305    ;  166	// This function takes an IP address st
+                           A  1306    ;  167	// of 192.168.1.1 and returns the idivi
+                           A  1307    ;  168	// integers
+                           A  1308    ;  169	// Param char* IPAddrString
+                           A  1309    ;  170	// Param int*  octet1
+                           A  1310    ;  171	// Param int*  octet2
+                           A  1311    ;  172	// Param int*  octet3
+                           A  1312    ;  173	// Param int*  octet4
+                           A  1313    ;  174	// Return OK or ERROR
+                           A  1314    ;  175	void parseIPAddrString(char* IPAddrStri
+                           A  1315    ;  176	{
+061E                       A  1316    _parseIPAddrString:
+                           A  1317    .define "_parseIPAddrString"
+                           A  1318    .value _parseIPAddrString
+                           A  1319    .class 2
+                           A  1320    .type 65
+                           A  1321    .endef
+                           A  1322    .begfunc "parseIPAddrString",176,"_parseIPAddrS
+                           A  1323    .define "IPAddrString"
+                           A  1324    .class 9
+                           A  1325    .value 4
+                           A  1326    .type 162
+                           A  1327    .endef
+                           A  1328    .define "octet1"
+                           A  1329    .class 9
+                           A  1330    .value 6
+                           A  1331    .type 163
+                           A  1332    .endef
+                           A  1333    .define "octet2"
+                           A  1334    .class 9
+                           A  1335    .value 8
+                           A  1336    .type 163
+                           A  1337    .endef
+                           A  1338    .define "octet3"
+                           A  1339    .class 9
+                           A  1340    .value 10
+                           A  1341    .type 163
+                           A  1342    .endef
+                           A  1343    .define "octet4"
+                           A  1344    .class 9
+                           A  1345    .value 12
+                           A  1346    .type 163
+                           A  1347    .endef
+                           A  1348    .define "t"
+                           A  1349    .class 1
+                           A  1350    .value -2
+                           A  1351    .type 162
+                           A  1352    .endef
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  27
+
+
+PC     Object              I  Line    Source tibbo.src
+061E 5C02                  A  1353    	LD	R5,#2
+0620 D6 0000               A  1354    	CALL	__b_frameset0
+                           A  1355    ;  177	  char* t;
+                           A  1356    ;  178	  
+                           A  1357    ;  179	  t = strtok(IPAddrString, ".");
+                           A  1358    .line 179
+0623 1F70 00               A  1359    	PUSH	#low(L__25)
+0626 1F70 00               A  1360    	PUSH	#high(L__25)
+0629 880E04                A  1361    	LDX	R0,4(RR14)
+062C 881E05                A  1362    	LDX	R1,5(RR14)
+062F 70E1                  A  1363    	PUSH	R1
+0631 70E0                  A  1364    	PUSH	R0
+0633 D6 0000               A  1365    	CALL	_f_f_strtok
+0636 50E2                  A  1366    	POP	R2
+0638 50E2                  A  1367    	POP	R2
+063A 50E2                  A  1368    	POP	R2
+063C 50E2                  A  1369    	POP	R2
+063E 89E0FE                A  1370    	LDX	-2(RR14),R0
+0641 89E1FF                A  1371    	LDX	-1(RR14),R1
+                           A  1372    ;  180	  *octet1 = atoi(t);
+                           A  1373    .line 180
+0644 880EFE                A  1374    	LDX	R0,-2(RR14)
+0647 881EFF                A  1375    	LDX	R1,-1(RR14)
+064A 70E1                  A  1376    	PUSH	R1
+064C 70E0                  A  1377    	PUSH	R0
+064E D6 0000               A  1378    	CALL	_f_atoi
+0651 50E2                  A  1379    	POP	R2
+0653 50E2                  A  1380    	POP	R2
+0655 882E06                A  1381    	LDX	R2,6(RR14)
+0658 883E07                A  1382    	LDX	R3,7(RR14)
+065B 96E0E2                A  1383    	LDX	@RR2,R0
+065E 892101                A  1384    	LDX	1(RR2),R1
+                           A  1385    ;  181	  
+                           A  1386    ;  182	  t = strtok(NULL, ".");
+                           A  1387    .line 182
+0661 1F70 02               A  1388    	PUSH	#low(L__26)
+0664 1F70 00               A  1389    	PUSH	#high(L__26)
+0667 1F7000                A  1390    	PUSH	#0
+066A 1F7000                A  1391    	PUSH	#0
+066D D6 0000               A  1392    	CALL	_f_f_strtok
+0670 50E2                  A  1393    	POP	R2
+0672 50E2                  A  1394    	POP	R2
+0674 50E2                  A  1395    	POP	R2
+0676 50E2                  A  1396    	POP	R2
+0678 89E0FE                A  1397    	LDX	-2(RR14),R0
+067B 89E1FF                A  1398    	LDX	-1(RR14),R1
+                           A  1399    ;  183	  *octet2 = atoi(t);
+                           A  1400    .line 183
+067E 880EFE                A  1401    	LDX	R0,-2(RR14)
+0681 881EFF                A  1402    	LDX	R1,-1(RR14)
+0684 70E1                  A  1403    	PUSH	R1
+0686 70E0                  A  1404    	PUSH	R0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  28
+
+
+PC     Object              I  Line    Source tibbo.src
+0688 D6 0000               A  1405    	CALL	_f_atoi
+068B 50E2                  A  1406    	POP	R2
+068D 50E2                  A  1407    	POP	R2
+068F 882E08                A  1408    	LDX	R2,8(RR14)
+0692 883E09                A  1409    	LDX	R3,9(RR14)
+0695 96E0E2                A  1410    	LDX	@RR2,R0
+0698 892101                A  1411    	LDX	1(RR2),R1
+                           A  1412    ;  184	
+                           A  1413    ;  185	  t = strtok(NULL, ".");
+                           A  1414    .line 185
+069B 1F70 04               A  1415    	PUSH	#low(L__27)
+069E 1F70 00               A  1416    	PUSH	#high(L__27)
+06A1 1F7000                A  1417    	PUSH	#0
+06A4 1F7000                A  1418    	PUSH	#0
+06A7 D6 0000               A  1419    	CALL	_f_f_strtok
+06AA 50E2                  A  1420    	POP	R2
+06AC 50E2                  A  1421    	POP	R2
+06AE 50E2                  A  1422    	POP	R2
+06B0 50E2                  A  1423    	POP	R2
+06B2 89E0FE                A  1424    	LDX	-2(RR14),R0
+06B5 89E1FF                A  1425    	LDX	-1(RR14),R1
+                           A  1426    ;  186	  *octet3 = atoi(t);
+                           A  1427    .line 186
+06B8 880EFE                A  1428    	LDX	R0,-2(RR14)
+06BB 881EFF                A  1429    	LDX	R1,-1(RR14)
+06BE 70E1                  A  1430    	PUSH	R1
+06C0 70E0                  A  1431    	PUSH	R0
+06C2 D6 0000               A  1432    	CALL	_f_atoi
+06C5 50E2                  A  1433    	POP	R2
+06C7 50E2                  A  1434    	POP	R2
+06C9 882E0A                A  1435    	LDX	R2,10(RR14)
+06CC 883E0B                A  1436    	LDX	R3,11(RR14)
+06CF 96E0E2                A  1437    	LDX	@RR2,R0
+06D2 892101                A  1438    	LDX	1(RR2),R1
+                           A  1439    ;  187	
+                           A  1440    ;  188	  t = strtok(NULL, ".");
+                           A  1441    .line 188
+06D5 1F70 06               A  1442    	PUSH	#low(L__28)
+06D8 1F70 00               A  1443    	PUSH	#high(L__28)
+06DB 1F7000                A  1444    	PUSH	#0
+06DE 1F7000                A  1445    	PUSH	#0
+06E1 D6 0000               A  1446    	CALL	_f_f_strtok
+06E4 50E2                  A  1447    	POP	R2
+06E6 50E2                  A  1448    	POP	R2
+06E8 50E2                  A  1449    	POP	R2
+06EA 50E2                  A  1450    	POP	R2
+06EC 89E0FE                A  1451    	LDX	-2(RR14),R0
+06EF 89E1FF                A  1452    	LDX	-1(RR14),R1
+                           A  1453    ;  189	  *octet4 = atoi(t);
+                           A  1454    .line 189
+06F2 880EFE                A  1455    	LDX	R0,-2(RR14)
+06F5 881EFF                A  1456    	LDX	R1,-1(RR14)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  29
+
+
+PC     Object              I  Line    Source tibbo.src
+06F8 70E1                  A  1457    	PUSH	R1
+06FA 70E0                  A  1458    	PUSH	R0
+06FC D6 0000               A  1459    	CALL	_f_atoi
+06FF 50E2                  A  1460    	POP	R2
+0701 50E2                  A  1461    	POP	R2
+0703 882E0C                A  1462    	LDX	R2,12(RR14)
+0706 883E0D                A  1463    	LDX	R3,13(RR14)
+0709 96E0E2                A  1464    	LDX	@RR2,R0
+070C 892101                A  1465    	LDX	1(RR2),R1
+                           A  1466    ;  190	}
+                           A  1467    .line 190
+070F D6 0000               A  1468    	CALL	__b_framereset
+0712 AF                    A  1469    	RET	
+                           A  1470    .endfunc "parseIPAddrString",190,"_parseIPAddrS
+                           A  1471    	SEGMENT ROM_DATA
+                           A  1472    
+                           A  1473    
+                           A  1474    ;**************************** _checkIPAddr ****
+                           A  1475    ;Name                         Addr/Register   S
+                           A  1476    ;IPAddr1Octet4                      RR14-10    
+                           A  1477    ;IPAddr1Octet1                       RR14-8    
+                           A  1478    ;IPAddr1Octet3                       RR14-6    
+                           A  1479    ;IPAddr1Octet2                       RR14-4    
+                           A  1480    ;temp38                              RR14-2    
+                           A  1481    ;IPAddr2Octet4                      RR14+12    
+                           A  1482    ;IPAddr2Octet3                      RR14+10    
+                           A  1483    ;IPAddr2Octet2                       RR14+8    
+                           A  1484    ;IPAddr2Octet1                       RR14+6    
+                           A  1485    ;IPAddrString1                       RR14+4    
+                           A  1486    
+                           A  1487    
+                           A  1488    ; Aggregate Stack Size: -10 (words)
+                           A  1489    
+                           A  1490    
+                           A  1491    	.FRAME _n_checkIPAddr,?_n_checkIPAddr,RDATA
+                           A  1492    	.FCALL _n_parseIPAddrString
+                           A  1493    	.FRAME _f_checkIPAddr,?_f_checkIPAddr,EDATA
+                           A  1494    	.FCALL _f_parseIPAddrString
+                           A  1495    	SEGMENT tibbo_TEXT
+                           A  1496    ;  191	
+                           A  1497    ;  192	#if 0
+                           A  1498    ;  193	
+                           A  1499    ;  194	///////////////////////////////////////
+                           A  1500    ;  195	// compareIPAddrStrings
+                           A  1501    ;  196	// This function takes two IP address s
+                           A  1502    ;  197	// of 192.168.1.1 and compares them. Re
+                           A  1503    ;  198	// are the same address
+                           A  1504    ;  199	// Param char* IPAddrString1
+                           A  1505    ;  200	// Param char* IPAddrString2
+                           A  1506    ;  201	// Return OK or ERROR
+                           A  1507    ;  202	int compareIPAddrStrings(char* IPAddrSt
+                           A  1508    ;  203	{
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  30
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1509    ;  204	  int IPAddr1Octet1, IPAddr1Octet2, IPA
+                           A  1510    ;  205	  int IPAddr2Octet1, IPAddr2Octet2, IPA
+                           A  1511    ;  206	
+                           A  1512    ;  207	  parseIPAddrString(IPAddrString1, &IPA
+                           A  1513    ;  208	                    &IPAddr1Octet3, &IP
+                           A  1514    ;  209	  parseIPAddrString(IPAddrString2, &IPA
+                           A  1515    ;  210	                    &IPAddr2Octet3, &IP
+                           A  1516    ;  211	
+                           A  1517    ;  212	  return((IPAddr1Octet1 == IPAddr2Octet
+                           A  1518    ;  213	         (IPAddr1Octet2 == IPAddr2Octet
+                           A  1519    ;  214	         (IPAddr1Octet3 == IPAddr2Octet
+                           A  1520    ;  215	         (IPAddr1Octet4 == IPAddr2Octet
+                           A  1521    ;  216	}
+                           A  1522    ;  217	
+                           A  1523    ;  218	#endif
+                           A  1524    ;  219	
+                           A  1525    ;  220	///////////////////////////////////////
+                           A  1526    ;  221	// checkIPAddr
+                           A  1527    ;  222	// This function takes an IP address st
+                           A  1528    ;  223	// of 192.168.1.1 and compares them to 
+                           A  1529    ;  224	// are the same address
+                           A  1530    ;  225	// Param char* IPAddrString1
+                           A  1531    ;  226	// Param int   IPAddrOctet1;
+                           A  1532    ;  227	// Param int   IPAddrOctet2;
+                           A  1533    ;  228	// Param int   IPAddrOctet3;
+                           A  1534    ;  229	// Param int   IPAddrOctet4;
+                           A  1535    ;  230	// Return 1 or 0
+                           A  1536    ;  231	int checkIPAddr(char* IPAddrString1, in
+                           A  1537    ;  232	                int IPAddr2Octet2, int 
+                           A  1538    ;  233	                int IPAddr2Octet4)
+                           A  1539    ;  234	{
+0713                       A  1540    _checkIPAddr:
+                           A  1541    .define "_checkIPAddr"
+                           A  1542    .value _checkIPAddr
+                           A  1543    .class 2
+                           A  1544    .type 67
+                           A  1545    .endef
+                           A  1546    .begfunc "checkIPAddr",234,"_checkIPAddr"
+                           A  1547    .define "IPAddrString1"
+                           A  1548    .class 9
+                           A  1549    .value 4
+                           A  1550    .type 162
+                           A  1551    .endef
+                           A  1552    .define "IPAddr2Octet1"
+                           A  1553    .class 9
+                           A  1554    .value 6
+                           A  1555    .type 3
+                           A  1556    .endef
+                           A  1557    .define "IPAddr2Octet2"
+                           A  1558    .class 9
+                           A  1559    .value 8
+                           A  1560    .type 3
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  31
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1561    .endef
+                           A  1562    .define "IPAddr2Octet3"
+                           A  1563    .class 9
+                           A  1564    .value 10
+                           A  1565    .type 3
+                           A  1566    .endef
+                           A  1567    .define "IPAddr2Octet4"
+                           A  1568    .class 9
+                           A  1569    .value 12
+                           A  1570    .type 3
+                           A  1571    .endef
+                           A  1572    .define "IPAddr1Octet2"
+                           A  1573    .class 1
+                           A  1574    .value -4
+                           A  1575    .type 3
+                           A  1576    .endef
+                           A  1577    .define "IPAddr1Octet3"
+                           A  1578    .class 1
+                           A  1579    .value -6
+                           A  1580    .type 3
+                           A  1581    .endef
+                           A  1582    .define "IPAddr1Octet1"
+                           A  1583    .class 1
+                           A  1584    .value -8
+                           A  1585    .type 3
+                           A  1586    .endef
+                           A  1587    .define "IPAddr1Octet4"
+                           A  1588    .class 1
+                           A  1589    .value -10
+                           A  1590    .type 3
+                           A  1591    .endef
+0713 5C0A                  A  1592    	LD	R5,#10
+0715 D6 0000               A  1593    	CALL	__b_frameset0
+                           A  1594    ;  235	  int IPAddr1Octet1, IPAddr1Octet2, IPA
+                           A  1595    ;  236	
+                           A  1596    ;  237	  parseIPAddrString(IPAddrString1, &IPA
+                           A  1597    ;  238	                    &IPAddr1Octet3, &IP
+                           A  1598    .line 238
+0718 1CFF                  A  1599    	LD	R1,#255
+071A 0CF6                  A  1600    	LD	R0,#246
+071C 020F                  A  1601    	ADD	R0,R15
+071E 121E                  A  1602    	ADC	R1,R14
+0720 70E0                  A  1603    	PUSH	R0
+0722 70E1                  A  1604    	PUSH	R1
+0724 1CFF                  A  1605    	LD	R1,#255
+0726 0CFA                  A  1606    	LD	R0,#250
+0728 020F                  A  1607    	ADD	R0,R15
+072A 121E                  A  1608    	ADC	R1,R14
+072C 70E0                  A  1609    	PUSH	R0
+072E 70E1                  A  1610    	PUSH	R1
+0730 1CFF                  A  1611    	LD	R1,#255
+0732 0CFC                  A  1612    	LD	R0,#252
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  32
+
+
+PC     Object              I  Line    Source tibbo.src
+0734 020F                  A  1613    	ADD	R0,R15
+0736 121E                  A  1614    	ADC	R1,R14
+0738 70E0                  A  1615    	PUSH	R0
+073A 70E1                  A  1616    	PUSH	R1
+073C 1CFF                  A  1617    	LD	R1,#255
+073E 0CF8                  A  1618    	LD	R0,#248
+0740 020F                  A  1619    	ADD	R0,R15
+0742 121E                  A  1620    	ADC	R1,R14
+0744 70E0                  A  1621    	PUSH	R0
+0746 70E1                  A  1622    	PUSH	R1
+0748 880E04                A  1623    	LDX	R0,4(RR14)
+074B 881E05                A  1624    	LDX	R1,5(RR14)
+074E 70E1                  A  1625    	PUSH	R1
+0750 70E0                  A  1626    	PUSH	R0
+0752 D6 061E               A  1627    	CALL	_parseIPAddrString
+0755 2F                    A  1628    	ATM	
+0756 090A0FFF              A  1629    	ADDX	4095,#10
+075A 19000FFE              A  1630    	ADCX	4094,#-0
+                           A  1631    ;  239	
+                           A  1632    ;  240	  return((IPAddr1Octet1 == IPAddr2Octet
+                           A  1633    .line 240
+075E 880EF8                A  1634    	LDX	R0,-8(RR14)
+0761 881EF9                A  1635    	LDX	R1,-7(RR14)
+0764 882E06                A  1636    	LDX	R2,6(RR14)
+0767 883E07                A  1637    	LDX	R3,7(RR14)
+076A A213                  A  1638    	CP	R1,R3
+076C 1FA202                A  1639    	CPC	R0,R2
+076F EB 45                 A  1640    	JR	NE,_3_L_36
+                           A  1641    ;  241	         (IPAddr1Octet2 == IPAddr2Octet
+                           A  1642    .line 241
+0771 880EFC                A  1643    	LDX	R0,-4(RR14)
+0774 881EFD                A  1644    	LDX	R1,-3(RR14)
+0777 882E08                A  1645    	LDX	R2,8(RR14)
+077A 883E09                A  1646    	LDX	R3,9(RR14)
+077D A213                  A  1647    	CP	R1,R3
+077F 1FA202                A  1648    	CPC	R0,R2
+0782 EB 32                 A  1649    	JR	NE,_3_L_36
+                           A  1650    ;  242	         (IPAddr1Octet3 == IPAddr2Octet
+                           A  1651    .line 242
+0784 880EFA                A  1652    	LDX	R0,-6(RR14)
+0787 881EFB                A  1653    	LDX	R1,-5(RR14)
+078A 882E0A                A  1654    	LDX	R2,10(RR14)
+078D 883E0B                A  1655    	LDX	R3,11(RR14)
+0790 A213                  A  1656    	CP	R1,R3
+0792 1FA202                A  1657    	CPC	R0,R2
+0795 EB 1F                 A  1658    	JR	NE,_3_L_36
+                           A  1659    ;  243	         (IPAddr1Octet4 == IPAddr2Octet
+                           A  1660    .line 243
+0797 880EF6                A  1661    	LDX	R0,-10(RR14)
+079A 881EF7                A  1662    	LDX	R1,-9(RR14)
+079D 882E0C                A  1663    	LDX	R2,12(RR14)
+07A0 883E0D                A  1664    	LDX	R3,13(RR14)
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  33
+
+
+PC     Object              I  Line    Source tibbo.src
+07A3 A213                  A  1665    	CP	R1,R3
+07A5 1FA202                A  1666    	CPC	R0,R2
+07A8 EB 0C                 A  1667    	JR	NE,_3_L_36
+                           A  1668    ;  244	}
+                           A  1669    .line 244
+07AA B0E0                  A  1670    	CLR	R0
+07AC 1C01                  A  1671    	LD	R1,#1
+07AE 89E0FE                A  1672    	LDX	-2(RR14),R0
+07B1 89E1FF                A  1673    	LDX	-1(RR14),R1
+07B4 8B 0A                 A  1674    	JR	_3_L_37
+07B6                       A  1675    _3_L_36:
+07B6 B0E0                  A  1676    	CLR	R0
+07B8 B0E1                  A  1677    	CLR	R1
+07BA 89E0FE                A  1678    	LDX	-2(RR14),R0
+07BD 89E1FF                A  1679    	LDX	-1(RR14),R1
+07C0                       A  1680    _3_L_37:
+                           A  1681    .line 243
+07C0 880EFE                A  1682    	LDX	R0,-2(RR14)
+07C3 881EFF                A  1683    	LDX	R1,-1(RR14)
+                           A  1684    .line 244
+07C6 D6 0000               A  1685    	CALL	__b_framereset
+07C9 AF                    A  1686    	RET	
+                           A  1687    .endfunc "checkIPAddr",244,"_checkIPAddr"
+                           A  1688    	SEGMENT ROM_DATA
+                           A  1689    
+                           A  1690    
+                           A  1691    ;**************************** _sendMsgTibbo ***
+                           A  1692    ;Name                         Addr/Register   S
+                           A  1693    ;_putchar                            IMPORT  --
+                           A  1694    ;index                               RR14-2    
+                           A  1695    ;size                                RR14+6    
+                           A  1696    ;buffer                              RR14+4    
+                           A  1697    
+                           A  1698    
+                           A  1699    ; Aggregate Stack Size: -2 (words)
+                           A  1700    
+                           A  1701    
+                           A  1702    	.FRAME _n_sendMsgTibbo,?_n_sendMsgTibbo,RDA
+                           A  1703    	.FCALL _n_putchar
+                           A  1704    	.FRAME _f_sendMsgTibbo,?_f_sendMsgTibbo,EDA
+                           A  1705    	.FCALL _f_putchar
+                           A  1706    	SEGMENT tibbo_TEXT
+                           A  1707    ;  245	
+                           A  1708    ;  246	#if 0
+                           A  1709    ;  247	///////////////////////////////////////
+                           A  1710    ;  248	// checkTibbo
+                           A  1711    ;  249	// This function checks to see if the T
+                           A  1712    ;  250	// module is istalled.\
+                           A  1713    ;  251	// Param none
+                           A  1714    ;  252	// Return OK or ERROR
+                           A  1715    ;  253	int checkTibbo( void )
+                           A  1716    ;  254	{
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  34
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1717    ;  255	  char tibboVersion[] = {0x02, 'V', 0x0
+                           A  1718    ;  256	  char tibboVersionResponse[20];
+                           A  1719    ;  257	  int result = 0;
+                           A  1720    ;  258		int count = 0;
+                           A  1721    ;  259		
+                           A  1722    ;  260	  for (;;)
+                           A  1723    ;  261		{
+                           A  1724    ;  262	    memset(tibboVersionResponse, 0, 20)
+                           A  1725    ;  263	    sendMsgTibbo(tibboVersion, sizeof(t
+                           A  1726    ;  264	    result = readUart(tibboVersionRespo
+                           A  1727    ;  265	    if (result > 0)
+                           A  1728    ;  266	    {
+                           A  1729    ;  267	      result = OK;
+                           A  1730    ;  268	      break;
+                           A  1731    ;  269	    }
+                           A  1732    ;  270	    count++;
+                           A  1733    ;  271	    if (3 <= count)
+                           A  1734    ;  272	    {
+                           A  1735    ;  273	      result = ERROR;
+                           A  1736    ;  274	      break;
+                           A  1737    ;  275	    }
+                           A  1738    ;  276	  }
+                           A  1739    ;  277	  return result;
+                           A  1740    ;  278	}
+                           A  1741    ;  279	#endif
+                           A  1742    ;  280	
+                           A  1743    ;  281	///////////////////////////////////////
+                           A  1744    ;  282	// sendMsgTibbo
+                           A  1745    ;  283	// This function takes a buffer and sen
+                           A  1746    ;  284	// Tibbo Ethernet to RS232 module
+                           A  1747    ;  285	// Param buffer
+                           A  1748    ;  286	// Param size
+                           A  1749    ;  287	// Return none
+                           A  1750    ;  288	void sendMsgTibbo(char* buffer, int siz
+                           A  1751    ;  289	{
+07CA                       A  1752    _sendMsgTibbo:
+                           A  1753    .define "_sendMsgTibbo"
+                           A  1754    .value _sendMsgTibbo
+                           A  1755    .class 2
+                           A  1756    .type 65
+                           A  1757    .endef
+                           A  1758    .begfunc "sendMsgTibbo",289,"_sendMsgTibbo"
+                           A  1759    .define "buffer"
+                           A  1760    .class 9
+                           A  1761    .value 4
+                           A  1762    .type 162
+                           A  1763    .endef
+                           A  1764    .define "size"
+                           A  1765    .class 9
+                           A  1766    .value 6
+                           A  1767    .type 3
+                           A  1768    .endef
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  35
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1769    .define "index"
+                           A  1770    .class 1
+                           A  1771    .value -2
+                           A  1772    .type 3
+                           A  1773    .endef
+07CA 5C02                  A  1774    	LD	R5,#2
+07CC D6 0000               A  1775    	CALL	__b_frameset0
+                           A  1776    ;  290	  int index = 0;
+                           A  1777    .line 290
+07CF B0E0                  A  1778    	CLR	R0
+07D1 B0E1                  A  1779    	CLR	R1
+07D3 89E0FE                A  1780    	LDX	-2(RR14),R0
+07D6 89E1FF                A  1781    	LDX	-1(RR14),R1
+                           A  1782    ;  291	  
+                           A  1783    ;  292	  // Turn on TX light here
+                           A  1784    ;  293	  PAOUT &= ~TxLEDCtl;
+                           A  1785    .line 293
+07D9 59FD0FD3              A  1786    	ANDX	4051,#-3
+07DD 8B 15                 A  1787    	JR	_4_L_41
+                           A  1788    ;  294	  
+                           A  1789    ;  295	  for(index = 0; index<size; index++)
+07DF                       A  1790    _4_L_42:
+                           A  1791    .line 295
+07DF 880EFE                A  1792    	LDX	R0,-2(RR14)
+07E2 881EFF                A  1793    	LDX	R1,-1(RR14)
+07E5 882E06                A  1794    	LDX	R2,6(RR14)
+07E8 883E07                A  1795    	LDX	R3,7(RR14)
+07EB A213                  A  1796    	CP	R1,R3
+07ED 1FA202                A  1797    	CPC	R0,R2
+07F0 1B 0E                 A  1798    	JR	LT,_4_L_44
+07F2 8B 41                 A  1799    	JR	_4_L_45
+07F4                       A  1800    _4_L_41:
+07F4 B0E0                  A  1801    	CLR	R0
+07F6 B0E1                  A  1802    	CLR	R1
+07F8 89E0FE                A  1803    	LDX	-2(RR14),R0
+07FB 89E1FF                A  1804    	LDX	-1(RR14),R1
+07FE 8B DF                 A  1805    	JR	_4_L_42
+0800                       A  1806    _4_L_44:
+                           A  1807    ;  296		putchar(buffer[index]);
+                           A  1808    .line 296
+0800 882EFE                A  1809    	LDX	R2,-2(RR14)
+0803 883EFF                A  1810    	LDX	R3,-1(RR14)
+0806 880E04                A  1811    	LDX	R0,4(RR14)
+0809 881E05                A  1812    	LDX	R1,5(RR14)
+080C 0213                  A  1813    	ADD	R1,R3
+080E 1202                  A  1814    	ADC	R0,R2
+0810 86E0E2                A  1815    	LDX	R2,@RR0
+0813 E4E2E0                A  1816    	LD	R0,R2
+0816 90E0                  A  1817    	RL	R0
+0818 3200                  A  1818    	SBC	R0,R0
+081A 70E2                  A  1819    	PUSH	R2
+081C 70E0                  A  1820    	PUSH	R0
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  36
+
+
+PC     Object              I  Line    Source tibbo.src
+081E D6 0000               A  1821    	CALL	_putchar
+0821 50E0                  A  1822    	POP	R0
+0823 50E0                  A  1823    	POP	R0
+                           A  1824    .line 295
+0825 880EFE                A  1825    	LDX	R0,-2(RR14)
+0828 881EFF                A  1826    	LDX	R1,-1(RR14)
+082B A0E0                  A  1827    	INCW	RR0
+082D 89E0FE                A  1828    	LDX	-2(RR14),R0
+0830 89E1FF                A  1829    	LDX	-1(RR14),R1
+                           A  1830    .line 296
+0833 8B AA                 A  1831    	JR	_4_L_42
+0835                       A  1832    _4_L_45:
+                           A  1833    ;  297	  
+                           A  1834    ;  298	  // Turn off TX light here
+                           A  1835    ;  299	  PAOUT |= TxLEDCtl;
+                           A  1836    .line 299
+0835 49020FD3              A  1837    	ORX	4051,#2
+                           A  1838    ;  300	}
+                           A  1839    .line 300
+0839 D6 0000               A  1840    	CALL	__b_framereset
+083C AF                    A  1841    	RET	
+                           A  1842    .endfunc "sendMsgTibbo",300,"_sendMsgTibbo"
+                           A  1843    	SEGMENT ROM_DATA
+                           A  1844    
+                           A  1845    
+                           A  1846    ;**************************** _resetTibbo *****
+                           A  1847    ;Name                         Addr/Register   S
+                           A  1848    ;_delay                              IMPORT  --
+                           A  1849    
+                           A  1850    
+                           A  1851    ; Aggregate Stack Size: 0 (words)
+                           A  1852    
+                           A  1853    
+                           A  1854    	.FRAME _n_resetTibbo,?_n_resetTibbo,RDATA
+                           A  1855    	.FCALL _n_delay
+                           A  1856    	.FRAME _f_resetTibbo,?_f_resetTibbo,EDATA
+                           A  1857    	.FCALL _f_delay
+                           A  1858    	SEGMENT tibbo_TEXT
+                           A  1859    ;  301	
+                           A  1860    ;  302	
+                           A  1861    ;  303	#if 0
+                           A  1862    ;  304	///////////////////////////////////////
+                           A  1863    ;  305	// Get message Tibboo
+                           A  1864    ;  306	// This function reads repsonses back f
+                           A  1865    ;  307	// module when it is in the programming
+                           A  1866    ;  308	// Return OK or ERROR if the message le
+                           A  1867    ;  309	// correct or not
+                           A  1868    ;  310	int getMsgTibbo(char* buffer, int count
+                           A  1869    ;  311	{
+                           A  1870    ;  312	  int index = 0;
+                           A  1871    ;  313	  int result = OK;
+                           A  1872    ;  314	  
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  37
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1873    ;  315	  // Turn on RX light here
+                           A  1874    ;  316	  PAOUT &= ~RxLEDCtl;
+                           A  1875    ;  317	  
+                           A  1876    ;  318	  // Store the data until the count is 
+                           A  1877    ;  319	  for (;;)
+                           A  1878    ;  320	  {
+                           A  1879    ;  321	    buffer[index++] = getc();
+                           A  1880    ;  322	    if (index >= count)
+                           A  1881    ;  323	    {
+                           A  1882    ;  324	      result = OK;
+                           A  1883    ;  325	      break;
+                           A  1884    ;  326	    }
+                           A  1885    ;  327	    
+                           A  1886    ;  328	    if (index > MAX_TIBBO_MSG_LENGTH)
+                           A  1887    ;  329	    {
+                           A  1888    ;  330	      result = ERROR;
+                           A  1889    ;  331	      break;
+                           A  1890    ;  332	    }
+                           A  1891    ;  333	  }
+                           A  1892    ;  334	
+                           A  1893    ;  335	  // Turn off RX light here
+                           A  1894    ;  336	  PAOUT |= RxLEDCtl;
+                           A  1895    ;  337	
+                           A  1896    ;  338	  return result;
+                           A  1897    ;  339	} // End of getMsgTibbo
+                           A  1898    ;  340	#endif
+                           A  1899    ;  341	
+                           A  1900    ;  342	///////////////////////////////////////
+                           A  1901    ;  343	// resetTibbo
+                           A  1902    ;  344	// This function resets the Tibbo Ether
+                           A  1903    ;  345	// module
+                           A  1904    ;  346	// Param none
+                           A  1905    ;  347	// Return none
+                           A  1906    ;  348	void resetTibbo(void)
+                           A  1907    ;  349	{
+083D                       A  1908    _resetTibbo:
+                           A  1909    .define "_resetTibbo"
+                           A  1910    .value _resetTibbo
+                           A  1911    .class 2
+                           A  1912    .type 65
+                           A  1913    .endef
+                           A  1914    .begfunc "resetTibbo",349,"_resetTibbo"
+083D D6 0000               A  1915    	CALL	__b_frameset00
+                           A  1916    ;  350	  PAOUT |= IP_RST;
+                           A  1917    .line 350
+0840 49040FD3              A  1918    	ORX	4051,#4
+                           A  1919    ;  351	  delay();
+                           A  1920    .line 351
+0844 D6 0000               A  1921    	CALL	_delay
+                           A  1922    ;  352	  PAOUT &= ~IP_RST;
+                           A  1923    .line 352
+0847 59FB0FD3              A  1924    	ANDX	4051,#-5
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  38
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1925    ;  353	}
+                           A  1926    .line 353
+084B D6 0000               A  1927    	CALL	__b_framereset
+084E AF                    A  1928    	RET	
+                           A  1929    .endfunc "resetTibbo",353,"_resetTibbo"
+                           A  1930    	SEGMENT ROM_DATA
+                           A  1931    
+                           A  1932    
+                           A  1933    ;**************************** _releaseTibboRese
+                           A  1934    ;Name                         Addr/Register   S
+                           A  1935    
+                           A  1936    
+                           A  1937    ; Aggregate Stack Size: 0 (words)
+                           A  1938    
+                           A  1939    
+                           A  1940    	.FRAME _n_releaseTibboReset,?_n_releaseTibb
+                           A  1941    	.FRAME _f_releaseTibboReset,?_f_releaseTibb
+                           A  1942    	SEGMENT tibbo_TEXT
+                           A  1943    ;  354	
+                           A  1944    ;  355	///////////////////////////////////////
+                           A  1945    ;  356	// releaseTibboReset
+                           A  1946    ;  357	// This function removes the reset from
+                           A  1947    ;  358	// Ethernet to RS232 serial module
+                           A  1948    ;  359	// Param none
+                           A  1949    ;  360	// Return none
+                           A  1950    ;  361	void releaseTibboReset(void)
+                           A  1951    ;  362	{
+084F                       A  1952    _releaseTibboReset:
+                           A  1953    .define "_releaseTibboReset"
+                           A  1954    .value _releaseTibboReset
+                           A  1955    .class 2
+                           A  1956    .type 65
+                           A  1957    .endef
+                           A  1958    .begfunc "releaseTibboReset",362,"_releaseTibbo
+084F D6 0000               A  1959    	CALL	__b_frameset00
+                           A  1960    ;  363	  PAOUT &= ~IP_RST;
+                           A  1961    .line 363
+0852 59FB0FD3              A  1962    	ANDX	4051,#-5
+                           A  1963    ;  364	}
+                           A  1964    .line 364
+0856 D6 0000               A  1965    	CALL	__b_framereset
+0859 AF                    A  1966    	RET	
+                           A  1967    .endfunc "releaseTibboReset",364,"_releaseTibbo
+                           A  1968    	SEGMENT ROM_DATA
+                           A  1969    
+                           A  1970    
+                           A  1971    ;**************************** _enableTibboSeria
+                           A  1972    ;Name                         Addr/Register   S
+                           A  1973    ;_clearAR                            IMPORT  --
+                           A  1974    ;_delay                              IMPORT  --
+                           A  1975    ;_setAR                              IMPORT  --
+                           A  1976    
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  39
+
+
+PC     Object              I  Line    Source tibbo.src
+                           A  1977    
+                           A  1978    ; Aggregate Stack Size: 0 (words)
+                           A  1979    
+                           A  1980    
+                           A  1981    	.FRAME _n_enableTibboSerialProgramming,?_n_
+                           A  1982    	.FCALL _n_setAR
+                           A  1983    	.FCALL _n_delay
+                           A  1984    	.FCALL _n_clearAR
+                           A  1985    	.FRAME _f_enableTibboSerialProgramming,?_f_
+                           A  1986    	.FCALL _f_setAR
+                           A  1987    	.FCALL _f_delay
+                           A  1988    	.FCALL _f_clearAR
+                           A  1989    	SEGMENT tibbo_TEXT
+                           A  1990    ;  365	
+                           A  1991    ;  366	///////////////////////////////////////
+                           A  1992    ;  367	// enableTibboSerialProgramming
+                           A  1993    ;  368	// This function sets the MD input on t
+                           A  1994    ;  369	// to serial module enabling programmin
+                           A  1995    ;  370	// port
+                           A  1996    ;  371	// Param none
+                           A  1997    ;  372	// Return none
+                           A  1998    ;  373	void enableTibboSerialProgramming(void)
+                           A  1999    ;  374	{
+085A                       A  2000    _enableTibboSerialProgramming:
+                           A  2001    .define "_enableTibboSerialProgramming"
+                           A  2002    .value _enableTibboSerialProgramming
+                           A  2003    .class 2
+                           A  2004    .type 65
+                           A  2005    .endef
+                           A  2006    .begfunc "enableTibboSerialProgramming",374,"_e
+085A D6 0000               A  2007    	CALL	__b_frameset00
+                           A  2008    ;  375		setAR(MD);
+                           A  2009    .line 375
+085D 1F7006                A  2010    	PUSH	#6
+0860 1F7000                A  2011    	PUSH	#0
+0863 D6 0000               A  2012    	CALL	_setAR
+0866 50E0                  A  2013    	POP	R0
+0868 50E0                  A  2014    	POP	R0
+                           A  2015    ;  376		delay();
+                           A  2016    .line 376
+086A D6 0000               A  2017    	CALL	_delay
+                           A  2018    ;  377		delay();
+                           A  2019    .line 377
+086D D6 0000               A  2020    	CALL	_delay
+                           A  2021    ;  378		delay();
+                           A  2022    .line 378
+0870 D6 0000               A  2023    	CALL	_delay
+                           A  2024    ;  379		delay();
+                           A  2025    .line 379
+0873 D6 0000               A  2026    	CALL	_delay
+                           A  2027    ;  380		clearAR();
+                           A  2028    .line 380
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:19     page:  40
+
+
+PC     Object              I  Line    Source tibbo.src
+0876 D6 0000               A  2029    	CALL	_clearAR
+                           A  2030    .line 381
+0879 D6 0000               A  2031    	CALL	__b_framereset
+087C AF                    A  2032    	RET	
+                           A  2033    .endfunc "enableTibboSerialProgramming",381,"_e
+                           A  2034    	XREF _readUart:ROM
+                           A  2035    	XREF _init_uart0:ROM
+                           A  2036    	XREF _cardAddress:EDATA
+                           A  2037    	XREF _mSecDelay:ROM
+                           A  2038    	XREF _delay:ROM
+                           A  2039    	XREF _clearAR:ROM
+                           A  2040    	XREF _setAR:ROM
+                           A  2041    	XREF _f_atoi:ROM
+                           A  2042    	XREF _f_memset:ROM
+                           A  2043    	XREF _f_f_strtok:ROM
+                           A  2044    	XREF _f_f_strncpy:ROM
+                           A  2045    	XREF _putchar:ROM
+                           A  2046    	XREF ___clr_print_fmt:ROM
+                           A  2047    	XREF __u_stoa:ROM
+                           A  2048    	XREF ___print_putch:ROM
+                           A  2049    	XREF __b_framereset:ROM
+                           A  2050    	XREF __b_frameset0:ROM
+                           A  2051    	XREF __b_frameset00:ROM
+                           A  2052    	XDEF _enableTibboSerialProgramming
+                           A  2053    	XDEF _releaseTibboReset
+                           A  2054    	XDEF _resetTibbo
+                           A  2055    	XDEF _sendMsgTibbo
+                           A  2056    	XDEF _checkIPAddr
+                           A  2057    	XDEF _parseIPAddrString
+                           A  2058    	XDEF _initTibbo
+                           A  2059    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 2060

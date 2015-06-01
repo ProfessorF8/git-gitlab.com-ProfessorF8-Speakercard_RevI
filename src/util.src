@@ -1,0 +1,3420 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE util_TEXT,SPACE=ROM
+	FILE	".\util.c"
+.debug "C"
+	SEGMENT ROM_DATA
+
+
+;**************************** _calculateChecksum ***************************
+;Name                         Addr/Register   Size   Type
+;cs                                  RR14-4      2   variable
+;index                               RR14-2      2   variable
+;command                             RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -4 (words)
+
+
+	.FRAME _n_calculateChecksum,?_n_calculateChecksum,RDATA
+	.FRAME _f_calculateChecksum,?_f_calculateChecksum,EDATA
+	SEGMENT util_TEXT
+;    1	#include <eZ8.h>
+;    2	#include "util.h"
+;    3	#include "init.h"
+;    4	#include "main.h"
+;    5	
+;    6	////////////////////////////////////////////////////////
+;    7	// Calculate checksum
+;    8	// This function calculates the checksum for the chars
+;    9	// between [ to the #
+;   10	// Param none
+;   11	// Return cs or ERROR
+;   12	int calculateChecksum(char* command)
+;   13	{
+_calculateChecksum:
+.define "_calculateChecksum"
+.value _calculateChecksum
+.class 2
+.type 67
+.endef
+.begfunc "calculateChecksum",13,"_calculateChecksum"
+.define "command"
+.class 9
+.value 4
+.type 162
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "cs"
+.class 1
+.value -4
+.type 3
+.endef
+	LD	R5,#4
+	CALL	__b_frameset0
+;   14	  int cs = 0;
+.line 14
+	CLR	R0
+	CLR	R1
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+;   15	  int index = 1;
+.line 15
+	CLR	R0
+	LD	R1,#1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;   16	  
+;   17	  while ('#' != command[index])
+_1_L_2:
+.line 17
+	LDX	R2,-2(RR14)
+	LDX	R3,-1(RR14)
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	ADD	R1,R3
+	ADC	R0,R2
+	LDX	R2,@RR0
+	LD	R0,R2
+	RL	R0
+	SBC	R0,R0
+	CP	R2,#35
+	CPC	R0,#-0
+	JR	Z,_1_L_4
+;   18	  {
+;   19	    cs += command[index++];
+.line 19
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R5,@RR2
+	LD	R2,R5
+	RL	R2
+	SBC	R2,R2
+	LDX	R4,-4(RR14)
+	LDX	R3,-3(RR14)
+	ADD	R3,R5
+	ADC	R4,R2
+	LDX	-4(RR14),R4
+	LDX	-3(RR14),R3
+	LDWX	RR2,RR0
+	INCW	RR2
+	LDX	-2(RR14),R2
+	LDX	-1(RR14),R3
+;   20	    if (index > MAX_COMMAND_LENGTH)
+.line 20
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#17
+	CPC	R0,#-0
+	JR	LE,_1_L_2
+;   21	    {
+;   22	      return ERROR;
+.line 22
+	LD	R0,#255
+	LD	R1,#255
+	JR	_1_L_5
+;   23	    }
+;   24	  }
+_1_L_4:
+.line 24
+;   25	  return cs;
+.line 25
+	LDX	R0,-4(RR14)
+	LDX	R1,-3(RR14)
+;   26	} // End of calculateChecksum
+_1_L_5:
+.line 26
+	CALL	__b_framereset
+	RET	
+.endfunc "calculateChecksum",26,"_calculateChecksum"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setICChannel ***************************
+;Name                         Addr/Register   Size   Type
+;_clearDataBus                       IMPORT  -----   function
+;_clearRD                            IMPORT  -----   function
+;_setDataBus                         IMPORT  -----   function
+;_setRD                              IMPORT  -----   function
+;channel                             RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setICChannel,?_n_setICChannel,RDATA
+	.FCALL _n_setRD
+	.FCALL _n_setDataBus
+	.FCALL _n_clearRD
+	.FCALL _n_clearDataBus
+	.FRAME _f_setICChannel,?_f_setICChannel,EDATA
+	.FCALL _f_setRD
+	.FCALL _f_setDataBus
+	.FCALL _f_clearRD
+	.FCALL _f_clearDataBus
+	SEGMENT util_TEXT
+;   27	
+;   28	////////////////////////////////////////////////////////
+;   29	// Set the Intercom Channel
+;   30	// Take a binary input and set the appropriate IC
+;   31	// channel.
+;   32	// Param channel IC channel to set
+;   33	// Return none
+;   34	void setICChannel(int channel)
+;   35	{
+_setICChannel:
+.define "_setICChannel"
+.value _setICChannel
+.class 2
+.type 65
+.endef
+.begfunc "setICChannel",35,"_setICChannel"
+.define "channel"
+.class 9
+.value 4
+.type 3
+.endef
+	CALL	__b_frameset00
+;   36	  // Set RD1
+;   37	  setRD(RD1);
+.line 37
+	PUSH	#1
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;   38	  setDataBus(channel & 0x00FF);
+.line 38
+	LDX	R0,5(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;   39	  asm("NOP");
+.line 39
+NOP
+;   40	  asm("NOP");
+.line 40
+NOP
+;   41	  asm("NOP");
+.line 41
+NOP
+;   42	  asm("NOP");
+.line 42
+NOP
+;   43	  clearRD();
+.line 43
+	CALL	_clearRD
+;   44	  clearDataBus();
+.line 44
+	CALL	_clearDataBus
+;   45	  // Set RD3
+;   46	  setRD(RD3);
+.line 46
+	PUSH	#3
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;   47	  setDataBus((channel & 0xFF00) >> 8);
+.line 47
+	LDX	R0,4(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;   48	  asm("NOP");
+.line 48
+NOP
+;   49	  asm("NOP");
+.line 49
+NOP
+;   50	  asm("NOP");
+.line 50
+NOP
+;   51	  asm("NOP");
+.line 51
+NOP
+;   52	  clearRD();
+.line 52
+	CALL	_clearRD
+;   53	  clearDataBus();
+.line 53
+	CALL	_clearDataBus
+;   54	}
+.line 54
+	CALL	__b_framereset
+	RET	
+.endfunc "setICChannel",54,"_setICChannel"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setZone ***************************
+;Name                         Addr/Register   Size   Type
+;_clearRD                            IMPORT  -----   function
+;_clearDataBus                       IMPORT  -----   function
+;_setDataBus                         IMPORT  -----   function
+;_setRD                              IMPORT  -----   function
+;channels                            RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setZone,?_n_setZone,RDATA
+	.FCALL _n_setRD
+	.FCALL _n_setDataBus
+	.FCALL _n_clearDataBus
+	.FCALL _n_clearRD
+	.FRAME _f_setZone,?_f_setZone,EDATA
+	.FCALL _f_setRD
+	.FCALL _f_setDataBus
+	.FCALL _f_clearDataBus
+	.FCALL _f_clearRD
+	SEGMENT util_TEXT
+;   55	
+;   56	////////////////////////////////////////////////////////
+;   57	// Set the zone relays
+;   58	// Take a binary input and set the zone relays
+;   59	// Param channels bits 0-15 corrispond to zone channel
+;   60	//                1-16
+;   61	// Return none
+;   62	void setZone(int channels)
+;   63	{
+_setZone:
+.define "_setZone"
+.value _setZone
+.class 2
+.type 65
+.endef
+.begfunc "setZone",63,"_setZone"
+.define "channels"
+.class 9
+.value 4
+.type 3
+.endef
+	CALL	__b_frameset00
+;   64	  // Set RD0
+;   65	  setRD(RD0);
+.line 65
+	PUSH	#0
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;   66	  setDataBus(channels & 0x00FF);
+.line 66
+	LDX	R0,5(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;   67	  asm("NOP");
+.line 67
+NOP
+;   68	  asm("NOP");
+.line 68
+NOP
+;   69	  asm("NOP");
+.line 69
+NOP
+;   70	  asm("NOP");
+.line 70
+NOP
+;   71	  clearDataBus();
+.line 71
+	CALL	_clearDataBus
+;   72	  clearRD();
+.line 72
+	CALL	_clearRD
+;   73	  // Set RD2
+;   74	  setRD(RD2);
+.line 74
+	PUSH	#2
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;   75	  setDataBus((channels & 0xFF00) >> 8);
+.line 75
+	LDX	R0,4(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;   76	  asm("NOP");
+.line 76
+NOP
+;   77	  asm("NOP");
+.line 77
+NOP
+;   78	  asm("NOP");
+.line 78
+NOP
+;   79	  asm("NOP");
+.line 79
+NOP
+;   80	  clearDataBus();
+.line 80
+	CALL	_clearDataBus
+;   81	  clearRD();
+.line 81
+	CALL	_clearRD
+;   82	}
+.line 82
+	CALL	__b_framereset
+	RET	
+.endfunc "setZone",82,"_setZone"
+	SEGMENT ROM_DATA
+
+
+;**************************** _updateSupervisor ***************************
+;Name                         Addr/Register   Size   Type
+;_latchingDelay                      IMPORT  -----   function
+;_setSupervisor                      IMPORT  -----   function
+;_clearSupervisor                    IMPORT  -----   function
+;channels                            RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_updateSupervisor,?_n_updateSupervisor,RDATA
+	.FCALL _n_clearSupervisor
+	.FCALL _n_setSupervisor
+	.FCALL _n_latchingDelay
+	.FRAME _f_updateSupervisor,?_f_updateSupervisor,EDATA
+	.FCALL _f_clearSupervisor
+	.FCALL _f_setSupervisor
+	.FCALL _f_latchingDelay
+	SEGMENT util_TEXT
+;   83	
+;   84	////////////////////////////////////////////////////////
+;   85	// Update supervisor relays
+;   86	// The supervisor relays are special dual latching
+;   87	// relays so this update function will need to be a little
+;   88	// more sophisticated.
+;   89	// Take a binary input and update the supervisor relays
+;   90	// Param channels bits 0-15 corrispond to supervisor channel
+;   91	//                1-16
+;   92	// Return none
+;   93	void updateSupervisor(int channels)
+;   94	{
+_updateSupervisor:
+.define "_updateSupervisor"
+.value _updateSupervisor
+.class 2
+.type 65
+.endef
+.begfunc "updateSupervisor",94,"_updateSupervisor"
+.define "channels"
+.class 9
+.value 4
+.type 3
+.endef
+	CALL	__b_frameset00
+;   95	  // Flip the supervisor relays that are being used for intercom first
+;   96	  clearSupervisor(channels);  
+.line 96
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_clearSupervisor
+	POP	R0
+	POP	R0
+;   97	
+;   98	  // Flop the supervisor relays that are not being used for intercom
+;   99	  setSupervisor(~channels);
+.line 99
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	COM	R0
+	COM	R1
+	PUSH	R1
+	PUSH	R0
+	CALL	_setSupervisor
+	POP	R0
+	POP	R0
+;  100	  
+;  101	  // Wait long enough for the relays to switch
+;  102	  latchingDelay();
+.line 102
+	CALL	_latchingDelay
+;  103	  
+;  104	  // Clear the drivers
+;  105	  setSupervisor(0x0000);
+.line 105
+	PUSH	#0
+	PUSH	#0
+	CALL	_setSupervisor
+	POP	R0
+	POP	R0
+;  106	  clearSupervisor(0x0000);  
+.line 106
+	PUSH	#0
+	PUSH	#0
+	CALL	_clearSupervisor
+	POP	R0
+	POP	R0
+;  107	}
+.line 107
+	CALL	__b_framereset
+	RET	
+.endfunc "updateSupervisor",107,"_updateSupervisor"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setSupervisor ***************************
+;Name                         Addr/Register   Size   Type
+;_clearRD                            IMPORT  -----   function
+;_clearDataBus                       IMPORT  -----   function
+;_setDataBus                         IMPORT  -----   function
+;_setRD                              IMPORT  -----   function
+;lowByte                             RR14-4      1   variable
+;hiByte                              RR14-3      1   variable
+;index                               RR14-2      2   variable
+;channels                            RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -4 (words)
+
+
+	.FRAME _n_setSupervisor,?_n_setSupervisor,RDATA
+	.FCALL _n_setRD
+	.FCALL _n_setDataBus
+	.FCALL _n_clearDataBus
+	.FCALL _n_clearRD
+	.FRAME _f_setSupervisor,?_f_setSupervisor,EDATA
+	.FCALL _f_setRD
+	.FCALL _f_setDataBus
+	.FCALL _f_clearDataBus
+	.FCALL _f_clearRD
+	SEGMENT util_TEXT
+;  108	
+;  109	////////////////////////////////////////////////////////
+;  110	// Set the supervisor relays
+;  111	// Take a binary input and set the supervisor relays
+;  112	// Param channels bits 0-15 corrispond to supervisor channel
+;  113	//                1-16
+;  114	// Return none
+;  115	void setSupervisor(int channels)
+;  116	{
+_setSupervisor:
+.define "_setSupervisor"
+.value _setSupervisor
+.class 2
+.type 65
+.endef
+.begfunc "setSupervisor",116,"_setSupervisor"
+.define "channels"
+.class 9
+.value 4
+.type 3
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "hiByte"
+.class 1
+.value -3
+.type 12
+.endef
+.define "lowByte"
+.class 1
+.value -4
+.type 12
+.endef
+	LD	R5,#4
+	CALL	__b_frameset0
+;  117	  int index;
+;  118	  unsigned char hiByte = 0;
+.line 118
+	CLR	R0
+	LDX	-3(RR14),R0
+;  119	  unsigned char lowByte = 0;
+.line 119
+	CLR	R0
+	LDX	-4(RR14),R0
+	JR	_5_L_10
+;  120	  
+;  121	  for (index = 0; index < 8; index++)
+_5_L_11:
+.line 121
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#8
+	CPC	R0,#-0
+	JR	LT,_5_L_13
+	JR	_5_L_14
+_5_L_10:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_5_L_11
+_5_L_13:
+;  122	  {
+;  123	    lowByte |= ((channels >> index * 2) & 0x0001) << index;
+.line 123
+	LDX	R0,-1(RR14)
+	ADD	R0,R0
+	LDX	R2,4(RR14)
+	LDX	R1,5(RR14)
+	OR	R0,R0
+	JR	Z,L__11
+L__12:
+	SRA	R2
+	RRC	R1
+	DJNZ	R0,L__12
+L__11:
+	AND	R1,#1
+	CLR	R2
+	LD	R0,R1
+	LDX	R1,-1(RR14)
+	OR	R1,R1
+	JR	Z,L__13
+L__14:
+	ADD	R0,R0
+	ADC	R2,R2
+	DJNZ	R1,L__14
+L__13:
+	LDX	R1,-4(RR14)
+	OR	R0,R1
+	LDX	-4(RR14),R0
+;  124	    hiByte  |= ((channels >> (index * 2) + 1) & 0x0001) << index;
+.line 124
+	LDX	R1,-1(RR14)
+	ADD	R1,R1
+	LD	R0,#1
+	ADD	R0,R1
+	LDX	R2,4(RR14)
+	LDX	R1,5(RR14)
+	OR	R0,R0
+	JR	Z,L__15
+L__16:
+	SRA	R2
+	RRC	R1
+	DJNZ	R0,L__16
+L__15:
+	AND	R1,#1
+	CLR	R2
+	LD	R0,R1
+	LDX	R1,-1(RR14)
+	OR	R1,R1
+	JR	Z,L__17
+L__18:
+	ADD	R0,R0
+	ADC	R2,R2
+	DJNZ	R1,L__18
+L__17:
+	LDX	R1,-3(RR14)
+	OR	R0,R1
+	LDX	-3(RR14),R0
+.line 121
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  125	  }
+.line 125
+	JR	_5_L_11
+_5_L_14:
+;  126	
+;  127	  // Set RD6
+;  128	  setRD(RD6);
+.line 128
+	PUSH	#6
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;  129	  setDataBus(lowByte);
+.line 129
+	LDX	R0,-4(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;  130	  asm("NOP");
+.line 130
+NOP
+;  131	  asm("NOP");
+.line 131
+NOP
+;  132	  asm("NOP");
+.line 132
+NOP
+;  133	  asm("NOP");
+.line 133
+NOP
+;  134	  clearDataBus();
+.line 134
+	CALL	_clearDataBus
+;  135	  clearRD();
+.line 135
+	CALL	_clearRD
+;  136	  // Set RD7
+;  137	  setRD(RD7);
+.line 137
+	PUSH	#7
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;  138	  setDataBus(hiByte);
+.line 138
+	LDX	R0,-3(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;  139	  asm("NOP");
+.line 139
+NOP
+;  140	  asm("NOP");
+.line 140
+NOP
+;  141	  asm("NOP");
+.line 141
+NOP
+;  142	  asm("NOP");
+.line 142
+NOP
+;  143	  clearDataBus();
+.line 143
+	CALL	_clearDataBus
+;  144	  clearRD();
+.line 144
+	CALL	_clearRD
+;  145	}
+.line 145
+	CALL	__b_framereset
+	RET	
+.endfunc "setSupervisor",145,"_setSupervisor"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearSupervisor ***************************
+;Name                         Addr/Register   Size   Type
+;_clearRD                            IMPORT  -----   function
+;_clearDataBus                       IMPORT  -----   function
+;_setDataBus                         IMPORT  -----   function
+;_setRD                              IMPORT  -----   function
+;lowByte                             RR14-4      1   variable
+;hiByte                              RR14-3      1   variable
+;index                               RR14-2      2   variable
+;channels                            RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -4 (words)
+
+
+	.FRAME _n_clearSupervisor,?_n_clearSupervisor,RDATA
+	.FCALL _n_setRD
+	.FCALL _n_setDataBus
+	.FCALL _n_clearDataBus
+	.FCALL _n_clearRD
+	.FRAME _f_clearSupervisor,?_f_clearSupervisor,EDATA
+	.FCALL _f_setRD
+	.FCALL _f_setDataBus
+	.FCALL _f_clearDataBus
+	.FCALL _f_clearRD
+	SEGMENT util_TEXT
+;  146	
+;  147	////////////////////////////////////////////////////////
+;  148	// Clear the supervisor relays
+;  149	// Take a binary input and set the supervisor relays
+;  150	// Param channels bits 0-15 corrispond to supervisor channel
+;  151	//                1-16
+;  152	// Return none
+;  153	void clearSupervisor(int channels)
+;  154	{
+_clearSupervisor:
+.define "_clearSupervisor"
+.value _clearSupervisor
+.class 2
+.type 65
+.endef
+.begfunc "clearSupervisor",154,"_clearSupervisor"
+.define "channels"
+.class 9
+.value 4
+.type 3
+.endef
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "hiByte"
+.class 1
+.value -3
+.type 12
+.endef
+.define "lowByte"
+.class 1
+.value -4
+.type 12
+.endef
+	LD	R5,#4
+	CALL	__b_frameset0
+;  155	  int index;
+;  156	  unsigned char hiByte = 0;
+.line 156
+	CLR	R0
+	LDX	-3(RR14),R0
+;  157	  unsigned char lowByte = 0;
+.line 157
+	CLR	R0
+	LDX	-4(RR14),R0
+	JR	_6_L_17
+;  158	  
+;  159	  for (index = 0; index < 8; index++)
+_6_L_18:
+.line 159
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#8
+	CPC	R0,#-0
+	JR	LT,_6_L_20
+	JR	_6_L_21
+_6_L_17:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_6_L_18
+_6_L_20:
+;  160	  {
+;  161	    lowByte |= ((channels >> index * 2) & 0x0001) << index;
+.line 161
+	LDX	R0,-1(RR14)
+	ADD	R0,R0
+	LDX	R2,4(RR14)
+	LDX	R1,5(RR14)
+	OR	R0,R0
+	JR	Z,L__22
+L__23:
+	SRA	R2
+	RRC	R1
+	DJNZ	R0,L__23
+L__22:
+	AND	R1,#1
+	CLR	R2
+	LD	R0,R1
+	LDX	R1,-1(RR14)
+	OR	R1,R1
+	JR	Z,L__24
+L__25:
+	ADD	R0,R0
+	ADC	R2,R2
+	DJNZ	R1,L__25
+L__24:
+	LDX	R1,-4(RR14)
+	OR	R0,R1
+	LDX	-4(RR14),R0
+;  162	    hiByte  |= ((channels >> (index * 2) + 1) & 0x0001) << index;
+.line 162
+	LDX	R1,-1(RR14)
+	ADD	R1,R1
+	LD	R0,#1
+	ADD	R0,R1
+	LDX	R2,4(RR14)
+	LDX	R1,5(RR14)
+	OR	R0,R0
+	JR	Z,L__26
+L__27:
+	SRA	R2
+	RRC	R1
+	DJNZ	R0,L__27
+L__26:
+	AND	R1,#1
+	CLR	R2
+	LD	R0,R1
+	LDX	R1,-1(RR14)
+	OR	R1,R1
+	JR	Z,L__28
+L__29:
+	ADD	R0,R0
+	ADC	R2,R2
+	DJNZ	R1,L__29
+L__28:
+	LDX	R1,-3(RR14)
+	OR	R0,R1
+	LDX	-3(RR14),R0
+.line 159
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  163	  }
+.line 163
+	JR	_6_L_18
+_6_L_21:
+;  164	  
+;  165	  // Set RD4
+;  166	  setRD(RD4);
+.line 166
+	PUSH	#4
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;  167	  setDataBus(lowByte);
+.line 167
+	LDX	R0,-4(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;  168	  asm("NOP");
+.line 168
+NOP
+;  169	  asm("NOP");
+.line 169
+NOP
+;  170	  asm("NOP");
+.line 170
+NOP
+;  171	  asm("NOP");
+.line 171
+NOP
+;  172	  clearDataBus();
+.line 172
+	CALL	_clearDataBus
+;  173	  clearRD();
+.line 173
+	CALL	_clearRD
+;  174	  // Set RD5
+;  175	  setRD(RD5);
+.line 175
+	PUSH	#5
+	PUSH	#0
+	CALL	_setRD
+	POP	R0
+	POP	R0
+;  176	  setDataBus(hiByte);
+.line 176
+	LDX	R0,-3(RR14)
+	PUSH	R0
+	PUSH	#0
+	CALL	_setDataBus
+	POP	R0
+	POP	R0
+;  177	  asm("NOP");
+.line 177
+NOP
+;  178	  asm("NOP");
+.line 178
+NOP
+;  179	  asm("NOP");
+.line 179
+NOP
+;  180	  asm("NOP");
+.line 180
+NOP
+;  181	  clearDataBus();
+.line 181
+	CALL	_clearDataBus
+;  182	  clearRD();
+.line 182
+	CALL	_clearRD
+;  183	}
+.line 183
+	CALL	__b_framereset
+	RET	
+.endfunc "clearSupervisor",183,"_clearSupervisor"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setDataBus ***************************
+;Name                         Addr/Register   Size   Type
+;data                                RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setDataBus,?_n_setDataBus,RDATA
+	.FRAME _f_setDataBus,?_f_setDataBus,EDATA
+	SEGMENT util_TEXT
+;  184	
+;  185	////////////////////////////////////////////////////////
+;  186	// Output data on the Databus
+;  187	// Param data value to be output on port c
+;  188	// Return none
+;  189	void setDataBus(int data)
+;  190	{
+_setDataBus:
+.define "_setDataBus"
+.value _setDataBus
+.class 2
+.type 65
+.endef
+.begfunc "setDataBus",190,"_setDataBus"
+.define "data"
+.class 9
+.value 4
+.type 3
+.endef
+	CALL	__b_frameset00
+;  191	  // Set Port C to Outputs
+;  192		PCADDR = DATADIR;   // Port C Data Dir = input: updated
+.line 192
+	LDX	4056,#1
+;  193		PCCTL  = 0x00;      // Port C Set to outputs
+.line 193
+	LDX	4057,#-0
+;  194		PCADDR = NOFUNC;    // Clear Subregister Pointer
+.line 194
+	LDX	4056,#-0
+;  195	  PCOUT  = data;
+.line 195
+	LDX	R0,5(RR14)
+	LDX	4059,R0
+;  196	}
+.line 196
+	CALL	__b_framereset
+	RET	
+.endfunc "setDataBus",196,"_setDataBus"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearDataBus ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_clearDataBus,?_n_clearDataBus,RDATA
+	.FRAME _f_clearDataBus,?_f_clearDataBus,EDATA
+	SEGMENT util_TEXT
+;  197	
+;  198	////////////////////////////////////////////////////////
+;  199	// Clear the Databus
+;  200	// Switch Port C back to inputs abd set outputs to 0
+;  201	// Param none
+;  202	// Return none
+;  203	void clearDataBus(void)
+;  204	{
+_clearDataBus:
+.define "_clearDataBus"
+.value _clearDataBus
+.class 2
+.type 65
+.endef
+.begfunc "clearDataBus",204,"_clearDataBus"
+	CALL	__b_frameset00
+;  205	  // Set Port C to Inputs
+;  206		PCADDR = DATADIR;   // Port C Data Dir = input: updated
+.line 206
+	LDX	4056,#1
+;  207		PCCTL  = 0xFF;      // Port C Set to inputs
+.line 207
+	LDX	4057,#255
+;  208		PCADDR = NOFUNC;    // Clear Subregister Pointer
+.line 208
+	LDX	4056,#-0
+;  209	  PCOUT  = 0x00;
+.line 209
+	LDX	4059,#-0
+;  210	}
+.line 210
+	CALL	__b_framereset
+	RET	
+.endfunc "clearDataBus",210,"_clearDataBus"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setRD ***************************
+;Name                         Addr/Register   Size   Type
+;address                             RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setRD,?_n_setRD,RDATA
+	.FRAME _f_setRD,?_f_setRD,EDATA
+	SEGMENT util_TEXT
+;  211	
+;  212	////////////////////////////////////////////////////////
+;  213	// Set the RD set of address selects
+;  214	// Param address of the chip selecct to set
+;  215	// 0 = zone relays 1-8
+;  216	// 1 = IC relays 1-8
+;  217	// 2 = zone relays 9-16
+;  218	// 3 = IC relays 9-16
+;  219	// 4 = set sup relays 1-8
+;  220	// 5 = set sup relays 9-16
+;  221	// 6 = clear sup relays 1-8
+;  222	// 7 = clear sup relays 9-16
+;  223	// Return none
+;  224	void setRD(int address)
+;  225	{ 
+_setRD:
+.define "_setRD"
+.value _setRD
+.class 2
+.type 65
+.endef
+.begfunc "setRD",225,"_setRD"
+.define "address"
+.class 9
+.value 4
+.type 3
+.endef
+	CALL	__b_frameset00
+;  226	  // Set the address bits first
+;  227	  PBOUT = PBOUT & 0x8F;
+.line 227
+	ANDX	4055,#143
+;  228	  PBOUT = PBOUT | ((address << 4) & 0x70);
+.line 228
+	LDX	R1,4(RR14)
+	LDX	R0,5(RR14)
+	LD	R2,#4
+L__36:
+	ADD	R0,R0
+	ADC	R1,R1
+	DJNZ	R2,L__36
+	AND	R0,#112
+	LDX	R1,4055
+	OR	R0,R1
+	LDX	4055,R0
+;  229	  
+;  230	  asm("NOP");
+.line 230
+NOP
+;  231	  asm("NOP");
+.line 231
+NOP
+;  232	  asm("NOP");
+.line 232
+NOP
+;  233	  
+;  234	  // Set the enable
+;  235	  PBOUT &= ~R_EN_L;
+.line 235
+	ANDX	4055,#127
+;  236	  
+;  237	  asm("NOP");
+.line 237
+NOP
+;  238	  asm("NOP");
+.line 238
+NOP
+;  239	  asm("NOP");
+.line 239
+NOP
+;  240	}
+.line 240
+	CALL	__b_framereset
+	RET	
+.endfunc "setRD",240,"_setRD"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearRD ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_clearRD,?_n_clearRD,RDATA
+	.FRAME _f_clearRD,?_f_clearRD,EDATA
+	SEGMENT util_TEXT
+;  241	
+;  242	////////////////////////////////////////////////////////
+;  243	// Clear the RD set of address selects
+;  244	// Param none
+;  245	// Return none
+;  246	void clearRD(void)
+;  247	{
+_clearRD:
+.define "_clearRD"
+.value _clearRD
+.class 2
+.type 65
+.endef
+.begfunc "clearRD",247,"_clearRD"
+	CALL	__b_frameset00
+;  248	  // Clear the enable
+;  249	  PBOUT |= R_EN_L;
+.line 249
+	ORX	4055,#128
+;  250	  asm("NOP");
+.line 250
+NOP
+;  251	  asm("NOP");
+.line 251
+NOP
+;  252	  asm("NOP");
+.line 252
+NOP
+;  253	  PBOUT = 0xFF;
+.line 253
+	LDX	4055,#255
+;  254	  asm("NOP");
+.line 254
+NOP
+;  255	  asm("NOP");
+.line 255
+NOP
+;  256	  asm("NOP");
+.line 256
+NOP
+;  257	}
+.line 257
+	CALL	__b_framereset
+	RET	
+.endfunc "clearRD",257,"_clearRD"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setAR ***************************
+;Name                         Addr/Register   Size   Type
+;address                             RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setAR,?_n_setAR,RDATA
+	.FRAME _f_setAR,?_f_setAR,EDATA
+	SEGMENT util_TEXT
+;  258	
+;  259	////////////////////////////////////////////////////////
+;  260	// Set the AR set of address selects
+;  261	// Param address of the chip selecct to set
+;  262	// 0 = 
+;  263	// 1 = 
+;  264	// 2 = 
+;  265	// 3 = 
+;  266	// 4 = read sup status channels 1-8
+;  267	// 5 = read sup status channels 9-16
+;  268	// Return none
+;  269	void setAR(int address)
+;  270	{ 
+_setAR:
+.define "_setAR"
+.value _setAR
+.class 2
+.type 65
+.endef
+.begfunc "setAR",270,"_setAR"
+.define "address"
+.class 9
+.value 4
+.type 3
+.endef
+	CALL	__b_frameset00
+;  271	  // Set the address bits first
+;  272	  PBOUT = PBOUT & 0xF8;
+.line 272
+	ANDX	4055,#248
+;  273	  PBOUT = PBOUT | (address & 0x07);
+.line 273
+	LDX	R0,5(RR14)
+	AND	R0,#7
+	LDX	R1,4055
+	OR	R0,R1
+	LDX	4055,R0
+;  274	  
+;  275	  asm("NOP");
+.line 275
+NOP
+;  276	  asm("NOP");
+.line 276
+NOP
+;  277	  asm("NOP");
+.line 277
+NOP
+;  278	  
+;  279	  // Set the enable
+;  280	  PBOUT &= ~A_EN_L;
+.line 280
+	ANDX	4055,#-9
+;  281	  
+;  282	  asm("NOP");
+.line 282
+NOP
+;  283	  asm("NOP");
+.line 283
+NOP
+;  284	  asm("NOP");
+.line 284
+NOP
+;  285	}
+.line 285
+	CALL	__b_framereset
+	RET	
+.endfunc "setAR",285,"_setAR"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearAR ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_clearAR,?_n_clearAR,RDATA
+	.FRAME _f_clearAR,?_f_clearAR,EDATA
+	SEGMENT util_TEXT
+;  286	
+;  287	////////////////////////////////////////////////////////
+;  288	// Clear the AR set of address selects
+;  289	// Param none
+;  290	// Return none
+;  291	void clearAR(void)
+;  292	{
+_clearAR:
+.define "_clearAR"
+.value _clearAR
+.class 2
+.type 65
+.endef
+.begfunc "clearAR",292,"_clearAR"
+	CALL	__b_frameset00
+;  293	  // Clear the enable
+;  294	  PBOUT |= A_EN_L;
+.line 294
+	ORX	4055,#8
+;  295	  asm("NOP");
+.line 295
+NOP
+;  296	  asm("NOP");
+.line 296
+NOP
+;  297	  asm("NOP");
+.line 297
+NOP
+;  298	  PBOUT = 0xFF;
+.line 298
+	LDX	4055,#255
+;  299	  asm("NOP");
+.line 299
+NOP
+;  300	  asm("NOP");
+.line 300
+NOP
+;  301	  asm("NOP");
+.line 301
+NOP
+;  302	}
+.line 302
+	CALL	__b_framereset
+	RET	
+.endfunc "clearAR",302,"_clearAR"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setClkCor1Ctl ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setClkCor1Ctl,?_n_setClkCor1Ctl,RDATA
+	.FRAME _f_setClkCor1Ctl,?_f_setClkCor1Ctl,EDATA
+	SEGMENT util_TEXT
+;  303	
+;  304	////////////////////////////////////////////////////////
+;  305	// Close the Clock Correction 1 relay
+;  306	// Param none
+;  307	// Return none
+;  308	void setClkCor1Ctl(void)
+;  309	{
+_setClkCor1Ctl:
+.define "_setClkCor1Ctl"
+.value _setClkCor1Ctl
+.class 2
+.type 65
+.endef
+.begfunc "setClkCor1Ctl",309,"_setClkCor1Ctl"
+	CALL	__b_frameset00
+;  310		// Set Clock Control 1
+;  311		PDOUT |= CLK_COR1_CTL;
+.line 311
+	ORX	4063,#1
+;  312	}
+.line 312
+	CALL	__b_framereset
+	RET	
+.endfunc "setClkCor1Ctl",312,"_setClkCor1Ctl"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearClkCor1Ctl ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_clearClkCor1Ctl,?_n_clearClkCor1Ctl,RDATA
+	.FRAME _f_clearClkCor1Ctl,?_f_clearClkCor1Ctl,EDATA
+	SEGMENT util_TEXT
+;  313	
+;  314	////////////////////////////////////////////////////////
+;  315	// Open the Clock Correction 1 relay
+;  316	// Param none
+;  317	// Return none
+;  318	void clearClkCor1Ctl(void)
+;  319	{
+_clearClkCor1Ctl:
+.define "_clearClkCor1Ctl"
+.value _clearClkCor1Ctl
+.class 2
+.type 65
+.endef
+.begfunc "clearClkCor1Ctl",319,"_clearClkCor1Ctl"
+	CALL	__b_frameset00
+;  320		// Set Clock Control 1
+;  321		PDOUT &= ~CLK_COR1_CTL;
+.line 321
+	ANDX	4063,#-2
+;  322	}
+.line 322
+	CALL	__b_framereset
+	RET	
+.endfunc "clearClkCor1Ctl",322,"_clearClkCor1Ctl"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setClkCor2Ctl ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setClkCor2Ctl,?_n_setClkCor2Ctl,RDATA
+	.FRAME _f_setClkCor2Ctl,?_f_setClkCor2Ctl,EDATA
+	SEGMENT util_TEXT
+;  323	
+;  324	////////////////////////////////////////////////////////
+;  325	// Close the Clock Correction 2 relay
+;  326	// Param none
+;  327	// Return none
+;  328	void setClkCor2Ctl(void)
+;  329	{
+_setClkCor2Ctl:
+.define "_setClkCor2Ctl"
+.value _setClkCor2Ctl
+.class 2
+.type 65
+.endef
+.begfunc "setClkCor2Ctl",329,"_setClkCor2Ctl"
+	CALL	__b_frameset00
+;  330		// Set Clock Control 2
+;  331		PDOUT |= CLK_COR2_CTL;
+.line 331
+	ORX	4063,#2
+;  332	}
+.line 332
+	CALL	__b_framereset
+	RET	
+.endfunc "setClkCor2Ctl",332,"_setClkCor2Ctl"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearClkCor2Ctl ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_clearClkCor2Ctl,?_n_clearClkCor2Ctl,RDATA
+	.FRAME _f_clearClkCor2Ctl,?_f_clearClkCor2Ctl,EDATA
+	SEGMENT util_TEXT
+;  333	
+;  334	////////////////////////////////////////////////////////
+;  335	// Open the Clock Correction 2 relay
+;  336	// Param none
+;  337	// Return none
+;  338	void clearClkCor2Ctl(void)
+;  339	{
+_clearClkCor2Ctl:
+.define "_clearClkCor2Ctl"
+.value _clearClkCor2Ctl
+.class 2
+.type 65
+.endef
+.begfunc "clearClkCor2Ctl",339,"_clearClkCor2Ctl"
+	CALL	__b_frameset00
+;  340		// Set Clock Control 2
+;  341		PDOUT &= ~CLK_COR2_CTL;
+.line 341
+	ANDX	4063,#-3
+;  342	}
+.line 342
+	CALL	__b_framereset
+	RET	
+.endfunc "clearClkCor2Ctl",342,"_clearClkCor2Ctl"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setPgmRlyCtl ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setPgmRlyCtl,?_n_setPgmRlyCtl,RDATA
+	.FRAME _f_setPgmRlyCtl,?_f_setPgmRlyCtl,EDATA
+	SEGMENT util_TEXT
+;  343	
+;  344	////////////////////////////////////////////////////////
+;  345	// Set the Program relay to the Zone bus
+;  346	// Param none
+;  347	// Return none
+;  348	void setPgmRlyCtl(void)
+;  349	{
+_setPgmRlyCtl:
+.define "_setPgmRlyCtl"
+.value _setPgmRlyCtl
+.class 2
+.type 65
+.endef
+.begfunc "setPgmRlyCtl",349,"_setPgmRlyCtl"
+	CALL	__b_frameset00
+;  350		// Set PGM_RLY_CTL 
+;  351		PDOUT |= PGM_RLY_CTL;
+.line 351
+	ORX	4063,#64
+;  352	}
+.line 352
+	CALL	__b_framereset
+	RET	
+.endfunc "setPgmRlyCtl",352,"_setPgmRlyCtl"
+	SEGMENT ROM_DATA
+
+
+;**************************** _clearPgmRlyCtl ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_clearPgmRlyCtl,?_n_clearPgmRlyCtl,RDATA
+	.FRAME _f_clearPgmRlyCtl,?_f_clearPgmRlyCtl,EDATA
+	SEGMENT util_TEXT
+;  353	
+;  354	////////////////////////////////////////////////////////
+;  355	// Set the Program relay to the All Call/Program bus
+;  356	// Param none
+;  357	// Return none
+;  358	void clearPgmRlyCtl(void)
+;  359	{
+_clearPgmRlyCtl:
+.define "_clearPgmRlyCtl"
+.value _clearPgmRlyCtl
+.class 2
+.type 65
+.endef
+.begfunc "clearPgmRlyCtl",359,"_clearPgmRlyCtl"
+	CALL	__b_frameset00
+;  360		// Set PGM_RLY_CTL
+;  361		PDOUT &= ~PGM_RLY_CTL;
+.line 361
+	ANDX	4063,#-65
+;  362	}
+.line 362
+	CALL	__b_framereset
+	RET	
+.endfunc "clearPgmRlyCtl",362,"_clearPgmRlyCtl"
+	SEGMENT ROM_DATA
+
+
+;**************************** _readAddress ***************************
+;Name                         Addr/Register   Size   Type
+;data                                RR14-5      2   variable
+;flipped                             RR14-3      1   variable
+;index                               RR14-2      2   variable
+
+
+; Aggregate Stack Size: -5 (words)
+
+
+	.FRAME _n_readAddress,?_n_readAddress,RDATA
+	.FRAME _f_readAddress,?_f_readAddress,EDATA
+	SEGMENT util_TEXT
+;  363	
+;  364	////////////////////////////////////////////////////////
+;  365	// Read the external address switch
+;  366	// Param none
+;  367	// Return data the 8 bit switch value
+;  368	unsigned char readAddress(void)
+;  369	{
+_readAddress:
+.define "_readAddress"
+.value _readAddress
+.class 2
+.type 76
+.endef
+.begfunc "readAddress",369,"_readAddress"
+.define "index"
+.class 1
+.value -2
+.type 3
+.endef
+.define "flipped"
+.class 1
+.value -3
+.type 12
+.endef
+.define "data"
+.class 1
+.value -5
+.type 3
+.endef
+	LD	R5,#5
+	CALL	__b_frameset0
+;  370	  // Initialize Port A
+;  371	  // PA0 R_OE      OUTPUT  0 = Enable 1 = Disable
+;  372	  // PA1 TxLEDCtl  OUTPUT	 0 = ON     1 = OFF
+;  373	  // PA2 IP_RST    OUTPUT  0 = Normal 1 = Reset
+;  374	  // PA3 RxLEDCtl  OUTPUT  0 = ON     1 = OFF
+;  375	  // PA4 IP_RX     Alternate Function     
+;  376	  // PA5 IP_TX     Alternate Function
+;  377	  // PA6 SYSTEM_ID INPUT
+;  378	  // PA7 ADD_EN    OUTPUT
+;  379	  
+;  380	  int data;
+;  381	  unsigned char flipped = 0;
+.line 381
+	CLR	R0
+	LDX	-3(RR14),R0
+;  382	  int index;
+;  383	  
+;  384	  // Set the enable
+;  385	  PAOUT &= ~ADD_EN;
+.line 385
+	ANDX	4051,#127
+;  386	  
+;  387	  asm("NOP");
+.line 387
+NOP
+;  388	  asm("NOP");
+.line 388
+NOP
+;  389	  asm("NOP");
+.line 389
+NOP
+;  390	  asm("NOP");
+.line 390
+NOP
+;  391	  
+;  392	  // Read the data
+;  393	  data = PCIN;
+.line 393
+	LDX	R0,4058
+	CLR	R1
+	LDX	-5(RR14),R1
+	LDX	-4(RR14),R0
+;  394	
+;  395	  asm("NOP");
+.line 395
+NOP
+;  396	  asm("NOP");
+.line 396
+NOP
+;  397	
+;  398	  // Clear the enable
+;  399	  PAOUT |= ADD_EN;
+.line 399
+	ORX	4051,#128
+	JR	_19_L_36
+;  400	
+;  401	  for (index=0; index<8; index++)
+_19_L_37:
+.line 401
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#8
+	CPC	R0,#-0
+	JR	LT,_19_L_39
+	JR	_19_L_40
+_19_L_36:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_19_L_37
+_19_L_39:
+;  402	  {
+;  403	  flipped |= ((data >> index) & 0x01) << (7 - index);
+.line 403
+	LDX	R1,-5(RR14)
+	LDX	R2,-4(RR14)
+	LDX	R0,-1(RR14)
+	OR	R0,R0
+	JR	Z,L__58
+L__59:
+	SRA	R1
+	RRC	R2
+	DJNZ	R0,L__59
+L__58:
+	AND	R2,#1
+	LDX	R1,-1(RR14)
+	LD	R0,#7
+	SUB	R0,R1
+	CLR	R3
+	LD	R1,R2
+	OR	R0,R0
+	JR	Z,L__60
+L__61:
+	ADD	R1,R1
+	ADC	R3,R3
+	DJNZ	R0,L__61
+L__60:
+	LDX	R0,-3(RR14)
+	OR	R1,R0
+	LDX	-3(RR14),R1
+.line 401
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  404	  }
+.line 404
+	JR	_19_L_37
+_19_L_40:
+;  405	
+;  406	  return flipped;
+.line 406
+	LDX	R0,-3(RR14)
+;  407	}
+.line 407
+	CALL	__b_framereset
+	RET	
+.endfunc "readAddress",407,"_readAddress"
+	SEGMENT ROM_DATA
+
+
+;**************************** _readCallButtons ***************************
+;Name                         Addr/Register   Size   Type
+;_clearAR                            IMPORT  -----   function
+;_setAR                              IMPORT  -----   function
+;data                                RR14-2      2   variable
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_readCallButtons,?_n_readCallButtons,RDATA
+	.FCALL _n_setAR
+	.FCALL _n_clearAR
+	.FRAME _f_readCallButtons,?_f_readCallButtons,EDATA
+	.FCALL _f_setAR
+	.FCALL _f_clearAR
+	SEGMENT util_TEXT
+;  408	
+;  409	int readCallButtons(void)
+;  410	{
+_readCallButtons:
+.define "_readCallButtons"
+.value _readCallButtons
+.class 2
+.type 67
+.endef
+.begfunc "readCallButtons",410,"_readCallButtons"
+.define "data"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+;  411	  int data = 0;
+.line 411
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  412	
+;  413	  // Set AR3
+;  414	  setAR(AR3);
+.line 414
+	PUSH	#3
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  415	  asm("NOP");
+.line 415
+NOP
+;  416	  asm("NOP");
+.line 416
+NOP
+;  417	  asm("NOP");
+.line 417
+NOP
+;  418	  asm("NOP");
+.line 418
+NOP
+;  419	  data = data | PCIN;
+.line 419
+	LDX	R1,4058
+	LDX	R0,-1(RR14)
+	OR	R0,R1
+	LDX	-1(RR14),R0
+	LDX	R0,-2(RR14)
+	LDX	-2(RR14),R0
+;  420	  asm("NOP");
+.line 420
+NOP
+;  421	  asm("NOP");
+.line 421
+NOP
+;  422	  clearAR();
+.line 422
+	CALL	_clearAR
+;  423	  data = data << 8;
+.line 423
+	LDX	R0,-1(RR14)
+	LDX	-2(RR14),R0
+	CLR	R0
+	LDX	-1(RR14),R0
+;  424	  // Set AR2
+;  425	  setAR(AR2);
+.line 425
+	PUSH	#2
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  426	  asm("NOP");
+.line 426
+NOP
+;  427	  asm("NOP");
+.line 427
+NOP
+;  428	  asm("NOP");
+.line 428
+NOP
+;  429	  asm("NOP");
+.line 429
+NOP
+;  430	  data = data | PCIN;
+.line 430
+	LDX	R1,4058
+	LDX	R0,-1(RR14)
+	OR	R0,R1
+	LDX	-1(RR14),R0
+	LDX	R0,-2(RR14)
+	LDX	-2(RR14),R0
+;  431	  asm("NOP");
+.line 431
+NOP
+;  432	  asm("NOP");
+.line 432
+NOP
+;  433	  clearAR();
+.line 433
+	CALL	_clearAR
+;  434	  return data;
+.line 434
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+;  435	}
+.line 435
+	CALL	__b_framereset
+	RET	
+.endfunc "readCallButtons",435,"_readCallButtons"
+	SEGMENT ROM_DATA
+
+
+;**************************** _readPrivStatus ***************************
+;Name                         Addr/Register   Size   Type
+;_clearAR                            IMPORT  -----   function
+;_setAR                              IMPORT  -----   function
+;data                                RR14-2      2   variable
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_readPrivStatus,?_n_readPrivStatus,RDATA
+	.FCALL _n_setAR
+	.FCALL _n_clearAR
+	.FRAME _f_readPrivStatus,?_f_readPrivStatus,EDATA
+	.FCALL _f_setAR
+	.FCALL _f_clearAR
+	SEGMENT util_TEXT
+;  436	
+;  437	int readPrivStatus(void)
+;  438	{
+_readPrivStatus:
+.define "_readPrivStatus"
+.value _readPrivStatus
+.class 2
+.type 67
+.endef
+.begfunc "readPrivStatus",438,"_readPrivStatus"
+.define "data"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+;  439	  int data = 0;
+.line 439
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  440	
+;  441	  // Set AR1
+;  442	  setAR(AR1);
+.line 442
+	PUSH	#1
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  443	  asm("NOP");
+.line 443
+NOP
+;  444	  asm("NOP");
+.line 444
+NOP
+;  445	  asm("NOP");
+.line 445
+NOP
+;  446	  asm("NOP");
+.line 446
+NOP
+;  447	  data = data | PCIN;
+.line 447
+	LDX	R1,4058
+	LDX	R0,-1(RR14)
+	OR	R0,R1
+	LDX	-1(RR14),R0
+	LDX	R0,-2(RR14)
+	LDX	-2(RR14),R0
+;  448	  asm("NOP");
+.line 448
+NOP
+;  449	  asm("NOP");
+.line 449
+NOP
+;  450	  clearAR();
+.line 450
+	CALL	_clearAR
+;  451	  data = data << 8;
+.line 451
+	LDX	R0,-1(RR14)
+	LDX	-2(RR14),R0
+	CLR	R0
+	LDX	-1(RR14),R0
+;  452	  // Set AR0
+;  453	  setAR(AR0);
+.line 453
+	PUSH	#0
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  454	  asm("NOP");
+.line 454
+NOP
+;  455	  asm("NOP");
+.line 455
+NOP
+;  456	  asm("NOP");
+.line 456
+NOP
+;  457	  asm("NOP");
+.line 457
+NOP
+;  458	  data = data | PCIN;
+.line 458
+	LDX	R1,4058
+	LDX	R0,-1(RR14)
+	OR	R0,R1
+	LDX	-1(RR14),R0
+	LDX	R0,-2(RR14)
+	LDX	-2(RR14),R0
+;  459	  asm("NOP");
+.line 459
+NOP
+;  460	  asm("NOP");
+.line 460
+NOP
+;  461	  clearAR();
+.line 461
+	CALL	_clearAR
+;  462	  return data;
+.line 462
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+;  463	}
+.line 463
+	CALL	__b_framereset
+	RET	
+.endfunc "readPrivStatus",463,"_readPrivStatus"
+	SEGMENT ROM_DATA
+
+
+;**************************** _readSupStatus ***************************
+;Name                         Addr/Register   Size   Type
+;_clearAR                            IMPORT  -----   function
+;_setAR                              IMPORT  -----   function
+;data                                RR14-2      2   variable
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_readSupStatus,?_n_readSupStatus,RDATA
+	.FCALL _n_setAR
+	.FCALL _n_clearAR
+	.FRAME _f_readSupStatus,?_f_readSupStatus,EDATA
+	.FCALL _f_setAR
+	.FCALL _f_clearAR
+	SEGMENT util_TEXT
+;  464	
+;  465	int readSupStatus(void)
+;  466	{
+_readSupStatus:
+.define "_readSupStatus"
+.value _readSupStatus
+.class 2
+.type 67
+.endef
+.begfunc "readSupStatus",466,"_readSupStatus"
+.define "data"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+;  467	  int data = 0;
+.line 467
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  468	
+;  469	  // Set AR5
+;  470	  setAR(AR2);
+.line 470
+	PUSH	#2
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  471	  asm("NOP");
+.line 471
+NOP
+;  472	  asm("NOP");
+.line 472
+NOP
+;  473	  asm("NOP");
+.line 473
+NOP
+;  474	  asm("NOP");
+.line 474
+NOP
+;  475	  data = data | PCIN;
+.line 475
+	LDX	R1,4058
+	LDX	R0,-1(RR14)
+	OR	R0,R1
+	LDX	-1(RR14),R0
+	LDX	R0,-2(RR14)
+	LDX	-2(RR14),R0
+;  476	  asm("NOP");
+.line 476
+NOP
+;  477	  asm("NOP");
+.line 477
+NOP
+;  478	  clearAR();
+.line 478
+	CALL	_clearAR
+;  479	  data = data << 8;
+.line 479
+	LDX	R0,-1(RR14)
+	LDX	-2(RR14),R0
+	CLR	R0
+	LDX	-1(RR14),R0
+;  480	  // Set AR4
+;  481	  setAR(AR0);
+.line 481
+	PUSH	#0
+	PUSH	#0
+	CALL	_setAR
+	POP	R0
+	POP	R0
+;  482	  asm("NOP");
+.line 482
+NOP
+;  483	  asm("NOP");
+.line 483
+NOP
+;  484	  asm("NOP");
+.line 484
+NOP
+;  485	  asm("NOP");
+.line 485
+NOP
+;  486	  data = data | PCIN;
+.line 486
+	LDX	R1,4058
+	LDX	R0,-1(RR14)
+	OR	R0,R1
+	LDX	-1(RR14),R0
+	LDX	R0,-2(RR14)
+	LDX	-2(RR14),R0
+;  487	  asm("NOP");
+.line 487
+NOP
+;  488	  asm("NOP");
+.line 488
+NOP
+;  489	  clearAR();
+.line 489
+	CALL	_clearAR
+;  490	  return data;
+.line 490
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+;  491	}
+.line 491
+	CALL	__b_framereset
+	RET	
+.endfunc "readSupStatus",491,"_readSupStatus"
+	SEGMENT ROM_DATA
+
+
+;**************************** _delay ***************************
+;Name                         Addr/Register   Size   Type
+;y                                   RR14-4      2   variable
+;x                                   RR14-2      2   variable
+
+
+; Aggregate Stack Size: -4 (words)
+
+
+	.FRAME _n_delay,?_n_delay,RDATA
+	.FRAME _f_delay,?_f_delay,EDATA
+	SEGMENT util_TEXT
+;  492	
+;  493	////////////////////////////////////////////////////////
+;  494	// Delay loop
+;  495	// Param none
+;  496	// Return none
+;  497	void delay(void)
+;  498	{
+_delay:
+.define "_delay"
+.value _delay
+.class 2
+.type 65
+.endef
+.begfunc "delay",498,"_delay"
+.define "x"
+.class 1
+.value -2
+.type 3
+.endef
+.define "y"
+.class 1
+.value -4
+.type 3
+.endef
+	LD	R5,#4
+	CALL	__b_frameset0
+.line 498
+	JR	_23_L_51
+;  499	  int x, y;
+;  500	  for (x = 0; x < 1; x++)
+_23_L_52:
+.line 500
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#1
+	CPC	R0,#-0
+	JR	LT,_23_L_47
+	JR	_23_L_55
+_23_L_51:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_23_L_52
+;  501	  {
+;  502	    for (y = 0; y < 10000; y++)
+_23_L_48:
+.line 502
+	LDX	R0,-4(RR14)
+	LDX	R1,-3(RR14)
+	CP	R1,#16
+	CPC	R0,#39
+	JR	LT,_23_L_50
+	JR	_23_L_53
+_23_L_47:
+	CLR	R0
+	CLR	R1
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+	JR	_23_L_48
+_23_L_50:
+	LDX	R0,-4(RR14)
+	LDX	R1,-3(RR14)
+	INCW	RR0
+	LDX	-4(RR14),R0
+	LDX	-3(RR14),R1
+;  503	    {
+;  504	    }
+.line 504
+	JR	_23_L_48
+;  505	  }
+_23_L_53:
+.line 505
+.line 500
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+.line 505
+	JR	_23_L_52
+;  506	}
+_23_L_55:
+.line 506
+	CALL	__b_framereset
+	RET	
+.endfunc "delay",506,"_delay"
+	SEGMENT ROM_DATA
+
+
+;**************************** _mSecDelay ***************************
+;Name                         Addr/Register   Size   Type
+;_uSecDelay                          IMPORT  -----   function
+;x                                   RR14-2      2   variable
+;mSeconds                            RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_mSecDelay,?_n_mSecDelay,RDATA
+	.FCALL _n_uSecDelay
+	.FRAME _f_mSecDelay,?_f_mSecDelay,EDATA
+	.FCALL _f_uSecDelay
+	SEGMENT util_TEXT
+;  507	
+;  508	////////////////////////////////////////////////////////
+;  509	// uSecDelay
+;  510	// Param mSeconds - Number of milliseconds to delay
+;  511	// Return none
+;  512	void mSecDelay(int mSeconds)
+;  513	{
+_mSecDelay:
+.define "_mSecDelay"
+.value _mSecDelay
+.class 2
+.type 65
+.endef
+.begfunc "mSecDelay",513,"_mSecDelay"
+.define "mSeconds"
+.class 9
+.value 4
+.type 3
+.endef
+.define "x"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+.line 513
+	JR	_24_L_57
+;  514	  int x;
+;  515	  for (x = 0; x < mSeconds; x++)
+_24_L_58:
+.line 515
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	LT,_24_L_60
+	JR	_24_L_61
+_24_L_57:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_24_L_58
+_24_L_60:
+;  516	  {
+;  517	    uSecDelay(1000);
+.line 517
+	PUSH	#232
+	PUSH	#3
+	CALL	_uSecDelay
+	POP	R0
+	POP	R0
+.line 515
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  518	  }	
+.line 518
+	JR	_24_L_58
+;  519	}
+_24_L_61:
+.line 519
+	CALL	__b_framereset
+	RET	
+.endfunc "mSecDelay",519,"_mSecDelay"
+	SEGMENT ROM_DATA
+
+
+;**************************** _uSecDelay ***************************
+;Name                         Addr/Register   Size   Type
+;x                                   RR14-2      2   variable
+;uSeconds                            RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_uSecDelay,?_n_uSecDelay,RDATA
+	.FRAME _f_uSecDelay,?_f_uSecDelay,EDATA
+	SEGMENT util_TEXT
+;  520	
+;  521	////////////////////////////////////////////////////////
+;  522	// uSecDelay
+;  523	// Param uSeconds - Number of microseconds to delay
+;  524	// Return none
+;  525	void uSecDelay(int uSeconds)
+;  526	{
+_uSecDelay:
+.define "_uSecDelay"
+.value _uSecDelay
+.class 2
+.type 65
+.endef
+.begfunc "uSecDelay",526,"_uSecDelay"
+.define "uSeconds"
+.class 9
+.value 4
+.type 3
+.endef
+.define "x"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+.line 526
+	JR	_25_L_63
+;  527	  int x;
+;  528	  for (x = 0; x < uSeconds; x++)
+_25_L_64:
+.line 528
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	CP	R1,R3
+	CPC	R0,R2
+	JR	LT,_25_L_66
+	JR	_25_L_67
+_25_L_63:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_25_L_64
+_25_L_66:
+;  529	  {
+;  530	    // Each NOP is approx 54.25ns. 1 cycle at 18.432Mhz
+;  531	    // To get a 1us delay. 16 NOPS plus a couple cycles
+;  532	    // each loop for the decrement jump not zero instruction
+;  533	    asm("NOP"); 
+.line 533
+NOP
+;  534	    asm("NOP"); 
+.line 534
+NOP
+;  535	    asm("NOP"); 
+.line 535
+NOP
+;  536	    asm("NOP"); 
+.line 536
+NOP
+;  537	    asm("NOP"); 
+.line 537
+NOP
+;  538	    asm("NOP"); 
+.line 538
+NOP
+;  539	    asm("NOP"); 
+.line 539
+NOP
+;  540	    asm("NOP"); 
+.line 540
+NOP
+;  541	    asm("NOP"); 
+.line 541
+NOP
+;  542	    asm("NOP"); 
+.line 542
+NOP
+;  543	    asm("NOP"); 
+.line 543
+NOP
+;  544	    asm("NOP"); 
+.line 544
+NOP
+;  545	    asm("NOP"); 
+.line 545
+NOP
+;  546	    asm("NOP"); 
+.line 546
+NOP
+;  547	    asm("NOP"); 
+.line 547
+NOP
+;  548	    asm("NOP"); 
+.line 548
+NOP
+.line 528
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  549	  }
+.line 549
+	JR	_25_L_64
+;  550	}
+_25_L_67:
+.line 550
+	CALL	__b_framereset
+	RET	
+.endfunc "uSecDelay",550,"_uSecDelay"
+	SEGMENT ROM_DATA
+
+
+;**************************** _latchingDelay ***************************
+;Name                         Addr/Register   Size   Type
+;x                                   RR14-2      2   variable
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_latchingDelay,?_n_latchingDelay,RDATA
+	.FRAME _f_latchingDelay,?_f_latchingDelay,EDATA
+	SEGMENT util_TEXT
+;  551	
+;  552	////////////////////////////////////////////////////////
+;  553	// latchingDelay
+;  554	// Param none
+;  555	// Return none
+;  556	void latchingDelay(void)
+;  557	{
+_latchingDelay:
+.define "_latchingDelay"
+.value _latchingDelay
+.class 2
+.type 65
+.endef
+.begfunc "latchingDelay",557,"_latchingDelay"
+.define "x"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+.line 557
+	JR	_26_L_69
+;  558	  int x;
+;  559	  for (x = 0; x < 18432; x++)
+_26_L_70:
+.line 559
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#0
+	CPC	R0,#72
+	JR	LT,_26_L_72
+	JR	_26_L_73
+_26_L_69:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_26_L_70
+_26_L_72:
+;  560	  {
+;  561	    // Each NOP is approx 54.25ns. 1 cycle at 18.432Mhz
+;  562	    // To get a 10ms delay for the latching relays to
+;  563	    // switch we must loop 18432 times through this
+;  564	    // loop that is approximately 542ns long. 8 NOPS
+;  565	    // plus a couple cycles each loop for the decrement
+;  566	    // jump not zero instruction
+;  567	    asm("NOP"); 
+.line 567
+NOP
+;  568	    asm("NOP"); 
+.line 568
+NOP
+;  569	    asm("NOP"); 
+.line 569
+NOP
+;  570	    asm("NOP"); 
+.line 570
+NOP
+;  571	    asm("NOP"); 
+.line 571
+NOP
+;  572	    asm("NOP"); 
+.line 572
+NOP
+;  573	    asm("NOP"); 
+.line 573
+NOP
+;  574	    asm("NOP"); 
+.line 574
+NOP
+.line 559
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  575	  }
+.line 575
+	JR	_26_L_70
+;  576	}
+_26_L_73:
+.line 576
+	CALL	__b_framereset
+	RET	
+.endfunc "latchingDelay",576,"_latchingDelay"
+	SEGMENT ROM_DATA
+
+
+;**************************** _rs485Delay ***************************
+;Name                         Addr/Register   Size   Type
+;x                                   RR14-2      2   variable
+
+
+; Aggregate Stack Size: -2 (words)
+
+
+	.FRAME _n_rs485Delay,?_n_rs485Delay,RDATA
+	.FRAME _f_rs485Delay,?_f_rs485Delay,EDATA
+	SEGMENT util_TEXT
+;  577	
+;  578	////////////////////////////////////////////////////////
+;  579	// rs485Delay
+;  580	// Param none
+;  581	// Return none
+;  582	void rs485Delay(void)
+;  583	{
+_rs485Delay:
+.define "_rs485Delay"
+.value _rs485Delay
+.class 2
+.type 65
+.endef
+.begfunc "rs485Delay",583,"_rs485Delay"
+.define "x"
+.class 1
+.value -2
+.type 3
+.endef
+	LD	R5,#2
+	CALL	__b_frameset0
+.line 583
+	JR	_27_L_75
+;  584	  int x;
+;  585	  for (x = 0; x < 5050; x++)
+_27_L_76:
+.line 585
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	CP	R1,#186
+	CPC	R0,#19
+	JR	LT,_27_L_78
+	JR	_27_L_79
+_27_L_75:
+	CLR	R0
+	CLR	R1
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+	JR	_27_L_76
+_27_L_78:
+;  586	  {
+;  587	    // Each NOP is approx 54.25ns. 1 cycle at 18.432Mhz
+;  588	    // To get a 10ms delay for the latching relays to
+;  589	    // switch we must loop 18432 times through this
+;  590	    // loop that is approximately 542ns long. 8 NOPS
+;  591	    // plus a couple cycles each loop for the decrement
+;  592	    // jump not zero instruction
+;  593	    asm("NOP"); 
+.line 593
+NOP
+;  594	    asm("NOP"); 
+.line 594
+NOP
+;  595	    asm("NOP"); 
+.line 595
+NOP
+;  596	    asm("NOP"); 
+.line 596
+NOP
+;  597	    asm("NOP"); 
+.line 597
+NOP
+;  598	    asm("NOP"); 
+.line 598
+NOP
+;  599	    asm("NOP"); 
+.line 599
+NOP
+;  600	    asm("NOP"); 
+.line 600
+NOP
+.line 585
+	LDX	R0,-2(RR14)
+	LDX	R1,-1(RR14)
+	INCW	RR0
+	LDX	-2(RR14),R0
+	LDX	-1(RR14),R1
+;  601	  }
+.line 601
+	JR	_27_L_76
+;  602	}
+_27_L_79:
+.line 602
+	CALL	__b_framereset
+	RET	
+.endfunc "rs485Delay",602,"_rs485Delay"
+	SEGMENT ROM_DATA
+;	Jump Table for Switch Statement at line 614
+L__86:
+	DW	16
+	DW	48
+	DW	_28_L_80
+	DW	49
+	DW	_28_L_81
+	DW	50
+	DW	_28_L_82
+	DW	51
+	DW	_28_L_83
+	DW	52
+	DW	_28_L_84
+	DW	53
+	DW	_28_L_85
+	DW	54
+	DW	_28_L_86
+	DW	55
+	DW	_28_L_87
+	DW	56
+	DW	_28_L_88
+	DW	57
+	DW	_28_L_89
+	DW	65
+	DW	_28_L_90
+	DW	66
+	DW	_28_L_91
+	DW	67
+	DW	_28_L_92
+	DW	68
+	DW	_28_L_93
+	DW	69
+	DW	_28_L_94
+	DW	70
+	DW	_28_L_95
+	DW	_28_L_96
+
+
+;**************************** _asciiToNib ***************************
+;Name                         Addr/Register   Size   Type
+;result                              RR14-1      1   variable
+;buffer                              RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -1 (words)
+
+
+	.FRAME _n_asciiToNib,?_n_asciiToNib,RDATA
+	.FRAME _f_asciiToNib,?_f_asciiToNib,EDATA
+	SEGMENT util_TEXT
+;  603	
+;  604	////////////////////////////////////////////////////////
+;  605	// asciiToNib
+;  606	// This function converts the ascii hex character 
+;  607	// to an integer value
+;  608	// Param buffer - ascii hex char
+;  609	// Return char - integer value
+;  610	char asciiToNib(char* buffer)
+;  611	{
+_asciiToNib:
+.define "_asciiToNib"
+.value _asciiToNib
+.class 2
+.type 66
+.endef
+.begfunc "asciiToNib",611,"_asciiToNib"
+.define "buffer"
+.class 9
+.value 4
+.type 162
+.endef
+.define "result"
+.class 1
+.value -1
+.type 2
+.endef
+	LD	R5,#1
+	CALL	__b_frameset0
+;  612	  char result = 0;
+.line 612
+	CLR	R0
+	LDX	-1(RR14),R0
+;  613	  
+;  614	  switch (*buffer)
+.line 614
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	LDX	R1,@RR2
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	LD	R2,#high(L__86)
+	LD	R3,#low(L__86)
+	CALL	__b_ucase
+	JP	@RR0
+;  615	  {
+;  616	    case '0' :
+_28_L_80:
+.line 616
+;  617	      result = 0x0;
+.line 617
+	CLR	R0
+	LDX	-1(RR14),R0
+;  618	      break;
+.line 618
+	JR	_28_L_97
+;  619	    case '1' :
+_28_L_81:
+.line 619
+;  620	      result = 0x1;
+.line 620
+	LD	R0,#1
+	LDX	-1(RR14),R0
+;  621	      break;
+.line 621
+	JR	_28_L_97
+;  622	    case '2' :
+_28_L_82:
+.line 622
+;  623	      result = 0x2;
+.line 623
+	LD	R0,#2
+	LDX	-1(RR14),R0
+;  624	      break;
+.line 624
+	JR	_28_L_97
+;  625	    case '3' :
+_28_L_83:
+.line 625
+;  626	      result = 0x3;
+.line 626
+	LD	R0,#3
+	LDX	-1(RR14),R0
+;  627	      break;
+.line 627
+	JR	_28_L_97
+;  628	    case '4' :
+_28_L_84:
+.line 628
+;  629	      result = 0x4;
+.line 629
+	LD	R0,#4
+	LDX	-1(RR14),R0
+;  630	      break;
+.line 630
+	JR	_28_L_97
+;  631	    case '5' :
+_28_L_85:
+.line 631
+;  632	      result = 0x5;
+.line 632
+	LD	R0,#5
+	LDX	-1(RR14),R0
+;  633	      break;
+.line 633
+	JR	_28_L_97
+;  634	    case '6' :
+_28_L_86:
+.line 634
+;  635	      result = 0x6;
+.line 635
+	LD	R0,#6
+	LDX	-1(RR14),R0
+;  636	      break;
+.line 636
+	JR	_28_L_97
+;  637	    case '7' :
+_28_L_87:
+.line 637
+;  638	      result = 0x7;
+.line 638
+	LD	R0,#7
+	LDX	-1(RR14),R0
+;  639	      break;
+.line 639
+	JR	_28_L_97
+;  640	    case '8' :
+_28_L_88:
+.line 640
+;  641	      result = 0x8;
+.line 641
+	LD	R0,#8
+	LDX	-1(RR14),R0
+;  642	      break;
+.line 642
+	JR	_28_L_97
+;  643	    case '9' :
+_28_L_89:
+.line 643
+;  644	      result = 0x9;
+.line 644
+	LD	R0,#9
+	LDX	-1(RR14),R0
+;  645	      break;
+.line 645
+	JR	_28_L_97
+;  646	    case 'A' :
+_28_L_90:
+.line 646
+;  647	      result = 0xA;
+.line 647
+	LD	R0,#10
+	LDX	-1(RR14),R0
+;  648	      break;
+.line 648
+	JR	_28_L_97
+;  649	    case 'B' :
+_28_L_91:
+.line 649
+;  650	      result = 0xB;
+.line 650
+	LD	R0,#11
+	LDX	-1(RR14),R0
+;  651	      break;
+.line 651
+	JR	_28_L_97
+;  652	    case 'C' :
+_28_L_92:
+.line 652
+;  653	      result = 0xC;
+.line 653
+	LD	R0,#12
+	LDX	-1(RR14),R0
+;  654	      break;
+.line 654
+	JR	_28_L_97
+;  655	    case 'D' :
+_28_L_93:
+.line 655
+;  656	      result = 0xD;
+.line 656
+	LD	R0,#13
+	LDX	-1(RR14),R0
+;  657	      break;
+.line 657
+	JR	_28_L_97
+;  658	    case 'E' :
+_28_L_94:
+.line 658
+;  659	      result = 0xE;
+.line 659
+	LD	R0,#14
+	LDX	-1(RR14),R0
+;  660	      break;
+.line 660
+	JR	_28_L_97
+;  661	    case 'F' :
+_28_L_95:
+.line 661
+;  662	      result = 0xF;
+.line 662
+	LD	R0,#15
+	LDX	-1(RR14),R0
+;  663	      break;
+.line 663
+	JR	_28_L_97
+;  664	    default :
+_28_L_96:
+.line 664
+;  665	      result = 0x0;
+.line 665
+	CLR	R0
+	LDX	-1(RR14),R0
+;  666	  }
+_28_L_97:
+.line 666
+;  667	  
+;  668	  return result;
+.line 668
+	LDX	R0,-1(RR14)
+;  669	}
+.line 669
+	CALL	__b_framereset
+	RET	
+.endfunc "asciiToNib",669,"_asciiToNib"
+	SEGMENT ROM_DATA
+
+
+;**************************** _asciiToChar ***************************
+;Name                         Addr/Register   Size   Type
+;_asciiToNib                         IMPORT  -----   function
+;result                              RR14-1      1   variable
+;buffer                              RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -1 (words)
+
+
+	.FRAME _n_asciiToChar,?_n_asciiToChar,RDATA
+	.FCALL _n_asciiToNib
+	.FRAME _f_asciiToChar,?_f_asciiToChar,EDATA
+	.FCALL _f_asciiToNib
+	SEGMENT util_TEXT
+;  670	
+;  671	////////////////////////////////////////////////////////
+;  672	// asciiToChar
+;  673	// This function converts the tw digit ascii hex
+;  674	// character string to an integer value
+;  675	// Param buffer - two ascii hex chars
+;  676	// Return char - integer value
+;  677	char asciiToChar(char* buffer)
+;  678	{
+_asciiToChar:
+.define "_asciiToChar"
+.value _asciiToChar
+.class 2
+.type 66
+.endef
+.begfunc "asciiToChar",678,"_asciiToChar"
+.define "buffer"
+.class 9
+.value 4
+.type 162
+.endef
+.define "result"
+.class 1
+.value -1
+.type 2
+.endef
+	LD	R5,#1
+	CALL	__b_frameset0
+;  679	  char result = 0;
+.line 679
+	CLR	R0
+	LDX	-1(RR14),R0
+;  680	  result = asciiToNib(&buffer[1]);
+.line 680
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	LEA	RR4,1(RR2)
+	LD	R0,R4
+	PUSH	R5
+	PUSH	R0
+	CALL	_asciiToNib
+	POP	R1
+	POP	R1
+	LDX	-1(RR14),R0
+;  681	  result |= (asciiToNib(&buffer[0]) << 4);
+.line 681
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	PUSH	R3
+	PUSH	R2
+	CALL	_asciiToNib
+	POP	R1
+	POP	R1
+	LD	R1,R0
+	RL	R1
+	SBC	R1,R1
+	LD	R2,R0
+	LD	R0,#4
+L__89:
+	ADD	R2,R2
+	ADC	R1,R1
+	DJNZ	R0,L__89
+	LDX	R0,-1(RR14)
+	OR	R2,R0
+	LDX	-1(RR14),R2
+;  682	  return result;
+.line 682
+	LDX	R0,-1(RR14)
+;  683	}
+.line 683
+	CALL	__b_framereset
+	RET	
+.endfunc "asciiToChar",683,"_asciiToChar"
+	SEGMENT ROM_DATA
+_0temp100:
+	DB	48
+	DB	49
+	DB	50
+	DB	51
+	DB	52
+	DB	53
+	DB	54
+	DB	55
+	DB	56
+	DB	56
+	DB	65
+	DB	66
+	DB	67
+	DB	68
+	DB	69
+	DB	70
+
+
+;**************************** _nibToAscii ***************************
+;Name                         Addr/Register   Size   Type
+;_0temp100                           STATIC     16   variable
+;translate                          RR14-16     16   variable
+;src                                 RR14+6      1   parameter
+;dst                                 RR14+4      2   parameter
+
+
+; Aggregate Stack Size: -16 (words)
+
+
+	.FRAME _n_nibToAscii,?_n_nibToAscii,RDATA
+	.FRAME _f_nibToAscii,?_f_nibToAscii,EDATA
+	SEGMENT util_TEXT
+;  684	
+;  685	////////////////////////////////////////////////////////
+;  686	// nibToAscii
+;  687	// This function takes a pointer and char. It converts
+;  688	// the char lower 4 bits to one hex characters and
+;  689	// stores it at the pointer address
+;  690	// Param dst - pointer to buffer location
+;  691	// Param src - character to convert to ascii hex
+;  692	// Return none
+;  693	void nibToAscii(char* dst, char src)
+;  694	{
+_nibToAscii:
+.define "_nibToAscii"
+.value _nibToAscii
+.class 2
+.type 65
+.endef
+.begfunc "nibToAscii",694,"_nibToAscii"
+.define "dst"
+.class 9
+.value 4
+.type 162
+.endef
+.define "src"
+.class 9
+.value 6
+.type 2
+.endef
+.define "translate"
+.class 1
+.value -16
+.dim 16
+.type 98
+.endef
+	LD	R5,#16
+	CALL	__b_frameset0
+;  695	  char translate[] = {'0', '1', '2', '3', '4', '5', '6', '7',
+;  696	                      '8', '8', 'A', 'B', 'C', 'D', 'E', 'F'};
+.line 696
+	LD	R4,#16
+	LEA	RR2,240(RR14)
+	LD	R0,#high(_0temp100)
+	LD	R1,#low(_0temp100)
+L__93:
+	LDC	R5,@RR0
+	LDX	@RR2,R5
+	INCW	RR2
+	INCW	RR0
+	DJNZ	R4,L__93
+;  697	  *dst = translate[src & 0x0F];
+.line 697
+	LDX	R1,6(RR14)
+	AND	R1,#15
+	LD	R0,R1
+	RL	R0
+	SBC	R0,R0
+	LEA	RR2,240(RR14)
+	ADD	R3,R1
+	ADC	R2,R0
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	LDX	R4,@RR2
+	LDX	@RR0,R4
+;  698	}
+.line 698
+	CALL	__b_framereset
+	RET	
+.endfunc "nibToAscii",698,"_nibToAscii"
+	SEGMENT ROM_DATA
+
+
+;**************************** _charToAscii ***************************
+;Name                         Addr/Register   Size   Type
+;_nibToAscii                         IMPORT  -----   function
+;src                                 RR14+6      1   parameter
+;dst                                 RR14+4      2   parameter
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_charToAscii,?_n_charToAscii,RDATA
+	.FCALL _n_nibToAscii
+	.FRAME _f_charToAscii,?_f_charToAscii,EDATA
+	.FCALL _f_nibToAscii
+	SEGMENT util_TEXT
+;  699	
+;  700	////////////////////////////////////////////////////////
+;  701	// charToAscii
+;  702	// This function takes a pointer and char. It converts
+;  703	// the char to two hex characters and stores them at the
+;  704	// pointer address
+;  705	// Param dst - pointer to buffer location
+;  706	// Param src - character to convert to ascii hex
+;  707	// Return none
+;  708	void charToAscii(char* dst, char src)
+;  709	{
+_charToAscii:
+.define "_charToAscii"
+.value _charToAscii
+.class 2
+.type 65
+.endef
+.begfunc "charToAscii",709,"_charToAscii"
+.define "dst"
+.class 9
+.value 4
+.type 162
+.endef
+.define "src"
+.class 9
+.value 6
+.type 2
+.endef
+	CALL	__b_frameset00
+;  710	  nibToAscii(dst++, (src & 0xF0) >> 4);
+.line 710
+	LDX	R2,4(RR14)
+	LDX	R3,5(RR14)
+	LDWX	RR0,RR2
+	INCW	RR2
+	LDX	4(RR14),R2
+	LDX	5(RR14),R3
+	LDX	R2,6(RR14)
+	AND	R2,#240
+	SWAP	R2
+	AND	R2,#15
+	PUSH	R2
+	PUSH	R1
+	PUSH	R0
+	CALL	_nibToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  711	  nibToAscii(dst, src & 0x0F);
+.line 711
+	LDX	R0,6(RR14)
+	AND	R0,#15
+	PUSH	R0
+	LDX	R0,4(RR14)
+	LDX	R1,5(RR14)
+	PUSH	R1
+	PUSH	R0
+	CALL	_nibToAscii
+	POP	R0
+	POP	R0
+	POP	R0
+;  712	}
+.line 712
+	CALL	__b_framereset
+	RET	
+.endfunc "charToAscii",712,"_charToAscii"
+	SEGMENT ROM_DATA
+
+
+;**************************** _setRelays ***************************
+;Name                         Addr/Register   Size   Type
+;_clearClkCor2Ctl                    IMPORT  -----   function
+;_setClkCor2Ctl                      IMPORT  -----   function
+;_clearClkCor1Ctl                    IMPORT  -----   function
+;_setClkCor1Ctl                      IMPORT  -----   function
+;_updateSupervisor                   IMPORT  -----   function
+;_setZone                            IMPORT  -----   function
+;_zone                               IMPORT      2   variable
+;_icChannel                          IMPORT      2   variable
+;_clearPgmRlyCtl                     IMPORT  -----   function
+;_setPgmRlyCtl                       IMPORT  -----   function
+;_setICChannel                       IMPORT  -----   function
+;_supervisorChannels                 IMPORT      2   variable
+;_apccRelays                         IMPORT      1   variable
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_setRelays,?_n_setRelays,RDATA
+	.FCALL _n_setICChannel
+	.FCALL _n_setPgmRlyCtl
+	.FCALL _n_clearPgmRlyCtl
+	.FCALL _n_setZone
+	.FCALL _n_updateSupervisor
+	.FCALL _n_setClkCor1Ctl
+	.FCALL _n_clearClkCor1Ctl
+	.FCALL _n_setClkCor2Ctl
+	.FCALL _n_clearClkCor2Ctl
+	.FRAME _f_setRelays,?_f_setRelays,EDATA
+	.FCALL _f_setICChannel
+	.FCALL _f_setPgmRlyCtl
+	.FCALL _f_clearPgmRlyCtl
+	.FCALL _f_setZone
+	.FCALL _f_updateSupervisor
+	.FCALL _f_setClkCor1Ctl
+	.FCALL _f_clearClkCor1Ctl
+	.FCALL _f_setClkCor2Ctl
+	.FCALL _f_clearClkCor2Ctl
+	SEGMENT util_TEXT
+;  713	
+;  714	////////////////////////////////////////////////////////
+;  715	// setRelays
+;  716	// This function sets the relays based on the global
+;  717	// relay variables
+;  718	// Param none
+;  719	// Return none
+;  720	void setRelays( void )
+;  721	{
+_setRelays:
+.define "_setRelays"
+.value _setRelays
+.class 2
+.type 65
+.endef
+.begfunc "setRelays",721,"_setRelays"
+	CALL	__b_frameset00
+;  722	  // Figure out which supervisor channels have to be
+;  723	  // switched to pass audio to the speakers. If the
+;  724	  // all page is set the all the supervisor relays
+;  725	  // need to be cleared.
+;  726	  if (ALL_PAGE_BIT == ( apccRelays & ALL_PAGE_BIT))
+.line 726
+	TCMX	_apccRelays,#1
+	JR	NE,_32_L_105
+;  727	  {
+;  728	    // Update the variable for the supervisor channels
+;  729	    supervisorChannels = 0xFFFF;
+.line 729
+	LDX	_supervisorChannels,#255
+	LDX	_supervisorChannels+1,#255
+;  730	
+;  731	    // Override the intercom (speaker) relays
+;  732	    setICChannel(0x0000);
+.line 732
+	PUSH	#0
+	PUSH	#0
+	CALL	_setICChannel
+	POP	R0
+	POP	R0
+;  733	
+;  734	    // Clear the program relay
+;  735	    setPgmRlyCtl();
+.line 735
+	CALL	_setPgmRlyCtl
+;  736	  }
+;  737	  else
+.line 737
+	JR	_32_L_106
+_32_L_105:
+;  738	  {
+;  739	    // Clear the program relay
+;  740	    clearPgmRlyCtl();
+.line 740
+	CALL	_clearPgmRlyCtl
+;  741	
+;  742	    // Update the variable for the supervisor channels
+;  743	    supervisorChannels = icChannel | zone;
+.line 743
+	LDX	_supervisorChannels,_icChannel
+	LDX	_supervisorChannels+1,_icChannel+1
+	ORX	_supervisorChannels+1,_zone+1
+	ORX	_supervisorChannels,_zone
+;  744	
+;  745	    // Do the intercom (speaker) relays
+;  746	    setICChannel(icChannel);
+.line 746
+	PUSHX	_icChannel+1
+	PUSHX	_icChannel
+	CALL	_setICChannel
+	POP	R0
+	POP	R0
+;  747	    
+;  748	    // Do zone (page) relays
+;  749	    setZone(zone);
+.line 749
+	PUSHX	_zone+1
+	PUSHX	_zone
+	CALL	_setZone
+	POP	R0
+	POP	R0
+;  750	  }
+_32_L_106:
+.line 750
+;  751	  
+;  752	  // Do the supervisor relays
+;  753	  updateSupervisor(supervisorChannels);    
+.line 753
+	PUSHX	_supervisorChannels+1
+	PUSHX	_supervisorChannels
+	CALL	_updateSupervisor
+	POP	R0
+	POP	R0
+;  754	
+;  755	  // Do the Clock Correction 1 relay
+;  756	  if (CLK_COR1_BIT == ( apccRelays & CLK_COR1_BIT))
+.line 756
+	TCMX	_apccRelays,#2
+	JR	NE,_32_L_108
+;  757	  {
+;  758	    setClkCor1Ctl();
+.line 758
+	CALL	_setClkCor1Ctl
+;  759	  }
+;  760	  else
+.line 760
+	JR	_32_L_111
+_32_L_108:
+;  761	  {
+;  762	    clearClkCor1Ctl();
+.line 762
+	CALL	_clearClkCor1Ctl
+;  763	  }
+_32_L_111:
+.line 763
+;  764	
+;  765	  // Do the Clock Correction 2 relay
+;  766	  if (CLK_COR2_BIT == ( apccRelays & CLK_COR2_BIT))
+.line 766
+	TCMX	_apccRelays,#4
+	JR	NE,_32_L_110
+;  767	  {
+;  768	    setClkCor2Ctl();
+.line 768
+	CALL	_setClkCor2Ctl
+;  769	  }
+;  770	  else
+.line 770
+	JR	_32_L_112
+_32_L_110:
+;  771	  {
+;  772	    clearClkCor2Ctl();
+.line 772
+	CALL	_clearClkCor2Ctl
+;  773	  }
+;  774	}
+_32_L_112:
+.line 774
+	CALL	__b_framereset
+	RET	
+.endfunc "setRelays",774,"_setRelays"
+	XREF _apccRelays:EDATA
+	XREF _supervisorChannels:EDATA
+	XREF _zone:EDATA
+	XREF _icChannel:EDATA
+	XREF __b_ucase:ROM
+	XREF __b_framereset:ROM
+	XREF __b_frameset0:ROM
+	XREF __b_frameset00:ROM
+	XDEF _setRelays
+	XDEF _charToAscii
+	XDEF _nibToAscii
+	XDEF _asciiToChar
+	XDEF _asciiToNib
+	XDEF _rs485Delay
+	XDEF _latchingDelay
+	XDEF _uSecDelay
+	XDEF _mSecDelay
+	XDEF _delay
+	XDEF _readSupStatus
+	XDEF _readPrivStatus
+	XDEF _readCallButtons
+	XDEF _readAddress
+	XDEF _clearPgmRlyCtl
+	XDEF _setPgmRlyCtl
+	XDEF _clearClkCor2Ctl
+	XDEF _setClkCor2Ctl
+	XDEF _clearClkCor1Ctl
+	XDEF _setClkCor1Ctl
+	XDEF _clearAR
+	XDEF _setAR
+	XDEF _clearRD
+	XDEF _setRD
+	XDEF _clearDataBus
+	XDEF _setDataBus
+	XDEF _clearSupervisor
+	XDEF _setSupervisor
+	XDEF _updateSupervisor
+	XDEF _setZone
+	XDEF _setICChannel
+	XDEF _calculateChecksum
+	END

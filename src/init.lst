@@ -1,0 +1,293 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE init_TEXT,SPACE=ROM
+                           A     6    	FILE	".\init.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT ROM_DATA
+                           A     9    
+                           A    10    
+                           A    11    ;**************************** _Init ***********
+                           A    12    ;Name                         Addr/Register   S
+                           A    13    ;_init_uart1                         IMPORT  --
+                           A    14    ;_clearPgmRlyCtl                     IMPORT  --
+                           A    15    ;_clearClkCor2Ctl                    IMPORT  --
+                           A    16    ;_clearClkCor1Ctl                    IMPORT  --
+                           A    17    ;_setZone                            IMPORT  --
+                           A    18    ;_setICChannel                       IMPORT  --
+                           A    19    
+                           A    20    
+                           A    21    ; Aggregate Stack Size: 0 (words)
+                           A    22    
+                           A    23    
+                           A    24    	.FRAME _n_Init,?_n_Init,RDATA
+                           A    25    	.FCALL _n_setICChannel
+                           A    26    	.FCALL _n_setZone
+                           A    27    	.FCALL _n_clearClkCor1Ctl
+                           A    28    	.FCALL _n_clearClkCor2Ctl
+                           A    29    	.FCALL _n_clearPgmRlyCtl
+                           A    30    	.FCALL _n_init_uart1
+                           A    31    	.FRAME _f_Init,?_f_Init,EDATA
+                           A    32    	.FCALL _f_setICChannel
+                           A    33    	.FCALL _f_setZone
+                           A    34    	.FCALL _f_clearClkCor1Ctl
+                           A    35    	.FCALL _f_clearClkCor2Ctl
+                           A    36    	.FCALL _f_clearPgmRlyCtl
+                           A    37    	.FCALL _f_init_uart1
+                           A    38    	SEGMENT init_TEXT
+                           A    39    ;    1	#include <eZ8.h>
+                           A    40    ;    2	#include "init.h"
+                           A    41    ;    3	#include "uart.h"
+                           A    42    ;    4	#include "util.h"
+                           A    43    ;    5	
+                           A    44    ;    6	///////////////////////////////////////
+                           A    45    ;    7	// Power on initialization
+                           A    46    ;    8	// This function initializes the GPIO p
+                           A    47    ;    9	// and sets chip selects to avoid bus c
+                           A    48    ;   10	// Param none
+                           A    49    ;   11	// Return none
+                           A    50    ;   12	void Init( void )
+                           A    51    ;   13	{
+0000                       A    52    _Init:
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   2
+
+
+PC     Object              I  Line    Source init.src
+                           A    53    .define "_Init"
+                           A    54    .value _Init
+                           A    55    .class 2
+                           A    56    .type 65
+                           A    57    .endef
+                           A    58    .begfunc "Init",13,"_Init"
+0000 D6 0000               A    59    	CALL	__b_frameset00
+                           A    60    ;   14	  // Port Registers
+                           A    61    ;   15	  // PxADDR      Port A-H Address Regis
+                           A    62    ;   16	  // PxCTL       Port A-H Control Regis
+                           A    63    ;   17	  // PxIN        Port A-H Input Data Re
+                           A    64    ;   18	  // PxOUT       Port A-H Output Data R
+                           A    65    ;   19		
+                           A    66    ;   20	  // Port Subregisters
+                           A    67    ;   21	  // PxDD        Data Direction        
+                           A    68    ;   22	  // PxAF        Alternate Function    
+                           A    69    ;   23	  // PxOC        Ouput Control (Open-Dr
+                           A    70    ;   24	  // PxDD        Hi Drive Enable       
+                           A    71    ;   25	  // PxSMRE      Stop Mode Recover Sour
+                           A    72    ;   26		
+                           A    73    ;   27	  // PA0 R_OE      OUTPUT
+                           A    74    ;   28	  // PA1 TxLEDCtl  OUTPUT	
+                           A    75    ;   29	  // PA2 IP_RST    OUTPUT
+                           A    76    ;   30	  // PA3 RxLEDCtl  OUTPUT
+                           A    77    ;   31	  // PA4 IP_RX     Alternate Function  
+                           A    78    ;   32	  // PA5 IP_TX     Alternate Function
+                           A    79    ;   33	  // PA6 SYSTEM_ID INPUT
+                           A    80    ;   34	  // PA7 ADD_EN    OUTPUT
+                           A    81    ;   35		
+                           A    82    ;   36	  // PB0 A_ADDR_0  OUTPUT
+                           A    83    ;   37	  // PB1 A_ADDR_1  OUTPUT
+                           A    84    ;   38	  // PB2 A_ADDR_2  OUTPUT
+                           A    85    ;   39	  // PB3 A_EN_L    OUTPUT
+                           A    86    ;   40	  // PB4 R_ADDR_0  OUTPUT
+                           A    87    ;   41	  // PB5 R_ADDR_1  OUTPUT
+                           A    88    ;   42	  // PB6 R_ADDR_2  OUTPUT
+                           A    89    ;   43	  // PB7 R_EN_L    OUTPUT
+                           A    90    ;   44		
+                           A    91    ;   45	  // PC0 DO        IO
+                           A    92    ;   46	  // PC1 D1        IO
+                           A    93    ;   47	  // PC2 D2        IO
+                           A    94    ;   48	  // PC3 D3        IO
+                           A    95    ;   49	  // PC4 D4        IO
+                           A    96    ;   50	  // PC5 D5        IO
+                           A    97    ;   51	  // PC6 D6        IO
+                           A    98    ;   52	  // PC7 D7        IO
+                           A    99    ;   53		
+                           A   100    ;   54	  // PD0 CLK_COR1_CTL  OUTPUT 0 = Relay
+                           A   101    ;   55	  // PD1 CLK_COR2_CTL  OUTPUT 0 = Relay
+                           A   102    ;   56	  // PD2 CI_INT_H      INPUT  
+                           A   103    ;   57	  // PD3 RS_IO_CTL     OUTPUT 0 = Recei
+                           A   104    ;   58	  // PD4 RS_IN         Alternat  Functi
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   3
+
+
+PC     Object              I  Line    Source init.src
+                           A   105    ;   59	  // PD5 RS_OUT        Alternate Functi
+                           A   106    ;   60	  // PD6 PGM_RLY_CTL   OUTPUT 0 = Relay
+                           A   107    ;   61	
+                           A   108    ;   62	  // Port Registers
+                           A   109    ;   63	  // PxADDR      Port A-H Address Regis
+                           A   110    ;   64	  // PxCTL       Port A-H Control Regis
+                           A   111    ;   65	  // PxIN        Port A-H Input Data Re
+                           A   112    ;   66	  // PxOUT       Port A-H Output Data R
+                           A   113    ;   67		
+                           A   114    ;   68	  // Port Subregisters
+                           A   115    ;   69	  // PxDD        Data Direction        
+                           A   116    ;   70	  // PxAF        Alternate Function    
+                           A   117    ;   71	  // PxOC        Ouput Control (Open-Dr
+                           A   118    ;   72	  // PxDD        Hi Drive Enable       
+                           A   119    ;   73	  // PxSMRE      Stop Mode Recover Sour
+                           A   120    ;   74	
+                           A   121    ;   75	
+                           A   122    ;   76	  // NOFUNC    0x00
+                           A   123    ;   77	  // DATADIR   0x01
+                           A   124    ;   78	  // ALTFUNC   0x02
+                           A   125    ;   79	  // OUTCTRL   0x03
+                           A   126    ;   80	  // HIDRVCTRL 0x04
+                           A   127    ;   81	  // STOPMODE  0x05
+                           A   128    ;   82	
+                           A   129    ;   83	  // Initialize Port A
+                           A   130    ;   84	  // PA0 R_OE      OUTPUT  0 = Enable 1
+                           A   131    ;   85	  // PA1 TxLEDCtl  OUTPUT	 0 = ON    
+                           A   132    ;   86	  // PA2 IP_RST    OUTPUT  0 = Normal 1
+                           A   133    ;   87	  // PA3 RxLEDCtl  OUTPUT  0 = ON     1
+                           A   134    ;   88	  // PA4 IP_RX     Alternate Function  
+                           A   135    ;   89	  // PA5 IP_TX     Alternate Function
+                           A   136    ;   90	  // PA6 SYSTEM_ID INPUT
+                           A   137    ;   91	  // PA7 ADD_EN    OUTPUT
+                           A   138    ;   92	  PAADDR = ALTFUNC;   // Select Alterna
+                           A   139    .line 92
+0003 E9020FD0              A   140    	LDX	4048,#2
+                           A   141    ;   93	  PACTL  = 0x30;      // Set Port PA4 a
+                           A   142    .line 93
+0007 E9300FD1              A   143    	LDX	4049,#48
+                           A   144    ;   94	  PAOUT  = 0x8E;      // Set Outputs to
+                           A   145    .line 94
+000B E98E0FD3              A   146    	LDX	4051,#142
+                           A   147    ;   95	  PAADDR = DATADIR;   // Select Data Di
+                           A   148    .line 95
+000F E9010FD0              A   149    	LDX	4048,#1
+                           A   150    ;   96	  PACTL  = 0x70;      // Set PA0-PA3 to
+                           A   151    .line 96
+0013 E9700FD1              A   152    	LDX	4049,#112
+                           A   153    ;   97	  PAADDR = NOFUNC;    // Clear Subregis
+                           A   154    .line 97
+0017 E9000FD0              A   155    	LDX	4048,#-0
+                           A   156    ;   98		
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   4
+
+
+PC     Object              I  Line    Source init.src
+                           A   157    ;   99	  // Initialize Port B
+                           A   158    ;  100	  PBOUT  = 0xFF;      // Set Port B Hig
+                           A   159    .line 100
+001B E9FF0FD7              A   160    	LDX	4055,#255
+                           A   161    ;  101	  PBADDR = DATADIR;   // Port B Data Di
+                           A   162    .line 101
+001F E9010FD4              A   163    	LDX	4052,#1
+                           A   164    ;  102	  PBCTL  = 0x00;      // Port B Set to 
+                           A   165    .line 102
+0023 E9000FD5              A   166    	LDX	4053,#-0
+                           A   167    ;  103	  PBADDR = NOFUNC;	  // Clear Subregis
+                           A   168    .line 103
+0027 E9000FD4              A   169    	LDX	4052,#-0
+                           A   170    ;  104		
+                           A   171    ;  105	  // Initialize Port C
+                           A   172    ;  106	  // PC0 DO        IO
+                           A   173    ;  107	  // PC1 D1        IO
+                           A   174    ;  108	  // PC2 D2        IO
+                           A   175    ;  109	  // PC3 D3        IO
+                           A   176    ;  110	  // PC4 D4        IO
+                           A   177    ;  111	  // PC5 D5        IO
+                           A   178    ;  112	  // PC6 D6        IO
+                           A   179    ;  113	  // PC7 D7        IO
+                           A   180    ;  114	  PCADDR = DATADIR;   // Port C Data Di
+                           A   181    .line 114
+002B E9010FD8              A   182    	LDX	4056,#1
+                           A   183    ;  115	  PCCTL  = 0xFF;      // Port C Set to 
+                           A   184    .line 115
+002F E9FF0FD9              A   185    	LDX	4057,#255
+                           A   186    ;  116	  PCADDR = NOFUNC;	  // Clear Subregis
+                           A   187    .line 116
+0033 E9000FD8              A   188    	LDX	4056,#-0
+                           A   189    ;  117		
+                           A   190    ;  118	  // Intitialize Port D
+                           A   191    ;  119	  // PD0 CLK_COR1_CTL  OUTPUT 0 = Relay
+                           A   192    ;  120	  // PD1 CLK_COR2_CTL  OUTPUT 0 = Relay
+                           A   193    ;  121	  // PD2 CI_INT_H      INPUT  
+                           A   194    ;  122	  // PD3 RS_IO_CTL     OUTPUT 0 = Recei
+                           A   195    ;  123	  // PD4 RS_IN         Alternat  Functi
+                           A   196    ;  124	  // PD5 RS_OUT        Alternate Functi
+                           A   197    ;  125	  // PD6 PGM_RLY_CTL   OUTPUT 0 = Relay
+                           A   198    ;  126	  PDADDR = ALTFUNC;   // Select Alterna
+                           A   199    .line 126
+0037 E9020FDC              A   200    	LDX	4060,#2
+                           A   201    ;  127	  PDCTL  = 0x30;      // Set Port PD4 a
+                           A   202    .line 127
+003B E9300FDD              A   203    	LDX	4061,#48
+                           A   204    ;  128	  PDOUT  = 0x00;      // Set Outputs PD
+                           A   205    .line 128
+003F E9000FDF              A   206    	LDX	4063,#-0
+                           A   207    ;  129	  PDADDR = DATADIR;   // Select Data Di
+                           A   208    .line 129
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   5
+
+
+PC     Object              I  Line    Source init.src
+0043 E9010FDC              A   209    	LDX	4060,#1
+                           A   210    ;  130	  PDCTL  = 0x34;      // Set PD0, PD1, 
+                           A   211    .line 130
+0047 E9340FDD              A   212    	LDX	4061,#52
+                           A   213    ;  131	  PDADDR = NOFUNC;    // Clear Subregis
+                           A   214    .line 131
+004B E9000FDC              A   215    	LDX	4060,#-0
+                           A   216    ;  132		
+                           A   217    ;  133	  // Initialize channels
+                           A   218    ;  134	  setICChannel(0x0000);
+                           A   219    .line 134
+004F 1F7000                A   220    	PUSH	#0
+0052 1F7000                A   221    	PUSH	#0
+0055 D6 0000               A   222    	CALL	_setICChannel
+0058 50E0                  A   223    	POP	R0
+005A 50E0                  A   224    	POP	R0
+                           A   225    ;  135	
+                           A   226    ;  136	  // Initialize zone
+                           A   227    ;  137	  setZone(0x0000);
+                           A   228    .line 137
+005C 1F7000                A   229    	PUSH	#0
+005F 1F7000                A   230    	PUSH	#0
+0062 D6 0000               A   231    	CALL	_setZone
+0065 50E0                  A   232    	POP	R0
+0067 50E0                  A   233    	POP	R0
+                           A   234    ;  138	
+                           A   235    ;  139	  // Initialize clock correction and th
+                           A   236    ;  140	  clearClkCor1Ctl();
+                           A   237    .line 140
+0069 D6 0000               A   238    	CALL	_clearClkCor1Ctl
+                           A   239    ;  141	  clearClkCor2Ctl();
+                           A   240    .line 141
+006C D6 0000               A   241    	CALL	_clearClkCor2Ctl
+                           A   242    ;  142	  clearPgmRlyCtl();
+                           A   243    .line 142
+006F D6 0000               A   244    	CALL	_clearPgmRlyCtl
+                           A   245    ;  143	
+                           A   246    ;  144	  // Initialize the UART
+                           A   247    ;  145	  init_uart1();                   // In
+                           A   248    .line 145
+0072 D6 0000               A   249    	CALL	_init_uart1
+                           A   250    ;  146	} // End of initalization
+                           A   251    .line 146
+0075 D6 0000               A   252    	CALL	__b_framereset
+0078 AF                    A   253    	RET	
+                           A   254    .endfunc "Init",146,"_Init"
+                           A   255    	XREF _setZone:ROM
+                           A   256    	XREF _setICChannel:ROM
+                           A   257    	XREF _clearPgmRlyCtl:ROM
+                           A   258    	XREF _clearClkCor2Ctl:ROM
+                           A   259    	XREF _clearClkCor1Ctl:ROM
+                           A   260    	XREF _init_uart1:ROM
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:18     page:   6
+
+
+PC     Object              I  Line    Source init.src
+                           A   261    	XREF __b_framereset:ROM
+                           A   262    	XREF __b_frameset00:ROM
+                           A   263    	XDEF _Init
+                           A   264    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 265

@@ -1,0 +1,147 @@
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   1
+
+
+PC     Object              I  Line    Source 
+                           A     1    ; Z8 Encore! ANSI C Compiler Release 3.64
+                           A     2    ; -nolocalcse -optsize -nofastcall -const=RAM -
+                           A     3    ; -nooptlink -noregvar -reduceopt -debug -norev
+                           A     4    ; -alias 
+                           A     5    	DEFINE gpio_TEXT,SPACE=ROM
+                           A     6    	FILE	".\gpio.c"
+                           A     7    .debug "C"
+                           A     8    	SEGMENT ROM_DATA
+                           A     9    
+                           A    10    
+                           A    11    ;**************************** _init_led_gpio **
+                           A    12    ;Name                         Addr/Register   S
+                           A    13    
+                           A    14    
+                           A    15    ; Aggregate Stack Size: 0 (words)
+                           A    16    
+                           A    17    
+                           A    18    	.FRAME _n_init_led_gpio,?_n_init_led_gpio,R
+                           A    19    	.FRAME _f_init_led_gpio,?_f_init_led_gpio,E
+                           A    20    	SEGMENT gpio_TEXT
+                           A    21    ;    1	/**************************************
+                           A    22    ;    2	 *  Copyright (C) 1999-2008 by Zilog, I
+                           A    23    ;    3	 *  All Rights Reserved
+                           A    24    ;    4	 **************************************
+                           A    25    ;    5	
+                           A    26    ;    6	#include <eZ8.h>
+                           A    27    ;    7	
+                           A    28    ;    8	/* Initializes LED ports - Port A */
+                           A    29    ;    9	
+                           A    30    ;   10	void init_led_gpio(void)
+                           A    31    ;   11	{
+0000                       A    32    _init_led_gpio:
+                           A    33    .define "_init_led_gpio"
+                           A    34    .value _init_led_gpio
+                           A    35    .class 2
+                           A    36    .type 65
+                           A    37    .endef
+                           A    38    .begfunc "init_led_gpio",11,"_init_led_gpio"
+0000 D6 0000               A    39    	CALL	__b_frameset00
+                           A    40    ;   12	  PAADDR 	= 0x01;     // PA Data Dir 
+                           A    41    .line 12
+0003 E9010FD0              A    42    	LDX	4048,#1
+                           A    43    ;   13	  PACTL 	= 0x00;    	// PA Out Ctrl 
+                           A    44    .line 13
+0007 E9000FD1              A    45    	LDX	4049,#-0
+                           A    46    ;   14	  PAOUT		= 0X00;     // OUTPUT	   
+                           A    47    .line 14
+000B E9000FD3              A    48    	LDX	4051,#-0
+                           A    49    ;   15	}
+                           A    50    .line 15
+000F D6 0000               A    51    	CALL	__b_framereset
+0012 AF                    A    52    	RET	
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   2
+
+
+PC     Object              I  Line    Source gpio.src
+                           A    53    .endfunc "init_led_gpio",15,"_init_led_gpio"
+                           A    54    	SEGMENT ROM_DATA
+                           A    55    
+                           A    56    
+                           A    57    ;**************************** _init_test_button
+                           A    58    ;Name                         Addr/Register   S
+                           A    59    
+                           A    60    
+                           A    61    ; Aggregate Stack Size: 0 (words)
+                           A    62    
+                           A    63    
+                           A    64    	.FRAME _n_init_test_button_gpio,?_n_init_te
+                           A    65    	.FRAME _f_init_test_button_gpio,?_f_init_te
+                           A    66    	SEGMENT gpio_TEXT
+                           A    67    ;   16	
+                           A    68    ;   17	/* Initializes Test button port - Port 
+                           A    69    ;   18	
+                           A    70    ;   19	void init_test_button_gpio(void)
+                           A    71    ;   20	{
+0013                       A    72    _init_test_button_gpio:
+                           A    73    .define "_init_test_button_gpio"
+                           A    74    .value _init_test_button_gpio
+                           A    75    .class 2
+                           A    76    .type 65
+                           A    77    .endef
+                           A    78    .begfunc "init_test_button_gpio",20,"_init_test
+0013 D6 0000               A    79    	CALL	__b_frameset00
+                           A    80    ;   21	  PCADDR 	= 0x01;     // PC Data Dir 
+                           A    81    .line 21
+0016 E9010FD8              A    82    	LDX	4056,#1
+                           A    83    ;   22	  PCCTL 	= 0xFF;     // PC input Ctr
+                           A    84    .line 22
+001A E9FF0FD9              A    85    	LDX	4057,#255
+                           A    86    ;   23	}
+                           A    87    .line 23
+001E D6 0000               A    88    	CALL	__b_framereset
+0021 AF                    A    89    	RET	
+                           A    90    .endfunc "init_test_button_gpio",23,"_init_test
+                           A    91    	SEGMENT ROM_DATA
+                           A    92    
+                           A    93    
+                           A    94    ;**************************** _turn_off_led ***
+                           A    95    ;Name                         Addr/Register   S
+                           A    96    
+                           A    97    
+                           A    98    ; Aggregate Stack Size: 0 (words)
+                           A    99    
+                           A   100    
+                           A   101    	.FRAME _n_turn_off_led,?_n_turn_off_led,RDA
+                           A   102    	.FRAME _f_turn_off_led,?_f_turn_off_led,EDA
+                           A   103    	SEGMENT gpio_TEXT
+                           A   104    ;   24	
+Zilog eZ8 Encore! Macro Assembler Version 2.53 (15022701) 18-May-15     21:17:17     page:   3
+
+
+PC     Object              I  Line    Source gpio.src
+                           A   105    ;   25	/* Turns off ALL LED's */
+                           A   106    ;   26	
+                           A   107    ;   27	void turn_off_led(void)
+                           A   108    ;   28	{
+0022                       A   109    _turn_off_led:
+                           A   110    .define "_turn_off_led"
+                           A   111    .value _turn_off_led
+                           A   112    .class 2
+                           A   113    .type 65
+                           A   114    .endef
+                           A   115    .begfunc "turn_off_led",28,"_turn_off_led"
+0022 D6 0000               A   116    	CALL	__b_frameset00
+                           A   117    ;   29		PAOUT |= 0x07;  // Turn off all thr
+                           A   118    .line 29
+0025 49070FD3              A   119    	ORX	4051,#7
+                           A   120    ;   30	}
+                           A   121    .line 30
+0029 D6 0000               A   122    	CALL	__b_framereset
+002C AF                    A   123    	RET	
+                           A   124    .endfunc "turn_off_led",30,"_turn_off_led"
+                           A   125    	XREF __b_framereset:ROM
+                           A   126    	XREF __b_frameset00:ROM
+                           A   127    	XDEF _turn_off_led
+                           A   128    	XDEF _init_test_button_gpio
+                           A   129    	XDEF _init_led_gpio
+                           A   130    	END
+
+
+Errors: 0
+Warnings: 0
+Lines Assembled: 131

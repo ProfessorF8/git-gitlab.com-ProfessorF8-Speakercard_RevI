@@ -1,0 +1,264 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE init_TEXT,SPACE=ROM
+	FILE	".\init.c"
+.debug "C"
+	SEGMENT ROM_DATA
+
+
+;**************************** _Init ***************************
+;Name                         Addr/Register   Size   Type
+;_init_uart1                         IMPORT  -----   function
+;_clearPgmRlyCtl                     IMPORT  -----   function
+;_clearClkCor2Ctl                    IMPORT  -----   function
+;_clearClkCor1Ctl                    IMPORT  -----   function
+;_setZone                            IMPORT  -----   function
+;_setICChannel                       IMPORT  -----   function
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_Init,?_n_Init,RDATA
+	.FCALL _n_setICChannel
+	.FCALL _n_setZone
+	.FCALL _n_clearClkCor1Ctl
+	.FCALL _n_clearClkCor2Ctl
+	.FCALL _n_clearPgmRlyCtl
+	.FCALL _n_init_uart1
+	.FRAME _f_Init,?_f_Init,EDATA
+	.FCALL _f_setICChannel
+	.FCALL _f_setZone
+	.FCALL _f_clearClkCor1Ctl
+	.FCALL _f_clearClkCor2Ctl
+	.FCALL _f_clearPgmRlyCtl
+	.FCALL _f_init_uart1
+	SEGMENT init_TEXT
+;    1	#include <eZ8.h>
+;    2	#include "init.h"
+;    3	#include "uart.h"
+;    4	#include "util.h"
+;    5	
+;    6	////////////////////////////////////////////////////////
+;    7	// Power on initialization
+;    8	// This function initializes the GPIO ports to  valid values
+;    9	// and sets chip selects to avoid bus contention.
+;   10	// Param none
+;   11	// Return none
+;   12	void Init( void )
+;   13	{
+_Init:
+.define "_Init"
+.value _Init
+.class 2
+.type 65
+.endef
+.begfunc "Init",13,"_Init"
+	CALL	__b_frameset00
+;   14	  // Port Registers
+;   15	  // PxADDR      Port A-H Address Register (Seletects subregisters )
+;   16	  // PxCTL       Port A-H Control Register (Provides access to subregisters )
+;   17	  // PxIN        Port A-H Input Data Register   Read Input Pins
+;   18	  // PxOUT       Port A-H Output Data Register  Write Output Pins
+;   19		
+;   20	  // Port Subregisters
+;   21	  // PxDD        Data Direction                   0 = Output 1 = Input
+;   22	  // PxAF        Alternate Function               0 = GPIO   1 = Alternate Function
+;   23	  // PxOC        Ouput Control (Open-Drain)       0 = Drains Enabled 1 = Open Drain
+;   24	  // PxDD        Hi Drive Enable                  0 = Normal 1 = High Power
+;   25	  // PxSMRE      Stop Mode Recover Source Enable  0 = Normal 1 = Stop Mode 
+;   26		
+;   27	  // PA0 R_OE      OUTPUT
+;   28	  // PA1 TxLEDCtl  OUTPUT	
+;   29	  // PA2 IP_RST    OUTPUT
+;   30	  // PA3 RxLEDCtl  OUTPUT
+;   31	  // PA4 IP_RX     Alternate Function     
+;   32	  // PA5 IP_TX     Alternate Function
+;   33	  // PA6 SYSTEM_ID INPUT
+;   34	  // PA7 ADD_EN    OUTPUT
+;   35		
+;   36	  // PB0 A_ADDR_0  OUTPUT
+;   37	  // PB1 A_ADDR_1  OUTPUT
+;   38	  // PB2 A_ADDR_2  OUTPUT
+;   39	  // PB3 A_EN_L    OUTPUT
+;   40	  // PB4 R_ADDR_0  OUTPUT
+;   41	  // PB5 R_ADDR_1  OUTPUT
+;   42	  // PB6 R_ADDR_2  OUTPUT
+;   43	  // PB7 R_EN_L    OUTPUT
+;   44		
+;   45	  // PC0 DO        IO
+;   46	  // PC1 D1        IO
+;   47	  // PC2 D2        IO
+;   48	  // PC3 D3        IO
+;   49	  // PC4 D4        IO
+;   50	  // PC5 D5        IO
+;   51	  // PC6 D6        IO
+;   52	  // PC7 D7        IO
+;   53		
+;   54	  // PD0 CLK_COR1_CTL  OUTPUT 0 = Relay Open 1 = Relay Closed       
+;   55	  // PD1 CLK_COR2_CTL  OUTPUT 0 = Relay Open 1 = Relay Closed     
+;   56	  // PD2 CI_INT_H      INPUT  
+;   57	  // PD3 RS_IO_CTL     OUTPUT 0 = Receive 1 = Transmit
+;   58	  // PD4 RS_IN         Alternat  Function
+;   59	  // PD5 RS_OUT        Alternate Function
+;   60	  // PD6 PGM_RLY_CTL   OUTPUT 0 = Relay Open 1 = Relay Closed
+;   61	
+;   62	  // Port Registers
+;   63	  // PxADDR      Port A-H Address Register (Seletects subregisters )
+;   64	  // PxCTL       Port A-H Control Register (Provides access to subregisters )
+;   65	  // PxIN        Port A-H Input Data Register   Read Input Pins
+;   66	  // PxOUT       Port A-H Output Data Register  Write Output Pins
+;   67		
+;   68	  // Port Subregisters
+;   69	  // PxDD        Data Direction                   0 = Output 1 = Input
+;   70	  // PxAF        Alternate Function               0 = GPIO   1 = Alternate Function
+;   71	  // PxOC        Ouput Control (Open-Drain)       0 = Drains Enabled 1 = Open Drain
+;   72	  // PxDD        Hi Drive Enable                  0 = Normal 1 = High Power
+;   73	  // PxSMRE      Stop Mode Recover Source Enable  0 = Normal 1 = Stop Mode 
+;   74	
+;   75	
+;   76	  // NOFUNC    0x00
+;   77	  // DATADIR   0x01
+;   78	  // ALTFUNC   0x02
+;   79	  // OUTCTRL   0x03
+;   80	  // HIDRVCTRL 0x04
+;   81	  // STOPMODE  0x05
+;   82	
+;   83	  // Initialize Port A
+;   84	  // PA0 R_OE      OUTPUT  0 = Enable 1 = Disable
+;   85	  // PA1 TxLEDCtl  OUTPUT	 0 = ON     1 = OFF
+;   86	  // PA2 IP_RST    OUTPUT  0 = Normal 1 = Reset
+;   87	  // PA3 RxLEDCtl  OUTPUT  0 = ON     1 = OFF
+;   88	  // PA4 IP_RX     Alternate Function     
+;   89	  // PA5 IP_TX     Alternate Function
+;   90	  // PA6 SYSTEM_ID INPUT
+;   91	  // PA7 ADD_EN    OUTPUT
+;   92	  PAADDR = ALTFUNC;   // Select Alternate Function
+.line 92
+	LDX	4048,#2
+;   93	  PACTL  = 0x30;      // Set Port PA4 and PA5 to Alternate Functions
+.line 93
+	LDX	4049,#48
+;   94	  PAOUT  = 0x8E;      // Set Outputs to 1
+.line 94
+	LDX	4051,#142
+;   95	  PAADDR = DATADIR;   // Select Data Direction
+.line 95
+	LDX	4048,#1
+;   96	  PACTL  = 0x70;      // Set PA0-PA3 to Outputs
+.line 96
+	LDX	4049,#112
+;   97	  PAADDR = NOFUNC;    // Clear Subregister Pointer
+.line 97
+	LDX	4048,#-0
+;   98		
+;   99	  // Initialize Port B
+;  100	  PBOUT  = 0xFF;      // Set Port B High
+.line 100
+	LDX	4055,#255
+;  101	  PBADDR = DATADIR;   // Port B Data Dir = input: updated
+.line 101
+	LDX	4052,#1
+;  102	  PBCTL  = 0x00;      // Port B Set to outputs
+.line 102
+	LDX	4053,#-0
+;  103	  PBADDR = NOFUNC;	  // Clear Subregister Pointer
+.line 103
+	LDX	4052,#-0
+;  104		
+;  105	  // Initialize Port C
+;  106	  // PC0 DO        IO
+;  107	  // PC1 D1        IO
+;  108	  // PC2 D2        IO
+;  109	  // PC3 D3        IO
+;  110	  // PC4 D4        IO
+;  111	  // PC5 D5        IO
+;  112	  // PC6 D6        IO
+;  113	  // PC7 D7        IO
+;  114	  PCADDR = DATADIR;   // Port C Data Dir = input: updated
+.line 114
+	LDX	4056,#1
+;  115	  PCCTL  = 0xFF;      // Port C Set to inputs
+.line 115
+	LDX	4057,#255
+;  116	  PCADDR = NOFUNC;	  // Clear Subregister Pointer
+.line 116
+	LDX	4056,#-0
+;  117		
+;  118	  // Intitialize Port D
+;  119	  // PD0 CLK_COR1_CTL  OUTPUT 0 = Relay Open 1 = Relay Closed       
+;  120	  // PD1 CLK_COR2_CTL  OUTPUT 0 = Relay Open 1 = Relay Closed     
+;  121	  // PD2 CI_INT_H      INPUT  
+;  122	  // PD3 RS_IO_CTL     OUTPUT 0 = Receive 1 = Transmit
+;  123	  // PD4 RS_IN         Alternat  Function
+;  124	  // PD5 RS_OUT        Alternate Function
+;  125	  // PD6 PGM_RLY_CTL   OUTPUT 0 = Relay Open 1 = Relay Closed
+;  126	  PDADDR = ALTFUNC;   // Select Alternate Function
+.line 126
+	LDX	4060,#2
+;  127	  PDCTL  = 0x30;      // Set Port PD4 and PD5 to Alternate Functions
+.line 127
+	LDX	4061,#48
+;  128	  PDOUT  = 0x00;      // Set Outputs PD0, PD1, PD6 = 1 PD3 = 0
+.line 128
+	LDX	4063,#-0
+;  129	  PDADDR = DATADIR;   // Select Data Direction
+.line 129
+	LDX	4060,#1
+;  130	  PDCTL  = 0x34;      // Set PD0, PD1, PD3, PD6 to Outputs
+.line 130
+	LDX	4061,#52
+;  131	  PDADDR = NOFUNC;    // Clear Subregister Pointer
+.line 131
+	LDX	4060,#-0
+;  132		
+;  133	  // Initialize channels
+;  134	  setICChannel(0x0000);
+.line 134
+	PUSH	#0
+	PUSH	#0
+	CALL	_setICChannel
+	POP	R0
+	POP	R0
+;  135	
+;  136	  // Initialize zone
+;  137	  setZone(0x0000);
+.line 137
+	PUSH	#0
+	PUSH	#0
+	CALL	_setZone
+	POP	R0
+	POP	R0
+;  138	
+;  139	  // Initialize clock correction and the program relay
+;  140	  clearClkCor1Ctl();
+.line 140
+	CALL	_clearClkCor1Ctl
+;  141	  clearClkCor2Ctl();
+.line 141
+	CALL	_clearClkCor2Ctl
+;  142	  clearPgmRlyCtl();
+.line 142
+	CALL	_clearPgmRlyCtl
+;  143	
+;  144	  // Initialize the UART
+;  145	  init_uart1();                   // Intialize Uart
+.line 145
+	CALL	_init_uart1
+;  146	} // End of initalization
+.line 146
+	CALL	__b_framereset
+	RET	
+.endfunc "Init",146,"_Init"
+	XREF _setZone:ROM
+	XREF _setICChannel:ROM
+	XREF _clearPgmRlyCtl:ROM
+	XREF _clearClkCor2Ctl:ROM
+	XREF _clearClkCor1Ctl:ROM
+	XREF _init_uart1:ROM
+	XREF __b_framereset:ROM
+	XREF __b_frameset00:ROM
+	XDEF _Init
+	END

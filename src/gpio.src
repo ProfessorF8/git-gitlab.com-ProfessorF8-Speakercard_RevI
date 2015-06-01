@@ -1,0 +1,130 @@
+; Z8 Encore! ANSI C Compiler Release 3.64
+; -nolocalcse -optsize -nofastcall -const=RAM -model=L
+; -nooptlink -noregvar -reduceopt -debug -norevaa -peephole
+; -alias 
+	DEFINE gpio_TEXT,SPACE=ROM
+	FILE	".\gpio.c"
+.debug "C"
+	SEGMENT ROM_DATA
+
+
+;**************************** _init_led_gpio ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_init_led_gpio,?_n_init_led_gpio,RDATA
+	.FRAME _f_init_led_gpio,?_f_init_led_gpio,EDATA
+	SEGMENT gpio_TEXT
+;    1	/*************************************************
+;    2	 *  Copyright (C) 1999-2008 by Zilog, Inc.
+;    3	 *  All Rights Reserved
+;    4	 *************************************************/
+;    5	
+;    6	#include <eZ8.h>
+;    7	
+;    8	/* Initializes LED ports - Port A */
+;    9	
+;   10	void init_led_gpio(void)
+;   11	{
+_init_led_gpio:
+.define "_init_led_gpio"
+.value _init_led_gpio
+.class 2
+.type 65
+.endef
+.begfunc "init_led_gpio",11,"_init_led_gpio"
+	CALL	__b_frameset00
+;   12	  PAADDR 	= 0x01;     // PA Data Dir = output: updated
+.line 12
+	LDX	4048,#1
+;   13	  PACTL 	= 0x00;    	// PA Out Ctrl = push-pull
+.line 13
+	LDX	4049,#-0
+;   14	  PAOUT		= 0X00;     // OUTPUT	           : updated
+.line 14
+	LDX	4051,#-0
+;   15	}
+.line 15
+	CALL	__b_framereset
+	RET	
+.endfunc "init_led_gpio",15,"_init_led_gpio"
+	SEGMENT ROM_DATA
+
+
+;**************************** _init_test_button_gpio ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_init_test_button_gpio,?_n_init_test_button_gpio,RDATA
+	.FRAME _f_init_test_button_gpio,?_f_init_test_button_gpio,EDATA
+	SEGMENT gpio_TEXT
+;   16	
+;   17	/* Initializes Test button port - Port C */
+;   18	
+;   19	void init_test_button_gpio(void)
+;   20	{
+_init_test_button_gpio:
+.define "_init_test_button_gpio"
+.value _init_test_button_gpio
+.class 2
+.type 65
+.endef
+.begfunc "init_test_button_gpio",20,"_init_test_button_gpio"
+	CALL	__b_frameset00
+;   21	  PCADDR 	= 0x01;     // PC Data Dir = input: updated
+.line 21
+	LDX	4056,#1
+;   22	  PCCTL 	= 0xFF;     // PC input Ctrl = Pin 0
+.line 22
+	LDX	4057,#255
+;   23	}
+.line 23
+	CALL	__b_framereset
+	RET	
+.endfunc "init_test_button_gpio",23,"_init_test_button_gpio"
+	SEGMENT ROM_DATA
+
+
+;**************************** _turn_off_led ***************************
+;Name                         Addr/Register   Size   Type
+
+
+; Aggregate Stack Size: 0 (words)
+
+
+	.FRAME _n_turn_off_led,?_n_turn_off_led,RDATA
+	.FRAME _f_turn_off_led,?_f_turn_off_led,EDATA
+	SEGMENT gpio_TEXT
+;   24	
+;   25	/* Turns off ALL LED's */
+;   26	
+;   27	void turn_off_led(void)
+;   28	{
+_turn_off_led:
+.define "_turn_off_led"
+.value _turn_off_led
+.class 2
+.type 65
+.endef
+.begfunc "turn_off_led",28,"_turn_off_led"
+	CALL	__b_frameset00
+;   29		PAOUT |= 0x07;  // Turn off all three leds
+.line 29
+	ORX	4051,#7
+;   30	}
+.line 30
+	CALL	__b_framereset
+	RET	
+.endfunc "turn_off_led",30,"_turn_off_led"
+	XREF __b_framereset:ROM
+	XREF __b_frameset00:ROM
+	XDEF _turn_off_led
+	XDEF _init_test_button_gpio
+	XDEF _init_led_gpio
+	END
